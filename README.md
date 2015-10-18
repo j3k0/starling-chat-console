@@ -16,6 +16,10 @@ A starling/feathers based chat console that can be integrated within a mobile ap
 
 ![User Interface](doc/chat-spec.jpg)
 
+Chat console appears from the right hand side. it's possible to either slide it to the right, close it by clicking "close" or by clicking outside the chat console.
+
+Game is still visible on the left hand side. The total width of the visible size may vary, depending on the device size (tablet or phone). However, the chat console should capture events made on the game part when it's visible. When the user clicks on the outside of the console, the console hides itself.
+
 ### Initial API
 
 ```actionscript
