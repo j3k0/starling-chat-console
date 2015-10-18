@@ -79,3 +79,7 @@ public class ChatConsole extends Sprite {
   public function hide():void;
 }
 ```
+
+### System Messages
+
+The chat console can also display system message. Such messages will have a empty `username` and should have a special presentation (see screenshot on top).
