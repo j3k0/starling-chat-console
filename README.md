@@ -12,6 +12,10 @@ A starling/feathers based chat console that can be integrated within a mobile ap
 1. Implement your own `ChatServer`.
 1. Instanciate the ChatConsole and add it to your scene.
 
+### User Interface
+
+![User Interface](doc/chat-spec.jpg)
+
 ### API
 
 ```actionscript
