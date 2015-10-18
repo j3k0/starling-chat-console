@@ -16,7 +16,7 @@ A starling/feathers based chat console that can be integrated within a mobile ap
 
 ![User Interface](doc/chat-spec.jpg)
 
-### API
+### Initial API
 
 ```actionscript
 package fovea.chat;
@@ -54,9 +54,23 @@ public interface IChatServer {
   function removeListener(f:Function):void;
 }
 
+// The IChatTheme interface allow to define your own theme for the ChatConsole.
+// It's a collection of factory methods for each basic elements it uses.
+// (to be defined while implementing the ChatConsole)
+public interface IChatTheme {
+
+  // example call 1
+  function createTextField(prompt:String):TextField;
+
+  // example call 2
+  function getBackgroundColor():uint;
+
+  // ...
+}
+
 public class ChatConsole extends Sprite {
 
-  public function ChatConsole(server:IChatServer) {}
+  public function ChatConsole(server:IChatServer, theme:IChatTheme);
 
   // make the console appear on screen (animated from right)
   public function show():void;
