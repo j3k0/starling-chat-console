@@ -1,7 +1,5 @@
 package fovea.chat.message
 {
-	import flash.geom.Rectangle;
-
 	/**
 	 * Configuration for a chat messages display </br>
 	 * <ul>

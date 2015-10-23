@@ -1,14 +1,32 @@
 package fovea.chat.interfaces
 {
+	/**
+	 * Interface for the functional and visual porperties of a ChatConsole.</br>
+	 * Properties:
+	 * <ul>
+	 * 	<li>isMobile</li>
+	 * 	<li>backgroundColor</li>
+	 * 	<li>width</li>
+	 * 	<li>openCloseTransitionTime</li>
+	 * 	<li>openCloseTransitionType</li>
+	 * 	<li>replyWindowBackgroundColor</li>
+	 * 	<li>replyWindowTextBoxColor</li>
+	 * </ul> 
+	 */
 	public interface IChatTheme
 	{	
+		/**
+		 * Define if the platform is mobile
+		 */
+		function get isMobile():Boolean;
+		
 		/**
 		 * Background Color of the chat console window
 		 */
 		function get backgroundColor():uint;
 		
 		/**
-		 * X Position where the chat rests, when opened.
+		 * Width of the chat console, defines where the chat rests when opened.
 		 */
 		function get width():Number;
 		
@@ -45,22 +63,12 @@ package fovea.chat.interfaces
 		function get openCloseTransitionType():String;
 		
 		/**
-		 * Background color of a message display
-		 */
-		function get messageBackgroundColor():uint;
-		
-		/**
-		 * Background alpha of a message display
-		 */
-		function get messageBackgroundAlpha():uint;
-		
-		/**
 		 * Background color of the reply window
 		 */
 		function get replyWindowBackgroundColor():uint;
 		
 		/**
-		 * Background color of the reply window
+		 * Background color of the reply window text area
 		 */
 		function get replyWindowTextBoxColor():uint;
 	}

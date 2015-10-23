@@ -2,6 +2,7 @@ package fovea.chat.message
 {	
 	import fovea.chat.ChatUtil;
 	import fovea.chat.Controller;
+	import fovea.chat.configs.DefaultChatMessageDisplayConfig;
 	
 	import starling.events.Event;
 
@@ -19,6 +20,7 @@ package fovea.chat.message
 		/** current state of the message */
 		private var _state:int;
 		
+		/** The chat Message Display */
 		public function get view():ChatMessageDisplay
 		{
 			return _view as ChatMessageDisplay;
@@ -53,11 +55,22 @@ package fovea.chat.message
 		/** Unsuccessful retrieval of message data */
 		public static const STATE_FAILED:int = 2;
 		
+		/**
+		 * Instantiate a ChatMessage
+		 * @param data:ChatMessageData - Data associated with this chat message
+		 * @param config:ChatMessageDisplayConfig - Display Config associated with this chat message
+		 */
 		public function ChatMessage(data:ChatMessageData, config:ChatMessageDisplayConfig=null)
 		{
 			_state = STATE_IN_PROGRESS;
 			
 			_data = data;
+			
+			// If no config defined use default config
+			if(!config)
+				config = new DefaultChatMessageDisplayConfig();
+			
+			// If is system message use a system message display
 			if(data.isSystemMsg)
 			{
 				_view = new SystemMessageDisplay(_data, config);
@@ -69,23 +82,36 @@ package fovea.chat.message
 			_view.addEventListener(ChatUtil.LOAD_FAIL, onLoadFail);
 		}
 		
+		/**
+		 * Defines the message layout
+		 * @param consoleWidth:Number - Width of the console used to define positioning of message display objects 
+		 */
 		public function layout(consoleWidth:Number):void
 		{
 			view.layout(consoleWidth);
 		}
 		
+		/**
+		 * Successful image load callback
+		 */
 		private function onLoadSuccess(event:Event):void
 		{
 			event.stopImmediatePropagation();
 			_state = STATE_SUCESS;
 		}
 		
+		/**
+		 * Unsuccessful image load callback
+		 */
 		private function onLoadFail(event:Event):void
 		{
 			event.stopImmediatePropagation();
 			_state = STATE_FAILED;
 		}
 		
+		/**
+		 * Disposes of this object
+		 */
 		public function dispose():void
 		{
 			_view.removeEventListeners();

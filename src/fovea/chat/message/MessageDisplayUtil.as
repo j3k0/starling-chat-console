@@ -1,5 +1,8 @@
 package fovea.chat.message
 {
+	/**
+	 * Container for global Message display constants
+	 */
 	public class MessageDisplayUtil
 	{
 		/** X-Coordinate of the avatar image */

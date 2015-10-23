@@ -6,6 +6,9 @@ package fovea.chat.message
 	import starling.text.TextField;
 	import starling.utils.HAlign;
 
+	/**
+	 * View for a system chat message
+	 */
 	public class SystemMessageDisplay extends ChatMessageDisplay
 	{
 		/** background quad */
@@ -13,6 +16,11 @@ package fovea.chat.message
 		/** Message textField */
 		private var _messageTF:TextField;
 		
+		/**
+		 * Instantiates a SystemMessageDisplay
+		 * @param data:ChatMessageData - Data associated with this chat message
+		 * @param config:ChatMessageDisplayConfig - Display Config associated with this chat message
+		 */
 		public function SystemMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig)
 		{
 			_background = new Quad(1,1,config.backgroundColor);
@@ -29,7 +37,7 @@ package fovea.chat.message
 		}
 		
 		/**
-		 * redefines the user message layout
+		 * Defines the user message layout
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{

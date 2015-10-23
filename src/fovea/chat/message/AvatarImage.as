@@ -22,7 +22,7 @@ package fovea.chat.message
 		private var _image:Image;
 		/** url of the avatar image location */
 		private var _url:String;
-		/** loader */
+		/** loader used for avatar image */
 		private var _loader:Loader;
 		
 		public function AvatarImage()

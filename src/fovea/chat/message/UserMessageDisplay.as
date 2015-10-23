@@ -1,6 +1,5 @@
 package fovea.chat.message
 {
-	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
 	import starling.text.TextField;
 	import starling.utils.HAlign;
@@ -20,8 +19,14 @@ package fovea.chat.message
 		/** Time textField */
 		private var _timeTF:TextField;
 		
+		/**
+		 * Instantiates a UserMessageDisplay
+		 * @param data:ChatMessageData - Data associated with this chat message
+		 * @param config:ChatMessageDisplayConfig - Display Config associated with this chat message
+		 */
 		public function UserMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig)
 		{
+			// Instantiates Objects
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
 			
@@ -57,7 +62,7 @@ package fovea.chat.message
 		}
 		
 		/**
-		 * redefines the chat message layout
+		 * Defines the chat message layout
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{
@@ -82,7 +87,7 @@ package fovea.chat.message
 		}
 		
 		/**
-		 * Dipose of this object children
+		 * Dipose of this object
 		 */
 		override public function dispose():void
 		{
