@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<application xmlns="http://ns.adobe.com/air/application/18.0" minimumPatchLevel="0">
+  <id>fovea.chat.app</id>
+  <name>
+    <text xml:lang="en">FoveaChatApp</text>
+  </name>
+  <versionNumber>0.1.0</versionNumber>
+  <versionLabel>v0.1.0</versionLabel>
+  <filename>FoveaChatApp</filename>
+  <description>
+    <text xml:lang="en">FoveaChatApp</text>
+  </description>
+  <copyright>Copyright 2015, Fovea</copyright>
+  <supportedLanguages>en</supportedLanguages>
+  <initialWindow>
+    <content>FoveaChatApp.swf</content>
+    <title>FoveaChatApp</title>
+    <aspectRatio>landscape</aspectRatio>
+    <renderMode>direct</renderMode>
+    <autoOrients>false</autoOrients>
+    <fullScreen>true</fullScreen>
+    <visible>true</visible>
+    <softKeyboardBehavior>none</softKeyboardBehavior>
+  </initialWindow>
+</application>

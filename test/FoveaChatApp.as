@@ -4,6 +4,7 @@ package fovea.chat.app
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.geom.Rectangle;
+    import fovea.chat.app.TestHarness;
 	
 	import fovea.chat.app.TestHarness;
 	import fovea.chat.themes.ThemeWeb;
@@ -12,10 +13,10 @@ package fovea.chat.app
 	import starling.events.Event;
 	
 	[SWF(width='1024',height='600',backgroundColor='#ffffff',frameRate='25')]
-	public class App extends Sprite
+	public class FoveaChatApp extends Sprite
 	{
 		private var _starling:Starling;
-		public function App()
+		public function FoveaChatApp()
 		{
 			var viewPort:Rectangle = new Rectangle(0,0, stage.fullScreenWidth, stage.fullScreenHeight); 
 			
