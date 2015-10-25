@@ -1,4 +1,7 @@
-all:
+run: build
+	adl FoveaChatApp-app.xml
+
+build:
 	amxmlc -source-path=../src -library-path=libs/starling.swc -library-path=libs/feathers.swc FoveaChatApp.as
 
 clean:
