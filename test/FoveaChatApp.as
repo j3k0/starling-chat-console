@@ -4,13 +4,14 @@ package
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.geom.Rectangle;
+    import fovea.chat.app.TestHarness;
 	
 	import starling.core.Starling;
 
-	public class App extends Sprite
+	public class FoveaChatApp extends Sprite
 	{
 		private var _starling:Starling;
-		public function App()
+		public function FoveaChatApp()
 		{
 			var viewPort:Rectangle = new Rectangle(0,0, stage.fullScreenWidth, stage.fullScreenHeight); 
 			
