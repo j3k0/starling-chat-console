@@ -18,7 +18,7 @@ package
 			stage.align = StageAlign.TOP_LEFT;
 			stage.scaleMode = StageScaleMode.NO_SCALE;
 			
-			_starling = new Starling(AppTestHarness, stage, viewPort);
+			_starling = new Starling(TestHarness, stage, viewPort);
 			_starling.start();
 			_starling.antiAliasing = 0;
 		}
