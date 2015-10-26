@@ -81,5 +81,8 @@ package fovea.chat.themes
 		{
 			return Color.WHITE;
 		}
+		
+		public function DefaultChatTheme()
+		{}
 	}
 }
