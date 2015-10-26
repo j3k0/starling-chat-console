@@ -1,6 +1,8 @@
 package fovea.chat
 {
+	import flash.display.Stage;
 	import flash.geom.Point;
+	import flash.system.Capabilities;
 	
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
@@ -37,12 +39,16 @@ package fovea.chat
 		/**
 		 * Retreives the stage dimension in a defined space
 		 * @param space:DisplayObject - the space in whech to define the stage dimnensions.
+		 * @param isMobile:Boolean - whther this is a mobile platform or not
 		 */
-		public static function stageDimensions(space:DisplayObject):Point
+		public static function stageDimensions(space:DisplayObject=null, isMobile:Boolean=false):Point
 		{
-			var screenWidth:Number = Starling.current.nativeStage.fullScreenWidth * Starling.contentScaleFactor;
-			var screenHeight:Number = Starling.current.nativeStage.fullScreenHeight * Starling.contentScaleFactor;
-			 
+			var nativeStage:Stage = Starling.current.nativeStage;
+			var screenDim:Point = isMobile ? new Point(nativeStage.fullScreenWidth, nativeStage.fullScreenHeight) :
+										screenDim = new Point(nativeStage.stageWidth, nativeStage.stageHeight);
+			var screenWidth:Number = screenDim.x * Starling.contentScaleFactor;
+			var screenHeight:Number = screenDim.y * Starling.contentScaleFactor;
+			
 			return space.globalToLocal(new Point(screenWidth, screenHeight));
 		}
 	}

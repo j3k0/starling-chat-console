@@ -5,7 +5,7 @@ package fovea.chat.app
 	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
 	import fovea.chat.app.test_data.Server;
-	import fovea.chat.app.test_data.Theme;
+	import fovea.chat.interfaces.IChatTheme;
 	import fovea.chat.message.ChatMessageData;
 	
 	import starling.display.DisplayObject;
@@ -24,8 +24,11 @@ package fovea.chat.app
 		private var _openButton:Quad;
 		
 		public function TestHarness()
+		{}
+		
+		public function init(theme:IChatTheme):void
 		{
-			var dim:Point = ChatUtil.stageDimensions(this);
+			var dim:Point = ChatUtil.stageDimensions(this, theme.isMobile);
 			var quad:Quad = new Quad(dim.x, dim.y, Color.BLACK);
 			
 			_server = new Server();
@@ -36,7 +39,7 @@ package fovea.chat.app
 			_openButton.y = 10;
 			_openButton.addEventListener(TouchEvent.TOUCH, onOpenButtonTouched);
 			
-			_chatConsole = new ChatConsole(_server, new Theme());
+			_chatConsole = new ChatConsole(_server, theme);
 			_chatConsole.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			
 			addChild(quad);
