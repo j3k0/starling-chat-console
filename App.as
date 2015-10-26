@@ -1,4 +1,4 @@
-package fovea.chat.app
+package 
 {
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
@@ -7,12 +7,10 @@ package fovea.chat.app
 	
 	import fovea.chat.app.TestHarness;
 	import fovea.chat.app.test_data.ThemeMobile;
-	import fovea.chat.app.test_data.ThemeWeb;
 	
 	import starling.core.Starling;
 	import starling.events.Event;
 	
-	[SWF(width='1024',height='600',backgroundColor='#ffffff',frameRate='25')]
 	public class App extends Sprite
 	{
 		private var _starling:Starling;
@@ -36,7 +34,7 @@ package fovea.chat.app
 		private function onRootCreated(event:Event):void
 		{
 			// Initialize the testHarness theme
-			(_starling.root as TestHarness).init(new ThemeWeb());
+			(_starling.root as TestHarness).init(new ThemeMobile());
 		}
 	}
 }

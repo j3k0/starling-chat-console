@@ -6,6 +6,8 @@ package fovea.chat.message
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLRequest;
+	import flash.system.ApplicationDomain;
+	import flash.system.LoaderContext;
 	
 	import fovea.chat.ChatUtil;
 	
@@ -26,7 +28,7 @@ package fovea.chat.message
 		private var _loader:Loader;
 		
 		public function AvatarImage()
-		{
+		{	
 			_loader = new Loader();
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadSuccess);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
@@ -39,8 +41,12 @@ package fovea.chat.message
 		 */
 		public function load(url:String):void
 		{
+			var context:LoaderContext = new LoaderContext();
+			context.checkPolicyFile = true;
+			context.applicationDomain = new ApplicationDomain();
+			
 			_url = url;
-			_loader.load(new URLRequest(_url));
+			_loader.load(new URLRequest(_url), context);
 		}
 		
 		/**
