@@ -1,16 +1,17 @@
 package fovea.chat.app.test_data
 {
 	import fovea.chat.interfaces.IChatTheme;
+	
 	import starling.utils.Color;
-
-	public class Theme implements IChatTheme
+	
+	public class ThemeWeb implements IChatTheme
 	{	
 		/**
 		 * Define if the platform is mobile
 		 */
 		public function get isMobile():Boolean
 		{
-			return true;
+			return false;
 		}
 		
 		/** 
@@ -26,7 +27,7 @@ package fovea.chat.app.test_data
 		 */
 		public function get width():Number
 		{
-			return 800;
+			return 400;
 		}
 		
 		/** 
@@ -81,7 +82,9 @@ package fovea.chat.app.test_data
 			return Color.WHITE;
 		}
 		
-		public function Theme()
+		public function ThemeMobile()
 		{}
 	}
 }
+import fovea.chat.app.test_data;
+

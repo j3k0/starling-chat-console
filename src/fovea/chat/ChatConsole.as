@@ -1,5 +1,6 @@
 package fovea.chat
 {
+	import flash.display.Stage;
 	import flash.geom.Point;
 	
 	import fovea.chat.interfaces.IChatServer;
@@ -43,8 +44,10 @@ package fovea.chat
 		private var _theme:IChatTheme;
 		/** the reply window */
 		private var _replyWindow:ReplyWindow;
-		/** the width of the stage */
+		/** the width of the stage in this space */
 		private var _stageDimensions:Point;
+		/** the width of the stage in this space's parent */
+		private var _parentStageDimensions:Point;
 		/** Close button */
 		private var _closeButton:CloseButton;
 		/** New Chat Alert */
@@ -148,13 +151,14 @@ package fovea.chat
 		 */
 		private function resetStageLoc():void
 		{
+			var nativeStage:Stage = Starling.current.nativeStage;
 			// get the stage dimensions of the parent
-			var parentStageDimensions:Point = ChatUtil.stageDimensions(parent);
+			_parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
 			// Define the stage dimensions in this space.
-			_stageDimensions = ChatUtil.stageDimensions(this);
+			_stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
 			
 			// Define console location
-			x = parentStageDimensions.x;
+			x = _parentStageDimensions.x;
 			y = 0;
 		}
 		
@@ -366,7 +370,7 @@ package fovea.chat
 			if(_state != ChatUtil.CLOSED)
 				return;
 			
-			var openLoc:Number = _stageDimensions.x - _theme.width;
+			var openLoc:Number = _parentStageDimensions.x - _theme.width;
 			
 			// Remove tween if tween exists
 			clearTween();
@@ -395,7 +399,7 @@ package fovea.chat
 			_state = ChatUtil.TRANSITIONING;
 			_tween = new Tween(this, _theme.openCloseTransitionTime, _theme.openCloseTransitionType);
 			_tween.onComplete = onCloseComplete;
-			_tween.moveTo(_stageDimensions.x, y);
+			_tween.moveTo(_parentStageDimensions.x, y);
 			Starling.juggler.add(_tween);
 			// remove the stage touch listener for tapping outside the console 
 			stage.removeEventListener(TouchEvent.TOUCH, onTouch);
