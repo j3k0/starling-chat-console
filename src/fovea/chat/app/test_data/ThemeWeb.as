@@ -82,9 +82,7 @@ package fovea.chat.app.test_data
 			return Color.WHITE;
 		}
 		
-		public function ThemeMobile()
+		public function ThemeWeb()
 		{}
 	}
 }
-import fovea.chat.app.test_data;
-
