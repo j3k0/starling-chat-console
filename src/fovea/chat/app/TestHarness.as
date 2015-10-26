@@ -57,7 +57,7 @@ package fovea.chat.app
 			var touch:Touch = event.getTouch(event.currentTarget as DisplayObject);
 			if(!touch)
 				return;
-			
+
 			switch(touch.phase)
 			{
 				case TouchPhase.ENDED:
