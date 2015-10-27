@@ -162,7 +162,10 @@ package fovea.chat.reply_window
 			var g:uint = Color.getGreen(baseColor);
 			var b:uint = Color.getBlue(baseColor);
 			
-			return Color.rgb(r - 25, g - 25, b - 25);
+			return Color.rgb(
+				Math.max(r - 25, 0), 
+				Math.max(g - 25, 0), 
+				Math.max(b - 25, 0));
 		}
 			
 		
