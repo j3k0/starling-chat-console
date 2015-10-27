@@ -10,10 +10,13 @@ package fovea.chat.message
 	import flash.system.LoaderContext;
 	
 	import fovea.chat.ChatUtil;
+	import fovea.chat.objects.FailedLoadIcon;
+	import fovea.chat.objects.LoadingIcon;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.textures.Texture;
+	import starling.utils.Color;
 
 	/**
 	 * Load an avatar image for chat display
@@ -27,12 +30,29 @@ package fovea.chat.message
 		/** loader used for avatar image */
 		private var _loader:Loader;
 		
+		private var _loadingIcon:LoadingIcon;
+		
+		private var _loadFailedIcon:FailedLoadIcon;
+		
+		private static const LOADING_ICON_RADIUS:Number = 20;
+		
 		public function AvatarImage()
 		{	
+			// Instantiate objects
+			_loadingIcon = new LoadingIcon(Color.BLUE, Color.WHITE, LOADING_ICON_RADIUS);
 			_loader = new Loader();
+			
+			// Set position
+			_loadingIcon.x = LOADING_ICON_RADIUS;
+			_loadingIcon.y = LOADING_ICON_RADIUS;
+			
+			// Add Event Listeners
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadSuccess);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
 			_loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
+			
+			// Add Children
+			addChild(_loadingIcon);
 		}
 		
 		/**
@@ -58,6 +78,8 @@ package fovea.chat.message
 			_image = new Image(Texture.fromBitmap(_loader.content as Bitmap));
 			addChild(_image);
 			
+			// Remove the loading icon
+			removeChild(_loadingIcon);
 			dispatchEventWith(ChatUtil.LOAD_SUCCESS, true);
 		}
 		
@@ -67,6 +89,13 @@ package fovea.chat.message
 		private function onLoadFail(event:Event):void
 		{
 			trace("Load Failed: "+_url+": "+event.type);
+			// Add a load failed icon
+			_loadFailedIcon = new FailedLoadIcon();
+			_loadFailedIcon.y = -10;
+			addChild(_loadFailedIcon);
+			
+			// Remove the loading icon
+			removeChild(_loadingIcon);
 			dispatchEventWith(ChatUtil.LOAD_FAIL, true);
 		}
 		
@@ -79,6 +108,8 @@ package fovea.chat.message
 			_loader.removeEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
 			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
 			_image.dispose();
+			_loadFailedIcon.dispose();
+			_loadingIcon.dispose();
 			
 			_loader = null;
 		}

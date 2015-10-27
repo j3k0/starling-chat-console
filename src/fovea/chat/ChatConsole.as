@@ -211,17 +211,22 @@ package fovea.chat
 			layout();
 		}
 		
-		
 		/**
 		 * Data retrieval complete function 
 		 */
 		private function onDataRetrieved():void
 		{
-			_chatMessages = _server.getData();
+			// retrieve chat messages from the server
+			var chatMessages:Vector.<ChatMessage> = _server.getData();
 			
-			// add the messages to the console
-			for(var i:int = 0; i < _chatMessages.length; ++i)
-				_chatMessageContainer.addItem(_chatMessages[i].view);
+			// add the message list to the console if doesnt exist
+			for(var i:int = 0; i < chatMessages.length; ++i){
+				var chatMessage:ChatMessage = chatMessages[i];
+				var idx:int = _chatMessages.indexOf(chatMessage);
+				
+				if(idx == -1)
+					addMessage(chatMessage);
+			}
 			
 			// reorganize the layout when new chatmessages are received 
 			layout();
@@ -245,7 +250,7 @@ package fovea.chat
 		private function onReceivedChat(event:Event):void
 		{
 			// add the message to the message container 
-			addMessage(event.data.data, event.data.config);
+			addMessageData(event.data.data, event.data.config);
 		}
 		
 		/**
@@ -343,22 +348,38 @@ package fovea.chat
 		
 		/**
 		 * Adds a new message to the chat message container
-		 * @param data:ChatMessageData - Chat message data to be added to the message container
-		 * @param config:ChatMessageDisplayConfig = null - Display configuration of the chat message display
+		 * @param data:ChatMessage - Chat message object to be added to the message container
 		 */
-		public function addMessage(data:ChatMessageData, config:ChatMessageDisplayConfig = null):void
-		{
-			var chatMessage:ChatMessage = new ChatMessage(data, config);
-			
-			// Alert new text added
-			if(_chatMessageContainer.contentHeight > _replyWindow.y)
-				_chatAlert.show();
+		public function addMessage(chatMessage:ChatMessage):void
+		{	
+			// grab the last message's position in relation to the bottom of the container 
+			var lastMsgPos:Number = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
 			
 			// add text to the console
 			_chatMessages.push(chatMessage);
 			_chatMessageContainer.addItem(chatMessage.view);
-
+			
 			layout();
+			
+			// Check for auto scroll or new message alert
+			if(_chatMessageContainer.contentHeight > _replyWindow.y)
+			{
+				// if the position before the new message was added > 0 alert a new message has been added otherwise scroll to bottom.
+				if(lastMsgPos > 0)
+					_chatAlert.show();
+				else
+					_chatMessageContainer.scrollToBottom();
+			}
+		}
+		
+		/**
+		 * Adds a new message to the chat message container
+		 * @param data:ChatMessageData - Chat message data to be added to the message container
+		 * @param config:ChatMessageDisplayConfig = null - Display configuration of the chat message display
+		 */
+		public function addMessageData(data:ChatMessageData, config:ChatMessageDisplayConfig = null):void
+		{
+			addMessage(new ChatMessage(data, config));
 		}
 		
 		/**
@@ -454,10 +475,27 @@ package fovea.chat
 		}
 		
 		/**
+		 * clear out dispalyed chat messages
+		 */
+		private function clearMessages():void
+		{
+			// remove them from the view
+			_chatMessageContainer.clearMessages();
+			
+			for(var i:int = 0; i < _chatMessages.length; ++i)
+				_chatMessages[i].dispose();
+					
+			_chatMessages.splice(0, _chatMessages.length);
+		}
+		
+		/**
 		 * Disposes of the Chat console Window
 		 */
 		override public function dispose():void
 		{
+			// clear the messages
+			clearMessages();
+			
 			// Remove event listeners 
 			stage.removeEventListener(TouchEvent.TOUCH, onTouch);
 			_closeButton.removeEventListeners();
@@ -465,11 +503,6 @@ package fovea.chat
 			_chatMessageContainer.removeEventListeners();
 			
 			// dispose of the chat messages
-			var i:int = 0;
-			for(i = 0; i < _chatMessages.length; ++i)
-			{
-				_chatMessages[i].dispose()
-			}
 			
 			clearTween();
 			// Dispose of display objects

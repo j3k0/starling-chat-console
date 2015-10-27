@@ -1,7 +1,6 @@
 package fovea.chat.reply_window
 {
 	import flash.events.TimerEvent;
-	import flash.text.ReturnKeyLabel;
 	import flash.utils.Timer;
 	
 	import feathers.controls.TextInput;
@@ -18,6 +17,7 @@ package fovea.chat.reply_window
 	import starling.events.KeyboardEvent;
 	import starling.events.TouchEvent;
 	import starling.text.TextField;
+	import starling.utils.Color;
 	
 	/**
 	 * View for the Reply Window. </br>
@@ -29,6 +29,8 @@ package fovea.chat.reply_window
 		private var _background:Quad;
 		/** the background of the object */
 		private var _textBackground:Quad;
+		/** the background of the object */
+		private var _textBackgroundBorder:Quad;
 		/** the replytext box */
 		private var _replyTI:TextInput;
 		
@@ -45,6 +47,7 @@ package fovea.chat.reply_window
 		{
 			// Instantiate and Initialize objects
 			_background = new Quad(1,1,backgroundColor);
+			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
 			_textBackground = new Quad(1,1,textboxColor);
 			_replyTI = new TextInput();
 			_replyTI.text = DEFAULT_TEXT;
@@ -59,6 +62,7 @@ package fovea.chat.reply_window
 
 			// Add Children
 			addChild(_background);
+			addChild(_textBackgroundBorder);
 			addChild(_textBackground)
 			addChild(_replyTI);
 		}
@@ -79,6 +83,12 @@ package fovea.chat.reply_window
 			
 			_textBackground.x = (consoleWidth - _textBackground.width) >> 1;
 			_textBackground.y = (BACKGROUND_HEIGHT - _textBackground.height) >> 1;
+			
+			// Define the textbox border
+			_textBackgroundBorder.x = _textBackground.x - 2;
+			_textBackgroundBorder.y = _textBackground.y - 2;
+			_textBackgroundBorder.width = _textBackground.width + 4;
+			_textBackgroundBorder.height = _textBackground.height + 4;
 			
 			// Set the text input position and size
 			_replyTI.x = _textBackground.x;
@@ -141,6 +151,23 @@ package fovea.chat.reply_window
 			dispatchEventWith(ChatUtil.SEND_REPLY_TEXT, true, {message:_replyTI.text});
 			_replyTI.text = "";
 		}
+		
+		/**
+		 * Defines a color as a slightly darker color than the base color
+		 * @param baseColor:uint - The Background Color
+		 */
+		private function getDarkerColor(baseColor:uint):uint
+		{
+			var r:uint = Color.getRed(baseColor);
+			var g:uint = Color.getGreen(baseColor);
+			var b:uint = Color.getBlue(baseColor);
+			
+			return Color.rgb(
+				Math.max(r - 25, 0), 
+				Math.max(g - 25, 0), 
+				Math.max(b - 25, 0));
+		}
+			
 		
 		/**
 		 * Disposes of this object
