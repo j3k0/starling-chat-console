@@ -18,6 +18,7 @@ package fovea.chat.reply_window
 	import starling.events.TouchEvent;
 	import starling.text.TextField;
 	import starling.utils.Color;
+	import starling.utils.HAlign;
 	
 	/**
 	 * View for the Reply Window. </br>
@@ -33,7 +34,11 @@ package fovea.chat.reply_window
 		private var _textBackgroundBorder:Quad;
 		/** the replytext box */
 		private var _replyTI:TextInput;
+		/** display the amount of charcters left */
+		private var _charCountTF:TextField;
 		
+		private static const CHARS_LEFT_TEXT:String = "Left: ";
+		private static const MAX_CHARACTERS:int = 257;
 		private static const BACKGROUND_HEIGHT:Number = 75;
 		private static const DEFAULT_TEXT:String = "Write a reply";
 		
@@ -45,15 +50,21 @@ package fovea.chat.reply_window
 		 */
 		public function ReplyWindowDisplay(backgroundColor:uint, textboxColor:uint)
 		{
-			// Instantiate and Initialize objects
+			// Instantiate 
 			_background = new Quad(1,1,backgroundColor);
 			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
 			_textBackground = new Quad(1,1,textboxColor);
+			
+			// Initialize objects
 			_replyTI = new TextInput();
 			_replyTI.text = DEFAULT_TEXT;
 			_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 			_replyTI.textEditorProperties.multiline = true;
 			_replyTI.padding = 5;
+			_replyTI.maxChars = MAX_CHARACTERS;
+			
+			_charCountTF = new TextField(100, 15, CHARS_LEFT_TEXT+(MAX_CHARACTERS - 1), "Verdana", 8);
+			_charCountTF.hAlign = HAlign.RIGHT;
 			
 			// Add listeners
 			_replyTI.addEventListener(FeathersEventType.FOCUS_IN, onTextAreaFocusIn);
@@ -65,6 +76,7 @@ package fovea.chat.reply_window
 			addChild(_textBackgroundBorder);
 			addChild(_textBackground)
 			addChild(_replyTI);
+			addChild(_charCountTF);
 		}
 		
 		/**
@@ -95,6 +107,10 @@ package fovea.chat.reply_window
 			_replyTI.y = _textBackground.y;
 			_replyTI.width = _textBackground.width;
 			_replyTI.height = _textBackground.height;
+			
+			// Set the character count display position
+			_charCountTF.x = _replyTI.bounds.right - _charCountTF.width;
+			_charCountTF.y = _replyTI.bounds.bottom - _charCountTF.height;
 		}
 		
 		/**
@@ -134,6 +150,15 @@ package fovea.chat.reply_window
 				// if there is text to send, send text
 				if(_replyTI.text != "")
 					sendText();
+			}else{
+				if(_replyTI.text.length > (MAX_CHARACTERS - 1))
+					_replyTI.text = _replyTI.text.substring(0, _replyTI.text.length - 1);
+				
+				// Sets the character left
+				if(_replyTI.hasFocus)
+					_charCountTF.text = CHARS_LEFT_TEXT+(_replyTI.maxChars - (_replyTI.text.length + 1));
+				else
+					_charCountTF.text = CHARS_LEFT_TEXT+(MAX_CHARACTERS - 1);
 			}
 		}
 		
