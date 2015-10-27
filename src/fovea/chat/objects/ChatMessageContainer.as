@@ -22,6 +22,19 @@ package fovea.chat.objects
 		/** Scroller for the message objects */
 		private var _scrollContainer:ScrollContainer;
 		
+		
+		/** the current scroll position on the y - axis */
+		public function get scrollPosition():Number
+		{
+			return _scrollContainer.verticalScrollPosition;
+		}
+		
+		/** the maximum scroll position on the y - axis */
+		public function get maxScrollPosition():Number
+		{
+			return _scrollContainer.maxVerticalScrollPosition;
+		}
+		
 		/** 
 		 * content width </br>
 		 * heavy function use sparingly 
@@ -100,6 +113,14 @@ package fovea.chat.objects
 		{
 			_scrollContainer.validate();
 			_scrollContainer.scrollToPosition(_scrollContainer.horizontalScrollPosition, _scrollContainer.maxVerticalScrollPosition, .5);
+		}
+		
+		/**
+		 * Remove all messages from the view
+		 */
+		public function clearMessages():void
+		{
+			_scrollContainer.removeChildren();
 		}
 		
 		/**

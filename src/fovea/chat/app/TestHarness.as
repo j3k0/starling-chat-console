@@ -49,7 +49,7 @@ package fovea.chat.app
 		
 		private function onAddedToStage(event:Event):void
 		{
-			_server.test();
+			_server.dataUpdated();
 		}
 		
 		private function onOpenButtonTouched(event:TouchEvent):void
@@ -70,7 +70,7 @@ package fovea.chat.app
 		{
 			var chatMessageData:ChatMessageData = 
 				new ChatMessageData("Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message, "9:46"); 
-			_chatConsole.addMessage(chatMessageData);
+			_chatConsole.addMessageData(chatMessageData);
 		}
 	}
 }

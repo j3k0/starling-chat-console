@@ -1,7 +1,11 @@
 package fovea.chat.message
-{
+{	
+	import fovea.chat.ChatUtil;
+	
 	import starling.display.Quad;
+	import starling.events.Event;
 	import starling.text.TextField;
+	import starling.text.TextFieldAutoSize;
 	import starling.utils.HAlign;
 
 	public class UserMessageDisplay extends ChatMessageDisplay
@@ -40,8 +44,9 @@ package fovea.chat.message
 			_userNameTF.bold = true;
 			
 			_messageTF.hAlign = HAlign.LEFT
+			_messageTF.autoSize = TextFieldAutoSize.VERTICAL;
 			
-			_timeTF.hAlign = HAlign.LEFT
+			_timeTF.hAlign = HAlign.RIGHT;
 			_timeTF.bold = true;
 			
 			// add the children
@@ -50,6 +55,9 @@ package fovea.chat.message
 			addChild(_userNameTF);
 			addChild(_messageTF);
 			addChild(_timeTF);
+			
+			// add event listeners
+			_avatarImage.addEventListener(ChatUtil.LOAD_SUCCESS, onAvatarImageLoaded);
 		}
 		
 		/**
@@ -66,9 +74,6 @@ package fovea.chat.message
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{
-			// Define the avatar image location
-			_avatarImage.x = MessageDisplayUtil.AV_IMAGE_X;
-			_avatarImage.y = MessageDisplayUtil.AV_IMAGE_Y;
 			
 			// Define the username location
 			_userNameTF.x = MessageDisplayUtil.NAME_TEXT_X;
@@ -77,13 +82,35 @@ package fovea.chat.message
 			// Define the message location
 			_messageTF.x = MessageDisplayUtil.MESSAGE_TEXT_X;
 			_messageTF.y = MessageDisplayUtil.MESSAGE_TEXT_Y;
+			_messageTF.width = consoleWidth - _messageTF.x;
 			
 			// Define the message location
 			_timeTF.x = consoleWidth - _timeTF.width;
 			_timeTF.y = MessageDisplayUtil.TIME_TEXT_Y;
 			
 			_background.width = this.width;
-			_background.height = this.height;
+			_background.height = _messageTF.bounds.bottom + MessageDisplayUtil.BOTTOM_PADDING;
+			
+			// Position the avatar image
+			positionAvatarImage();
+		}
+		
+		/**
+		 * Avatar image loaded callback
+		 */
+		private function onAvatarImageLoaded(event:Event):void
+		{
+			positionAvatarImage()
+		}
+		
+		/**
+		 * Positions the avatar image based upon the image height and text height.
+		 */
+		private function positionAvatarImage():void
+		{
+			// Define the avatar image location
+			_avatarImage.x = MessageDisplayUtil.AV_IMAGE_X;
+			_avatarImage.y = ((_messageTF.bounds.bottom - _userNameTF.bounds.top) >> 1);
 		}
 		
 		/**
@@ -91,6 +118,8 @@ package fovea.chat.message
 		 */
 		override public function dispose():void
 		{
+			_avatarImage.removeEventListeners();
+			
 			_userNameTF.dispose();
 			_messageTF.dispose();
 			_avatarImage.dispose();
