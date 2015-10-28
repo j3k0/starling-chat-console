@@ -2,6 +2,7 @@ package fovea.chat
 {
 	import flash.display.Stage;
 	import flash.geom.Point;
+	import flash.system.Capabilities;
 	
 	import fovea.chat.interfaces.IChatServer;
 	import fovea.chat.interfaces.IChatTheme;
@@ -52,6 +53,8 @@ package fovea.chat
 		private var _closeButton:CloseButton;
 		/** New Chat Alert */
 		private var _chatAlert:NewChatAlert;
+		/** map of sent messages to chat message objects*/
+		private var _sentMessages:Object;
 		
 		/** Current state of the chat console 
 		    <ul><li>OPEN</li><li>CLOSED</li><li>TRANSITIONING</li>
@@ -88,6 +91,7 @@ package fovea.chat
 			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor);
 			_closeButton = new CloseButton(5);
 			_chatAlert = new NewChatAlert(this);
+			_sentMessages = new Object();
 			
 			// add children
 			addChild(_background);
@@ -225,7 +229,7 @@ package fovea.chat
 				var idx:int = _chatMessages.indexOf(chatMessage);
 				
 				if(idx == -1)
-					addMessage(chatMessage);
+					addMessage(chatMessage, ChatMessage.STATE_SUCCESS);
 			}
 			
 			// reorganize the layout when new chatmessages are received 
@@ -237,8 +241,13 @@ package fovea.chat
 		 */
 		private function onSendReplyText(event:Event):void
 		{
-			//send the text message to the server 
-			_server.send(event.data.message);
+			// add the chat message
+			var id:String = getUniqueKey();
+			_sentMessages[id] =
+				addMessageData(new ChatMessageData(id, "Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message,"test"), ChatMessage.STATE_IN_PROGRESS);
+			
+			//send the text message to the server
+			_server.send(id, event.data.message);
 			_chatMessageContainer.scrollToBottom();
 			if(_chatMessageContainer.y > 0)
 				slideContent(Math.max(_replyWindow.y - _chatMessageContainer.contentHeight, 0));
@@ -350,8 +359,18 @@ package fovea.chat
 		 * Adds a new message to the chat message container
 		 * @param data:ChatMessage - Chat message object to be added to the message container
 		 */
-		public function addMessage(chatMessage:ChatMessage):void
+		public function addMessage(chatMessage:ChatMessage, state:int):ChatMessage
 		{	
+			// Set this user sent chat message state to success
+			if(_sentMessages[chatMessage.id] != "undefined" && _sentMessages[chatMessage.id] != null)
+			{
+				_chatMessages.splice(_chatMessages.indexOf(_sentMessages[chatMessage.id]), 1);
+				_chatMessageContainer.removeItem(_sentMessages[chatMessage.id].view);
+				_sentMessages[chatMessage.id] = null;
+			}
+			
+			// set incoming chats to success
+			chatMessage.state = state;
 			// grab the last message's position in relation to the bottom of the container 
 			var lastMsgPos:Number = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
 			
@@ -370,6 +389,8 @@ package fovea.chat
 				else
 					_chatMessageContainer.scrollToBottom();
 			}
+			
+			return chatMessage
 		}
 		
 		/**
@@ -377,9 +398,9 @@ package fovea.chat
 		 * @param data:ChatMessageData - Chat message data to be added to the message container
 		 * @param config:ChatMessageDisplayConfig = null - Display configuration of the chat message display
 		 */
-		public function addMessageData(data:ChatMessageData, config:ChatMessageDisplayConfig = null):void
+		public function addMessageData(data:ChatMessageData, state:int, config:ChatMessageDisplayConfig = null):ChatMessage
 		{
-			addMessage(new ChatMessage(data, config));
+			return addMessage(new ChatMessage(data, config), state);
 		}
 		
 		/**
@@ -486,6 +507,14 @@ package fovea.chat
 				_chatMessages[i].dispose();
 					
 			_chatMessages.splice(0, _chatMessages.length);
+		}
+		
+		/**
+		 * returns a reasonably unique-key based on this specific console
+		 */
+		private function getUniqueKey():String
+		{
+			return ChatUtil.obfuscateString(Capabilities.cpuArchitecture+Capabilities.version+Capabilities.pixelAspectRatio+_chatMessages.length);
 		}
 		
 		/**

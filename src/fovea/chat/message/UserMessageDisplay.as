@@ -22,6 +22,16 @@ package fovea.chat.message
 		private var _messageTF:TextField;
 		/** Time textField */
 		private var _timeTF:TextField;
+		/** state icon container */
+		private var _loadingStateIcon:LoadingStateIcon;
+		
+		/**
+		 * Sets the state of the avatar image
+		 */
+		override public function set state(value:int):void 
+		{
+			_loadingStateIcon.state = value;
+		}
 		
 		/**
 		 * Instantiates a UserMessageDisplay
@@ -38,11 +48,16 @@ package fovea.chat.message
 			// Instantiates Objects
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
+			_loadingStateIcon = new LoadingStateIcon();
 			
 			_avatarImage = new AvatarImage();
 			_userNameTF = new TextField(620,30,data.username);
 			_messageTF = new TextField(620,70,message);
 			_timeTF = new TextField(66, 30, data.time);
+			
+			// initialize objects
+			_loadingStateIcon.scaleX = .3;
+			_loadingStateIcon.scaleY = .3; 
 			
 			// set text field vars
 			_userNameTF.hAlign = HAlign.LEFT
@@ -60,6 +75,7 @@ package fovea.chat.message
 			addChild(_userNameTF);
 			addChild(_messageTF);
 			addChild(_timeTF);
+			addChild(_loadingStateIcon);
 			
 			// add event listeners
 			_avatarImage.addEventListener(ChatUtil.LOAD_SUCCESS, onAvatarImageLoaded);
@@ -90,11 +106,15 @@ package fovea.chat.message
 			_messageTF.width = consoleWidth - _messageTF.x;
 			
 			// Define the message location
-			_timeTF.x = consoleWidth - _timeTF.width;
+			_timeTF.x = consoleWidth - _timeTF.width - _loadingStateIcon.width;
 			_timeTF.y = MessageDisplayUtil.TIME_TEXT_Y;
 			
 			_background.width = this.width;
 			_background.height = _messageTF.bounds.bottom + MessageDisplayUtil.BOTTOM_PADDING;
+			
+			// position the loading state icon
+			_loadingStateIcon.x = consoleWidth - _loadingStateIcon.width;
+			_loadingStateIcon.y = MessageDisplayUtil.TIME_TEXT_Y + 10;
 			
 			// Position the avatar image
 			positionAvatarImage();

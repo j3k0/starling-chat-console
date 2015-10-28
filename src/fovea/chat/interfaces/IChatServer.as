@@ -5,7 +5,7 @@ package fovea.chat.interfaces
 	public interface IChatServer
 	{
 		// initiate sending a message
-		function send(message:String):void;
+		function send(id:String, message:String):void;
 		
 		// return the list of messages on the chat room
 		function getData():Vector.<ChatMessage>;

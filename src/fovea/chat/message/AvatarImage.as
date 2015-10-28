@@ -29,11 +29,10 @@ package fovea.chat.message
 		private var _url:String;
 		/** loader used for avatar image */
 		private var _loader:Loader;
-		
+		/** loading icon */
 		private var _loadingIcon:LoadingIcon;
 		
-		private var _loadFailedIcon:FailedLoadIcon;
-		
+		/** Radius of the loading icon */
 		private static const LOADING_ICON_RADIUS:Number = 20;
 		
 		public function AvatarImage()
@@ -80,7 +79,8 @@ package fovea.chat.message
 			
 			// Remove the loading icon
 			removeChild(_loadingIcon);
-			dispatchEventWith(ChatUtil.LOAD_SUCCESS, true);
+			
+			dispatchEventWith(ChatUtil.LOAD_SUCCESS);
 		}
 		
 		/**
@@ -89,14 +89,11 @@ package fovea.chat.message
 		private function onLoadFail(event:Event):void
 		{
 			trace("Load Failed: "+_url+": "+event.type);
-			// Add a load failed icon
-			_loadFailedIcon = new FailedLoadIcon();
-			_loadFailedIcon.y = -10;
-			addChild(_loadFailedIcon);
+			// Add a load failed image
+			
 			
 			// Remove the loading icon
 			removeChild(_loadingIcon);
-			dispatchEventWith(ChatUtil.LOAD_FAIL, true);
 		}
 		
 		/**
@@ -108,7 +105,6 @@ package fovea.chat.message
 			_loader.removeEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
 			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
 			_image.dispose();
-			_loadFailedIcon.dispose();
 			_loadingIcon.dispose();
 			
 			_loader = null;

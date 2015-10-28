@@ -1,10 +1,10 @@
 package fovea.chat.message
 {	
-	import fovea.chat.ChatUtil;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
+	
 	import fovea.chat.Controller;
 	import fovea.chat.configs.DefaultChatMessageDisplayConfig;
-	
-	import starling.events.Event;
 
 	/**
 	 * Controller for a specific chat message instance</br>
@@ -19,6 +19,8 @@ package fovea.chat.message
 		private var _data:ChatMessageData;
 		/** current state of the message */
 		private var _state:int;
+		/** a timer for a chat message time out */
+		private var _timeoutTimer:Timer;
 		
 		/** The chat Message Display */
 		public function get view():ChatMessageDisplay
@@ -33,7 +35,11 @@ package fovea.chat.message
 		 *  STATE_FAILED      - Unsuccessful retrieval of message data
 		 */
 		public function get state():int {return _state;}
-		public function set state(value:int):void {_state = value;}
+		public function set state(value:int):void 
+		{
+			_state = value;
+			view.state = value;
+		}
 		
 		/** user that sent this message */
 		public function get userName():String {return _data.username;}
@@ -47,11 +53,15 @@ package fovea.chat.message
 		public function get message():String {return _data.message;}
 		public function set message(value:String):void {_data.message = value;}
 		
+		/** message text */
+		public function get id():String {return _data.id;}
+		public function set id(value:String):void {_data.id = value;}
+		
 		
 		/** Retreiving message data */
 		public static const STATE_IN_PROGRESS:int = 0;
 		/** Successful retrieval of message data */
-		public static const STATE_SUCESS:int = 1;
+		public static const STATE_SUCCESS:int = 1;
 		/** Unsuccessful retrieval of message data */
 		public static const STATE_FAILED:int = 2;
 		
@@ -66,6 +76,10 @@ package fovea.chat.message
 			
 			_data = data;
 			
+			_timeoutTimer = new Timer(5000, 1);
+			_timeoutTimer.addEventListener(TimerEvent.TIMER, onTimeOut);
+			_timeoutTimer.start();
+			
 			// If no config defined use default config
 			if(!config)
 				config = new DefaultChatMessageDisplayConfig();
@@ -78,8 +92,26 @@ package fovea.chat.message
 				_view = new UserMessageDisplay(_data, config);
 				(_view as UserMessageDisplay).loadAvatarImage(_data.avatarURL);
 			}
-			_view.addEventListener(ChatUtil.LOAD_SUCCESS, onLoadSuccess);
-			_view.addEventListener(ChatUtil.LOAD_FAIL, onLoadFail);
+		}
+		
+		/**
+		 * Time our timer callback
+		 */
+		private function onTimeOut(event:TimerEvent):void
+		{
+			clearTimer();
+			// set state to fail if still in_progress
+			if(_state == STATE_IN_PROGRESS)
+				view.state = STATE_FAILED;
+		}
+		
+		/**
+		 * Clears the timer
+		 */
+		private function clearTimer():void
+		{
+			_timeoutTimer.stop();
+			_timeoutTimer.removeEventListener(TimerEvent.TIMER, onTimeOut);
 		}
 		
 		/**
@@ -92,28 +124,11 @@ package fovea.chat.message
 		}
 		
 		/**
-		 * Successful image load callback
-		 */
-		private function onLoadSuccess(event:Event):void
-		{
-			event.stopImmediatePropagation();
-			_state = STATE_SUCESS;
-		}
-		
-		/**
-		 * Unsuccessful image load callback
-		 */
-		private function onLoadFail(event:Event):void
-		{
-			event.stopImmediatePropagation();
-			_state = STATE_FAILED;
-		}
-		
-		/**
 		 * Disposes of this object
 		 */
 		public function dispose():void
 		{
+			clearTimer();
 			_view.removeEventListeners();
 			_view.dispose();
 		}

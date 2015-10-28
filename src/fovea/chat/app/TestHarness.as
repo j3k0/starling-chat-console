@@ -6,7 +6,6 @@ package fovea.chat.app
 	import fovea.chat.ChatUtil;
 	import fovea.chat.app.test_data.Server;
 	import fovea.chat.interfaces.IChatTheme;
-	import fovea.chat.message.ChatMessageData;
 	
 	import starling.display.DisplayObject;
 	import starling.display.Quad;
@@ -32,7 +31,6 @@ package fovea.chat.app
 			var quad:Quad = new Quad(dim.x, dim.y, Color.BLACK);
 			
 			_server = new Server();
-			_server.addEventListener(Server.MESSAGE_SENT, onMessageSent);
 			
 			_openButton = new Quad(40,40,Color.GREEN);
 			_openButton.x = 10;
@@ -64,13 +62,6 @@ package fovea.chat.app
 					_chatConsole.show();
 					break;
 			}
-		}
-		
-		private function onMessageSent(event:Event):void
-		{
-			var chatMessageData:ChatMessageData = 
-				new ChatMessageData("Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message, "9:46"); 
-			_chatConsole.addMessageData(chatMessageData);
 		}
 	}
 }

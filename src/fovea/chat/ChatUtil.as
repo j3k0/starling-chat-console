@@ -2,7 +2,6 @@ package fovea.chat
 {
 	import flash.display.Stage;
 	import flash.geom.Point;
-	import flash.system.Capabilities;
 	
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
@@ -36,6 +35,13 @@ package fovea.chat
 		// Color Definitions
 		public static const GREY_TEXT_COLOR:uint 	= 0xC8C8C8;
 		
+		/** obuscateMap */
+		private static const obfuscateMap:Object = {
+			"a":"0","b":"9","c":"1","d":"8","e":"2","f":"7","g":"3","h":"6","i":"4","j":"5","k":"q","l":"w","m":"e",
+			"n":"r","o":"t","p":"y","q":"u","r":"i","s":"o","t":"p","u":"a","v":"s","w":"d","x":"f","y":"g","z":"h",
+			"0":"j","1":"k","2":"l","3":"z","4":"x","5":"c","6":"v","7":"b","8":"n","9":"m"
+		};
+		
 		/**
 		 * Retreives the stage dimension in a defined space
 		 * @param space:DisplayObject - the space in whech to define the stage dimnensions.
@@ -50,6 +56,21 @@ package fovea.chat
 			var screenHeight:Number = screenDim.y * Starling.contentScaleFactor;
 			
 			return space.globalToLocal(new Point(screenWidth, screenHeight));
+		}
+		
+		/**
+		 * Uses a replacement algo to reassign a strings value
+		 */
+		public static function obfuscateString(string:String):String
+		{
+			var returnString:String = new String();
+			
+			for(var i:int = 0; i < string.length;++i)
+			{
+				if(obfuscateMap.hasOwnProperty(string.charAt(i)))
+					returnString += obfuscateMap[string.charAt(i)];
+			}
+			return returnString;
 		}
 	}
 }

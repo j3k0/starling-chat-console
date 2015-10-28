@@ -22,10 +22,13 @@ package fovea.chat.message
 		public var time:String;
 		/** Defines whether the message is a system message */
 		public var isSystemMsg:Boolean;
+		/** the chat messsage id */
+		public var id:String;
 		
 		
-		public function ChatMessageData(username:String, avatarURL:String, message:String, time:String)
+		public function ChatMessageData(id:String, username:String, avatarURL:String, message:String, time:String)
 		{
+			this.id = id;
 			this.username = username;
 			this.avatarURL = avatarURL;
 			this.message = message;

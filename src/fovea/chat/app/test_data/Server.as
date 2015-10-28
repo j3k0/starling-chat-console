@@ -22,8 +22,7 @@ package fovea.chat.app.test_data
 		private static const TEST_IMAGES:Array = 
 			[
 				"http://www.thotkraft.com/test/anime_head_01.jpg",
-				"http://www.thotkraft.com/test/anime_head_02.jpg",
-				"http://www.thotkraft.com/test/anime_head_03.jpg"
+				"http://www.thotkraft.com/test/anime_head_02.jpg"
 			];
 		
 		private static const TEST_NAMES:Array = 
@@ -94,9 +93,15 @@ package fovea.chat.app.test_data
 		}
 		
 		// initiate sending a message
-		public function send(message:String):void
+		public function send(id:String, message:String):void
 		{
-			dispatchEventWith(MESSAGE_SENT, false, {message:message});
+			// theres a 75% probability that the message will be added.
+			if(Math.random() * 100 > 25)
+			{
+				_messages.push(
+					new ChatMessage(new ChatMessageData(id, "Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", message, "9:46")));
+				dataUpdated();
+			}
 		}
 		
 		private function getTimeString():String
@@ -125,6 +130,7 @@ package fovea.chat.app.test_data
 			{
 				var serverMessageIdx:int = Math.floor(Math.max(0, Math.random() * TEST_SERVER_MESSAGES.length - .1));
 				data = new ChatMessageData(
+					"fakeID",
 					null,
 					null,
 					TEST_SERVER_MESSAGES[serverMessageIdx],
@@ -135,6 +141,7 @@ package fovea.chat.app.test_data
 				var userNameIdx:int = Math.floor(Math.max(0, Math.random() * TEST_NAMES.length - .1));
 				var userImageIdx:int = Math.floor(Math.max(0, Math.random() * TEST_IMAGES.length - .1));
 				data = new ChatMessageData(
+					"fakeID",
 					TEST_NAMES[userNameIdx],
 					TEST_IMAGES[userImageIdx],
 					TEST_MESSAGES[userMessageIdx],

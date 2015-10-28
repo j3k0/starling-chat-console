@@ -96,6 +96,15 @@ package fovea.chat.objects
 		}
 		
 		/** 
+		 * Removes an object from the scroll container 
+		 * @param child:DisplayObject - child to add to the scroller
+		 */
+		public function removeItem(child:DisplayObject):void
+		{
+			_scrollContainer.removeChild(child);
+		}
+		
+		/** 
 		 * Set the scroll containers viewport width and height 
 		 * @param width:Number - viewport width
 		 * @param height:Number - viewport height
