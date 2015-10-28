@@ -23,10 +23,15 @@ package fovea.chat.message
 		 */
 		public function SystemMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig)
 		{
+			var message:String = data.message;
+			
+			if (message.length > MessageDisplayUtil.MAX_CHARACTERS-1)
+				message = message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1)+"...";
+			
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
 			
-			_messageTF = new TextField(620,70,data.message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1));
+			_messageTF = new TextField(620,70,message);
 			_messageTF.hAlign = HAlign.LEFT
 			_messageTF.color = ChatUtil.GREY_TEXT_COLOR;
 			_messageTF.bold = true;

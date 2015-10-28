@@ -30,13 +30,18 @@ package fovea.chat.message
 		 */
 		public function UserMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig)
 		{
+			var message:String = data.message;
+			
+			if (message.length > MessageDisplayUtil.MAX_CHARACTERS-1)
+				message = message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1)+"...";
+			
 			// Instantiates Objects
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
 			
 			_avatarImage = new AvatarImage();
 			_userNameTF = new TextField(620,30,data.username);
-			_messageTF = new TextField(620,70,data.message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1));
+			_messageTF = new TextField(620,70,message);
 			_timeTF = new TextField(66, 30, data.time);
 			
 			// set text field vars
