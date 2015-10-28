@@ -1,9 +1,10 @@
-package fovea.chat.app.test_data
+package fovea.chat.themes
 {
 	import fovea.chat.interfaces.IChatTheme;
+	
 	import starling.utils.Color;
-
-	public class ThemeMobile implements IChatTheme
+	
+	public class DefaultChatTheme implements IChatTheme
 	{	
 		/**
 		 * Define if the platform is mobile
@@ -80,8 +81,5 @@ package fovea.chat.app.test_data
 		{
 			return Color.WHITE;
 		}
-		
-		public function ThemeMobile()
-		{}
 	}
 }
