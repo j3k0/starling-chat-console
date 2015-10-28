@@ -26,7 +26,7 @@ package fovea.chat.message
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
 			
-			_messageTF = new TextField(620,70,data.message);
+			_messageTF = new TextField(620,70,data.message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1));
 			_messageTF.hAlign = HAlign.LEFT
 			_messageTF.color = ChatUtil.GREY_TEXT_COLOR;
 			_messageTF.bold = true;

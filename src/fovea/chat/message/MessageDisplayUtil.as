@@ -25,5 +25,8 @@ package fovea.chat.message
 		
 		/** MESSAGE PADDING */
 		public static const BOTTOM_PADDING:Number = 15;
+		
+		/** Maximum allowed characters */
+		public static const MAX_CHARACTERS:int = 257;
 	}
 }

@@ -36,7 +36,7 @@ package fovea.chat.message
 			
 			_avatarImage = new AvatarImage();
 			_userNameTF = new TextField(620,30,data.username);
-			_messageTF = new TextField(620,70,data.message);
+			_messageTF = new TextField(620,70,data.message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1));
 			_timeTF = new TextField(66, 30, data.time);
 			
 			// set text field vars
