@@ -7,8 +7,7 @@ package
     import fovea.chat.app.TestHarness;
 	
 	import fovea.chat.app.TestHarness;
-	import fovea.chat.app.test_data.ThemeMobile;
-	import fovea.chat.app.test_data.ThemeWeb;
+	import fovea.chat.themes.ThemeWeb;
 	
 	import starling.core.Starling;
 	import starling.events.Event;
