@@ -11,8 +11,8 @@ package fovea.chat.app
 	
 	import starling.core.Starling;
 	import starling.events.Event;
-	
-	[SWF(width='1024',height='600',backgroundColor='#ffffff',frameRate='25')]
+
+	[SWF(width='1024',height='600',backgroundColor='#ffffff',frameRate='60')]
 	public class FoveaChatApp extends Sprite
 	{
 		private var _starling:Starling;
