@@ -5,4 +5,4 @@ build:
 	amxmlc -source-path=../src -source-path=libs/shapes/src -library-path=libs/starling.swc -library-path=libs/feathers.swc FoveaChatApp.as
 
 clean:
-	rm FoveaChatApp.swf
+	rm -f FoveaChatApp.swf
