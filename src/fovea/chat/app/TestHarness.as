@@ -1,5 +1,6 @@
 package fovea.chat.app
 {	
+	import flash.filesystem.File;
 	import flash.geom.Point;
 	
 	import fovea.chat.ChatConsole;
@@ -14,6 +15,7 @@ package fovea.chat.app
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
 	import starling.events.TouchPhase;
+	import starling.utils.AssetManager;
 	import starling.utils.Color;
 
 	public class TestHarness extends Sprite
@@ -21,16 +23,31 @@ package fovea.chat.app
 		private var _chatConsole:ChatConsole;
 		private var _server:Server;
 		private var _openButton:Quad;
+		private var _assetManager:AssetManager;
 		
 		public function TestHarness()
 		{}
 		
 		public function init(theme:IChatTheme):void
 		{
+			var appDir:File = File.applicationDirectory;
+			_assetManager = new AssetManager(1);
+			_assetManager.enqueue(appDir.resolvePath("loadFailedIcon.png"));
+			_assetManager.enqueue(appDir.resolvePath("loadingImage.png"));
+			
+			_assetManager.loadQueue(function(ratio:Number):void
+			{
+				if(ratio == 1)
+					start(theme);
+			});
+		}
+		
+		private function start(theme:IChatTheme):void
+		{
 			var dim:Point = ChatUtil.stageDimensions(this, theme.isMobile);
 			var quad:Quad = new Quad(dim.x, dim.y, Color.BLACK);
 			
-			_server = new Server();
+			_server = new Server(_assetManager.getTexture("loadFailedIcon"), _assetManager.getTexture("loadingImage"));
 			
 			_openButton = new Quad(40,40,Color.GREEN);
 			_openButton.x = 10;

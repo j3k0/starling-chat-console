@@ -50,7 +50,7 @@ package fovea.chat.message
 			_background.alpha = config.backgroundAlpha;
 			_loadingStateIcon = new LoadingStateIcon();
 			
-			_avatarImage = new AvatarImage();
+			_avatarImage = new AvatarImage(config.avatarLoadFailedTexture, config.avatarLoadingTexture);
 			_userNameTF = new TextField(620,30,data.username);
 			_messageTF = new TextField(620,70,message);
 			_timeTF = new TextField(66, 30, data.time);

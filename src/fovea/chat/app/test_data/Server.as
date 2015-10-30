@@ -9,6 +9,7 @@ package fovea.chat.app.test_data
 	import fovea.chat.message.ChatMessageDisplayConfig;
 	
 	import starling.events.EventDispatcher;
+	import starling.textures.Texture;
 	import starling.utils.Color;
 
 	public class Server extends EventDispatcher implements IChatServer 
@@ -17,12 +18,16 @@ package fovea.chat.app.test_data
 		private var _messages:Vector.<ChatMessage>;
 		private var _messageTimer:Timer;
 		
+		private var _loadFailedTex:Texture;
+		private var _loadingTex:Texture;
+		
 		public static const MESSAGE_SENT:String = "MESSAGE_SENT";
 		
 		private static const TEST_IMAGES:Array = 
 			[
 				"http://www.thotkraft.com/test/anime_head_01.jpg",
-				"http://www.thotkraft.com/test/anime_head_02.jpg"
+				"http://www.thotkraft.com/test/anime_head_02.jpg",
+				"http://www.thotkraft.com/test/anime_head_03.jpg"
 			];
 		
 		private static const TEST_NAMES:Array = 
@@ -79,8 +84,10 @@ package fovea.chat.app.test_data
 				"Henry wants to play a game",
 			];
 		
-		public function Server()
+		public function Server(loadFailedIcon:Texture, loadingImage:Texture)
 		{
+			_loadFailedTex = loadFailedIcon;
+			_loadingTex = loadingImage;
 			_listenerFunctions = new Vector.<Function>();
 			_messageTimer = new Timer(5000);
 			_messageTimer.addEventListener(TimerEvent.TIMER, onMessageTimer);
@@ -149,7 +156,7 @@ package fovea.chat.app.test_data
 				);
 			}
 			
-			return new ChatMessage(data, new ChatMessageDisplayConfig(Color.WHITE, 0));
+			return new ChatMessage(data, new ChatMessageDisplayConfig(Color.WHITE, 0, _loadFailedTex,_loadingTex));
 		}
 			
 		

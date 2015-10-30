@@ -10,13 +10,10 @@ package fovea.chat.message
 	import flash.system.LoaderContext;
 	
 	import fovea.chat.ChatUtil;
-	import fovea.chat.objects.FailedLoadIcon;
-	import fovea.chat.objects.LoadingIcon;
 	
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.textures.Texture;
-	import starling.utils.Color;
 
 	/**
 	 * Load an avatar image for chat display
@@ -29,29 +26,29 @@ package fovea.chat.message
 		private var _url:String;
 		/** loader used for avatar image */
 		private var _loader:Loader;
-		/** loading icon */
-		private var _loadingIcon:LoadingIcon;
+		/** loading image */
+		private var _loadingImage:Image;
+		/** load failed image */
+		private var _loadFailedImage:Image;
 		
 		/** Radius of the loading icon */
 		private static const LOADING_ICON_RADIUS:Number = 20;
 		
-		public function AvatarImage()
+		public function AvatarImage(loadFailedTexture:Texture, loadingTexture:Texture)
 		{	
 			// Instantiate objects
-			_loadingIcon = new LoadingIcon(Color.BLUE, Color.WHITE, LOADING_ICON_RADIUS);
+			_loadingImage = loadingTexture ? new Image(loadingTexture) : null;
+			_loadFailedImage = loadFailedTexture? new Image(loadFailedTexture) : null;;
 			_loader = new Loader();
-			
-			// Set position
-			_loadingIcon.x = LOADING_ICON_RADIUS;
-			_loadingIcon.y = LOADING_ICON_RADIUS;
 			
 			// Add Event Listeners
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoadSuccess);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
 			_loader.contentLoaderInfo.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
 			
-			// Add Children
-			addChild(_loadingIcon);
+			// Add loading image if exists
+			if(_loadingImage)
+				addChild(_loadingImage);
 		}
 		
 		/**
@@ -78,7 +75,8 @@ package fovea.chat.message
 			addChild(_image);
 			
 			// Remove the loading icon
-			removeChild(_loadingIcon);
+			if(_loadingImage)
+				removeChild(_loadingImage);
 			
 			dispatchEventWith(ChatUtil.LOAD_SUCCESS);
 		}
@@ -89,11 +87,15 @@ package fovea.chat.message
 		private function onLoadFail(event:Event):void
 		{
 			trace("Load Failed: "+_url+": "+event.type);
-			// Add a load failed image
 			
+			// Add a load failed image if exists
+			if(_loadFailedImage)
+				addChild(_loadFailedImage);
+				
 			
 			// Remove the loading icon
-			removeChild(_loadingIcon);
+			if(_loadingImage)
+				removeChild(_loadingImage);
 		}
 		
 		/**
@@ -105,7 +107,12 @@ package fovea.chat.message
 			_loader.removeEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
 			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
 			_image.dispose();
-			_loadingIcon.dispose();
+			
+			if(_loadingImage)
+				_loadingImage.dispose();
+			
+			if(_loadFailedImage)
+				_loadFailedImage.dispose();
 			
 			_loader = null;
 		}
