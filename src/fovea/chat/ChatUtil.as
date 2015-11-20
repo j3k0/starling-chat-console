@@ -35,6 +35,9 @@ package fovea.chat
 		// Color Definitions
 		public static const GREY_TEXT_COLOR:uint 	= 0xC8C8C8;
 		
+		// Translate function
+		public static var translate:Function = function(str:String):String{return str};
+		
 		/** obuscateMap */
 		private static const obfuscateMap:Object = {
 			"a":"0","b":"9","c":"1","d":"8","e":"2","f":"7","g":"3","h":"6","i":"4","j":"5","k":"q","l":"w","m":"e",

@@ -18,6 +18,7 @@ package fovea.chat
 	import starling.core.Starling;
 	import starling.display.Quad;
 	import starling.display.Sprite;
+	import starling.display.Stage;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
@@ -55,6 +56,8 @@ package fovea.chat
 		private var _chatAlert:NewChatAlert;
 		/** map of sent messages to chat message objects*/
 		private var _sentMessages:Object;
+		/** translate function */
+		private var _starlingStage:starling.display.Stage;
 		
 		/** Current state of the chat console 
 		    <ul><li>OPEN</li><li>CLOSED</li><li>TRANSITIONING</li>
@@ -77,12 +80,14 @@ package fovea.chat
 		 * @param server:IChatServer - Server interface to make and receive server calls
 		 * @param theme:IChatTheme - Theme to define ChatConsole Dispaly Properties
 		 */
-		public function ChatConsole(server:IChatServer, theme:IChatTheme)
+		public function ChatConsole(server:IChatServer, theme:IChatTheme, translate:Function=null)
 		{	
 			// Definitions
 			_server = server;
 			_theme = theme;
 			_state = ChatUtil.CLOSED;
+			if(translate)
+				ChatUtil.translate = translate;
 
 			// instantiate objects
 			_background = new Quad(_theme.width, 1,_theme.backgroundColor);
@@ -155,7 +160,7 @@ package fovea.chat
 		 */
 		private function resetStageLoc():void
 		{
-			var nativeStage:Stage = Starling.current.nativeStage;
+			var nativeStage:flash.display.Stage = Starling.current.nativeStage;
 			// get the stage dimensions of the parent
 			_parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
 			// Define the stage dimensions in this space.
@@ -190,6 +195,9 @@ package fovea.chat
 		{	
 			// Resets the position of the and sizing of the console
 			resetStageLoc();
+			
+			// store off the stage for disposal
+			_starlingStage = stage;
 			
 			// initialize the close button
 			// add a touch quad for the close button
@@ -444,7 +452,7 @@ package fovea.chat
 			_tween.moveTo(_parentStageDimensions.x, y);
 			Starling.juggler.add(_tween);
 			// remove the stage touch listener for tapping outside the console 
-			stage.removeEventListener(TouchEvent.TOUCH, onTouch);
+			_starlingStage.removeEventListener(TouchEvent.TOUCH, onTouch);
 		}
 		
 		/**
@@ -526,7 +534,7 @@ package fovea.chat
 			clearMessages();
 			
 			// Remove event listeners 
-			stage.removeEventListener(TouchEvent.TOUCH, onTouch);
+			_starlingStage.removeEventListener(TouchEvent.TOUCH, onTouch);
 			_closeButton.removeEventListeners();
 			_chatAlert.removeEventListeners();
 			_chatMessageContainer.removeEventListeners();

@@ -36,9 +36,9 @@ package fovea.chat.reply_window
 		/** shadow 3 */
 		private var _shadow3:Quad;
 		
-		private static const CHARS_LEFT_TEXT:String = "Left: ";
+		private static const CHARS_LEFT_TEXT:String = "chars_left";
+		private static const DEFAULT_TEXT:String = "write_reply";
 		private static const BACKGROUND_HEIGHT:Number = 75;
-		private static const DEFAULT_TEXT:String = "Write a reply";
 		
 		
 		/**
@@ -58,13 +58,13 @@ package fovea.chat.reply_window
 			_replyTI = new TextInput();
 			
 			// Initialize objects
-			_replyTI.text = DEFAULT_TEXT;
+			_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
 			_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 			_replyTI.textEditorProperties.multiline = true;
 			_replyTI.padding = 5;
 			_replyTI.maxChars = MessageDisplayUtil.MAX_CHARACTERS;
 			
-			_charCountTF = new TextField(100, 15, CHARS_LEFT_TEXT+(MessageDisplayUtil.MAX_CHARACTERS - 1), "Verdana", 8);
+			_charCountTF = new TextField(100, 15, ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.MAX_CHARACTERS - 1), "Verdana", 8);
 			_charCountTF.hAlign = HAlign.RIGHT;
 			
 			_shadow1.alpha = .1;
@@ -140,7 +140,7 @@ package fovea.chat.reply_window
 		private function onTextAreaFocusIn(event:Event):void
 		{
 			// If the text box is using the default text clear it.
-			if(_replyTI.text == DEFAULT_TEXT)
+			if(_replyTI.text == ChatUtil.translate(DEFAULT_TEXT))
 				_replyTI.text = "";
 			
 			dispatchEventWith(ChatUtil.SHOW_KEYBOARD, true);
@@ -153,7 +153,7 @@ package fovea.chat.reply_window
 		{
 			// If the text box is empty return it to the default text
 			if(_replyTI.text == "")
-				_replyTI.text = DEFAULT_TEXT;
+				_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
 			
 			dispatchEventWith(ChatUtil.HIDE_KEYBOARD, true);
 		}
@@ -177,9 +177,9 @@ package fovea.chat.reply_window
 				
 				// Sets the character left
 				if(_replyTI.hasFocus)
-					_charCountTF.text = CHARS_LEFT_TEXT+(_replyTI.maxChars - (_replyTI.text.length + 1));
+					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+(_replyTI.maxChars - (_replyTI.text.length + 1));
 				else
-					_charCountTF.text = CHARS_LEFT_TEXT+(MessageDisplayUtil.MAX_CHARACTERS - 1);
+					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.MAX_CHARACTERS - 1);
 			}
 		}
 		
@@ -190,7 +190,7 @@ package fovea.chat.reply_window
 		{
 			if(_replyTI.text == "")
 			{
-				_replyTI.text = DEFAULT_TEXT;
+				_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
 				return;
 			}
 			
