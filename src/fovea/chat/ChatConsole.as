@@ -165,6 +165,8 @@ package fovea.chat
 			_parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
 			// Define the stage dimensions in this space.
 			_stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
+            _parentStageDimensions = new Point(stage.stageWidth, stage.stageHeight);
+            _stageDimensions =  new Point(stage.stageWidth, stage.stageHeight);
 			
 			// Define console location
 			x = _parentStageDimensions.x;
