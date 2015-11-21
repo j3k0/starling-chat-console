@@ -3,6 +3,7 @@ package fovea.chat
 	import flash.display.Stage;
 	import flash.geom.Point;
 	import flash.system.Capabilities;
+	import flash.utils.setTimeout;
 	
 	import fovea.chat.interfaces.IChatServer;
 	import fovea.chat.interfaces.IChatTheme;
@@ -114,6 +115,8 @@ package fovea.chat
 			addEventListener(Event.RESIZE, onResize);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(ChatUtil.SEND_REPLY_TEXT, onSendReplyText);
+
+			setTimeout(onDataRetrieved, 50);
 		}
 		
 		/**
@@ -165,8 +168,8 @@ package fovea.chat
 			_parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
 			// Define the stage dimensions in this space.
 			_stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
-            _parentStageDimensions = new Point(stage.stageWidth, stage.stageHeight);
-            _stageDimensions =  new Point(stage.stageWidth, stage.stageHeight);
+			_parentStageDimensions = new Point(stage.stageWidth, stage.stageHeight);
+			_stageDimensions =  new Point(stage.stageWidth, stage.stageHeight);
 			
 			// Define console location
 			x = _parentStageDimensions.x;
@@ -252,12 +255,12 @@ package fovea.chat
 		private function onSendReplyText(event:Event):void
 		{
 			// add the chat message
-			var id:String = getUniqueKey();
-			_sentMessages[id] =
-				addMessageData(new ChatMessageData(id, "Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message,"test"), ChatMessage.STATE_IN_PROGRESS);
-			
+			//var id:String = getUniqueKey();
+			//_sentMessages[id] =
+			//	addMessageData(new ChatMessageData(id, "Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message, "test"), ChatMessage.STATE_IN_PROGRESS);
+
 			//send the text message to the server
-			_server.send(id, event.data.message);
+			_server.send(getTimestamp(), event.data.message);
 			_chatMessageContainer.scrollToBottom();
 			if(_chatMessageContainer.y > 0)
 				slideContent(Math.max(_replyWindow.y - _chatMessageContainer.contentHeight, 0));
@@ -518,13 +521,18 @@ package fovea.chat
 					
 			_chatMessages.splice(0, _chatMessages.length);
 		}
-		
+
+		private function getTimestamp():String {
+			return "" + (new Date()).valueOf();
+		}
+
 		/**
 		 * returns a reasonably unique-key based on this specific console
 		 */
 		private function getUniqueKey():String
 		{
-			return ChatUtil.obfuscateString(Capabilities.cpuArchitecture+Capabilities.version+Capabilities.pixelAspectRatio+_chatMessages.length);
+			return getTimestamp();
+			// return ChatUtil.obfuscateString(Capabilities.cpuArchitecture+Capabilities.version+Capabilities.pixelAspectRatio+_chatMessages.length);
 		}
 		
 		/**
