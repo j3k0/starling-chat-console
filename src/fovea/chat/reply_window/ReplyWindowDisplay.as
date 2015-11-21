@@ -62,9 +62,9 @@ package fovea.chat.reply_window
 			_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 			_replyTI.textEditorProperties.multiline = true;
 			_replyTI.padding = 5;
-			_replyTI.maxChars = MessageDisplayUtil.MAX_CHARACTERS;
+			_replyTI.maxChars = MessageDisplayUtil.getInstance().MAX_CHARACTERS;
 			
-			_charCountTF = new TextField(100, 15, ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.MAX_CHARACTERS - 1), "Verdana", 8);
+			_charCountTF = new TextField(100, 15, ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1), "Verdana", 8);
 			_charCountTF.hAlign = HAlign.RIGHT;
 			
 			_shadow1.alpha = .1;
@@ -172,14 +172,14 @@ package fovea.chat.reply_window
 				if(_replyTI.text != "")
 					sendText();
 			}else{
-				if(_replyTI.text.length > (MessageDisplayUtil.MAX_CHARACTERS - 1))
+				if(_replyTI.text.length > (MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1))
 					_replyTI.text = _replyTI.text.substring(0, _replyTI.text.length - 1);
 				
 				// Sets the character left
 				if(_replyTI.hasFocus)
 					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+(_replyTI.maxChars - (_replyTI.text.length + 1));
 				else
-					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.MAX_CHARACTERS - 1);
+					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1);
 			}
 		}
 		

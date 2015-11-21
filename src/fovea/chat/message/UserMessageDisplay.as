@@ -1,6 +1,7 @@
 package fovea.chat.message
 {	
 	import fovea.chat.ChatUtil;
+	import fovea.chat.message.ChatMessage;
 	
 	import starling.display.Quad;
 	import starling.events.Event;
@@ -38,12 +39,13 @@ package fovea.chat.message
 		 * @param data:ChatMessageData - Data associated with this chat message
 		 * @param config:ChatMessageDisplayConfig - Display Config associated with this chat message
 		 */
-		public function UserMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig)
+		public function UserMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig, state:int)
 		{
 			var message:String = data.message;
+            var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
-			if (message.length > MessageDisplayUtil.MAX_CHARACTERS-1)
-				message = message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1)+"...";
+			if (message.length > mdu.MAX_CHARACTERS-1)
+				message = message.substr(0,mdu.MAX_CHARACTERS-1)+"...";
 			
 			// Instantiates Objects
 			_background = new Quad(1,1,config.backgroundColor);
@@ -51,13 +53,14 @@ package fovea.chat.message
 			_loadingStateIcon = new LoadingStateIcon();
 			
 			_avatarImage = new AvatarImage(config.avatarLoadFailedTexture, config.avatarLoadingTexture);
-			_userNameTF = new TextField(620,30,data.username);
-			_messageTF = new TextField(620,70,message);
-			_timeTF = new TextField(66, 30, data.time);
+			_userNameTF = new TextField(mdu.NAME_TEXT_WIDTH, mdu.NAME_TEXT_HEIGHT, data.username, mdu.NAME_TEXT_FONT_NAME, mdu.NAME_TEXT_FONT_SIZE, mdu.NAME_TEXT_COLOR);
+			_messageTF = new TextField(mdu.MESSAGE_TEXT_WIDTH, mdu.MESSAGE_TEXT_HEIGHT, message, mdu.MESSAGE_TEXT_FONT_NAME, mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
+			_timeTF = new TextField(mdu.TIME_TEXT_WIDTH, mdu.TIME_TEXT_HEIGHT, data.time, mdu.TIME_TEXT_FONT_NAME, mdu.TIME_TEXT_FONT_SIZE, mdu.TIME_TEXT_COLOR);
 			
 			// initialize objects
-			_loadingStateIcon.scaleX = .3;
-			_loadingStateIcon.scaleY = .3; 
+			_loadingStateIcon.width = _loadingStateIcon.height = mdu.LOADING_STATE_ICON_SIZE;
+            //scaleX = .3;
+			//_loadingStateIcon.scaleY = .3; 
 			
 			// set text field vars
 			_userNameTF.hAlign = HAlign.LEFT
@@ -75,7 +78,8 @@ package fovea.chat.message
 			addChild(_userNameTF);
 			addChild(_messageTF);
 			addChild(_timeTF);
-			addChild(_loadingStateIcon);
+            if (state == ChatMessage.STATE_IN_PROGRESS)
+                addChild(_loadingStateIcon);
 			
 			// add event listeners
 			_avatarImage.addEventListener(ChatUtil.LOAD_SUCCESS, onAvatarImageLoaded);
@@ -95,26 +99,27 @@ package fovea.chat.message
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{
+            var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
 			// Define the username location
-			_userNameTF.x = MessageDisplayUtil.NAME_TEXT_X;
-			_userNameTF.y = MessageDisplayUtil.NAME_TEXT_Y;
+			_userNameTF.x = mdu.NAME_TEXT_X;
+			_userNameTF.y = mdu.NAME_TEXT_Y;
 			
 			// Define the message location
-			_messageTF.x = MessageDisplayUtil.MESSAGE_TEXT_X;
-			_messageTF.y = MessageDisplayUtil.MESSAGE_TEXT_Y;
+			_messageTF.x = mdu.MESSAGE_TEXT_X;
+			_messageTF.y = mdu.MESSAGE_TEXT_Y;
 			_messageTF.width = consoleWidth - _messageTF.x;
 			
 			// Define the message location
 			_timeTF.x = consoleWidth - _timeTF.width - _loadingStateIcon.width;
-			_timeTF.y = MessageDisplayUtil.TIME_TEXT_Y;
+			_timeTF.y = mdu.TIME_TEXT_Y;
 			
 			_background.width = this.width;
-			_background.height = _messageTF.bounds.bottom + MessageDisplayUtil.BOTTOM_PADDING;
+			_background.height = _messageTF.bounds.bottom + mdu.BOTTOM_PADDING;
 			
 			// position the loading state icon
 			_loadingStateIcon.x = consoleWidth - _loadingStateIcon.width;
-			_loadingStateIcon.y = MessageDisplayUtil.TIME_TEXT_Y + 10;
+			_loadingStateIcon.y = mdu.TIME_TEXT_Y;
 			
 			// Position the avatar image
 			positionAvatarImage();
@@ -134,8 +139,8 @@ package fovea.chat.message
 		private function positionAvatarImage():void
 		{
 			// Define the avatar image location
-			_avatarImage.x = MessageDisplayUtil.AV_IMAGE_X;
-			_avatarImage.y = ((_messageTF.bounds.bottom - _userNameTF.bounds.top) >> 1);
+			_avatarImage.x = MessageDisplayUtil.getInstance().AV_IMAGE_X;
+			_avatarImage.y = (_messageTF.bounds.bottom - _userNameTF.bounds.top) * 0.5/* - _avatarImage.height * 0.5*/;
 		}
 		
 		/**

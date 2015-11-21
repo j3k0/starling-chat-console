@@ -1,11 +1,17 @@
 package fovea.chat.themes
 {
+	import feathers.controls.Button;
+
 	import fovea.chat.interfaces.IChatTheme;
+	import fovea.chat.message.MessageDisplayUtil;
 	
 	import starling.utils.Color;
 	
 	public class DefaultChatTheme implements IChatTheme
 	{	
+		private var _stageWidth:Number = 0;
+		private var _stageHeight:Number = 0;
+
 		/**
 		 * Define if the platform is mobile
 		 */
@@ -14,6 +20,13 @@ package fovea.chat.themes
 			return true;
 		}
 		
+		/**
+		 * How graphic elements must be scaled up/down
+		 */
+		public function get scaleFactor():Number {
+			return 1.0;
+		}
+
 		/** 
 		 *  Background Color of the chat console window 
 		 */
@@ -27,7 +40,7 @@ package fovea.chat.themes
 		 */
 		public function get width():Number
 		{
-			return 800;
+			return _stageWidth * 0.9; // 800;
 		}
 		
 		/** 
@@ -35,7 +48,7 @@ package fovea.chat.themes
 		 */
 		public function get openCloseTransitionTime():Number
 		{
-			return .25;
+			return .2;
 		}
 		
 		
@@ -81,8 +94,28 @@ package fovea.chat.themes
 		{
 			return Color.WHITE;
 		}
-		
-		public function DefaultChatTheme()
+
+		/**
+		 * Customize the look of the close button
+		 */
+		public function customizeCloseButton(b:Button):void
 		{}
+
+    		/**
+		 * Size of the avatar image
+		 */
+		public function avatarSize():Number
+		{
+			return 32;
+		}
+
+		public function customizeMessageDisplay(mdu:MessageDisplayUtil):void
+		{}
+		
+		public function DefaultChatTheme(stageWidth:Number, stageHeight:Number)
+		{
+			_stageWidth = stageWidth;
+			_stageHeight = stageHeight;
+		}
 	}
 }

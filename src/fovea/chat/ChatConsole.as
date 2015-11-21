@@ -73,8 +73,10 @@ package fovea.chat
 			return _state;
 		}
 		
-		/** the location offset of the cloe button from tight and top */
+		/** the location offset of the close button from tight and top */
 		private static const CLOSE_BUTTON_OFFSET:Number = 10;
+
+		public static var theme:IChatTheme = null;
 		
 		/**
 		 * Instantiate ChatConsole
@@ -86,6 +88,7 @@ package fovea.chat
 			// Definitions
 			_server = server;
 			_theme = theme;
+			ChatConsole.theme = theme;
 			_state = ChatUtil.CLOSED;
 			if(translate)
 				ChatUtil.translate = translate;
@@ -95,9 +98,12 @@ package fovea.chat
 			_chatMessageContainer = new ChatMessageContainer();
 			_chatMessages = new Vector.<ChatMessage>();
 			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor);
-			_closeButton = new CloseButton(5);
+			_closeButton = new CloseButton(5 * _theme.scaleFactor);
 			_chatAlert = new NewChatAlert(this);
 			_sentMessages = new Object();
+
+			// customize objects
+			_theme.customizeCloseButton(_closeButton);
 			
 			// add children
 			addChild(_background);
@@ -163,11 +169,12 @@ package fovea.chat
 		 */
 		private function resetStageLoc():void
 		{
-			var nativeStage:flash.display.Stage = Starling.current.nativeStage;
+			// var nativeStage:flash.display.Stage = Starling.current.nativeStage;
 			// get the stage dimensions of the parent
-			_parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
+			// _parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
 			// Define the stage dimensions in this space.
-			_stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
+			// _stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
+
 			_parentStageDimensions = new Point(stage.stageWidth, stage.stageHeight);
 			_stageDimensions =  new Point(stage.stageWidth, stage.stageHeight);
 			
@@ -235,6 +242,10 @@ package fovea.chat
 		{
 			// retrieve chat messages from the server
 			var chatMessages:Vector.<ChatMessage> = _server.getData();
+
+			if (chatMessages.length == 0) {
+				clearMessages();
+			}
 			
 			// add the message list to the console if doesnt exist
 			for(var i:int = 0; i < chatMessages.length; ++i){
@@ -242,7 +253,7 @@ package fovea.chat
 				var idx:int = _chatMessages.indexOf(chatMessage);
 				
 				if(idx == -1)
-					addMessage(chatMessage, ChatMessage.STATE_SUCCESS);
+					addMessage(chatMessage); // ChatMessage.STATE_SUCCESS);
 			}
 			
 			// reorganize the layout when new chatmessages are received 
@@ -268,12 +279,12 @@ package fovea.chat
 		
 		/**
 		 * When a new message is received
-		 */
 		private function onReceivedChat(event:Event):void
 		{
 			// add the message to the message container 
 			addMessageData(event.data.data, event.data.config);
 		}
+		 */
 		
 		/**
 		 * Close button tapped callback
@@ -372,7 +383,7 @@ package fovea.chat
 		 * Adds a new message to the chat message container
 		 * @param data:ChatMessage - Chat message object to be added to the message container
 		 */
-		public function addMessage(chatMessage:ChatMessage, state:int):ChatMessage
+		public function addMessage(chatMessage:ChatMessage):ChatMessage
 		{	
 			// Set this user sent chat message state to success
 			if(_sentMessages[chatMessage.id] != "undefined" && _sentMessages[chatMessage.id] != null)
@@ -383,7 +394,7 @@ package fovea.chat
 			}
 			
 			// set incoming chats to success
-			chatMessage.state = state;
+			// chatMessage.state = state;
 			// grab the last message's position in relation to the bottom of the container 
 			var lastMsgPos:Number = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
 			
@@ -410,11 +421,11 @@ package fovea.chat
 		 * Adds a new message to the chat message container
 		 * @param data:ChatMessageData - Chat message data to be added to the message container
 		 * @param config:ChatMessageDisplayConfig = null - Display configuration of the chat message display
-		 */
 		public function addMessageData(data:ChatMessageData, state:int, config:ChatMessageDisplayConfig = null):ChatMessage
 		{
 			return addMessage(new ChatMessage(data, config), state);
 		}
+		 */
 		
 		/**
 		 * Display Console

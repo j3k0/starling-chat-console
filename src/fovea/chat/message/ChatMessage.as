@@ -70,9 +70,9 @@ package fovea.chat.message
 		 * @param data:ChatMessageData - Data associated with this chat message
 		 * @param config:ChatMessageDisplayConfig - Display Config associated with this chat message
 		 */
-		public function ChatMessage(data:ChatMessageData, config:ChatMessageDisplayConfig=null)
+		public function ChatMessage(data:ChatMessageData, state:int, config:ChatMessageDisplayConfig=null)
 		{
-			_state = STATE_IN_PROGRESS;
+			_state = state; // STATE_IN_PROGRESS;
 			
 			_data = data;
 			
@@ -89,7 +89,7 @@ package fovea.chat.message
 			{
 				_view = new SystemMessageDisplay(_data, config);
 			}else{
-				_view = new UserMessageDisplay(_data, config);
+				_view = new UserMessageDisplay(_data, config, state);
 				(_view as UserMessageDisplay).loadAvatarImage(_data.avatarURL);
 			}
 		}
