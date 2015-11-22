@@ -29,12 +29,6 @@ package fovea.chat.reply_window
 		private var _replyTI:TextInput;
 		/** display the amount of charcters left */
 		private var _charCountTF:TextField;
-		/** shadow 1 */
-		private var _shadow1:Quad;
-		/** shadow 2 */
-		private var _shadow2:Quad;
-		/** shadow 3 */
-		private var _shadow3:Quad;
 		
 		private static const CHARS_LEFT_TEXT:String = "chars_left";
 		private static const DEFAULT_TEXT:String = "write_reply";
@@ -50,9 +44,6 @@ package fovea.chat.reply_window
 		{
 			// Instantiate 
 			_background = new Quad(1,1,backgroundColor);
-			_shadow1 = new Quad(1,1,Color.BLACK);
-			_shadow2 = new Quad(2,1,Color.BLACK);
-			_shadow3 = new Quad(3,1,Color.BLACK);
 			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
 			_textBackground = new Quad(1,1,textboxColor);
 			_replyTI = new TextInput();
@@ -67,10 +58,6 @@ package fovea.chat.reply_window
 			_charCountTF = new TextField(100, 15, ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1), "Verdana", 8);
 			_charCountTF.hAlign = HAlign.RIGHT;
 			
-			_shadow1.alpha = .1;
-			_shadow2.alpha = .1;
-			_shadow3.alpha = .1;
-			
 			// Add listeners
 			_replyTI.addEventListener(FeathersEventType.FOCUS_IN, onTextAreaFocusIn);
 			_replyTI.addEventListener(FeathersEventType.FOCUS_OUT, onTextAreaFocusOut);
@@ -80,9 +67,6 @@ package fovea.chat.reply_window
 			addChild(_background);
 			addChild(_textBackgroundBorder);
 			addChild(_textBackground)
-			addChild(_shadow3);
-			addChild(_shadow2);
-			addChild(_shadow1);
 			addChild(_replyTI);
 			addChild(_charCountTF);
 		}
@@ -115,19 +99,6 @@ package fovea.chat.reply_window
 			_replyTI.y = _textBackground.y;
 			_replyTI.width = _textBackground.width;
 			_replyTI.height = _textBackground.height;
-			
-			// Set the shadow position and size
-			_shadow1.x = _textBackgroundBorder.x - 1;
-			_shadow1.y = _textBackgroundBorder.y;
-			_shadow1.height = _textBackgroundBorder.height; 
-			
-			_shadow2.x = _textBackgroundBorder.x - 2;
-			_shadow2.y = _textBackgroundBorder.y;
-			_shadow2.height = _textBackgroundBorder.height;
-			
-			_shadow3.x = _textBackgroundBorder.x - 3; 
-			_shadow3.y = _textBackgroundBorder.y;
-			_shadow3.height = _textBackgroundBorder.height;
 			
 			// Set the character count display position
 			_charCountTF.x = _replyTI.bounds.right - _charCountTF.width;
@@ -222,9 +193,6 @@ package fovea.chat.reply_window
 		{
 			_replyTI.removeEventListeners();
 			_replyTI.dispose();
-			_shadow1.dispose();
-			_shadow2.dispose();
-			_shadow3.dispose();
 		}
 	}
 }
