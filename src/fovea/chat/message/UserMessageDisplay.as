@@ -42,7 +42,7 @@ package fovea.chat.message
 		public function UserMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig, state:int)
 		{
 			var message:String = data.message;
-            var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
+			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
 			if (message.length > mdu.MAX_CHARACTERS-1)
 				message = message.substr(0,mdu.MAX_CHARACTERS-1)+"...";
@@ -59,7 +59,7 @@ package fovea.chat.message
 			
 			// initialize objects
 			_loadingStateIcon.width = _loadingStateIcon.height = mdu.LOADING_STATE_ICON_SIZE;
-            //scaleX = .3;
+			//scaleX = .3;
 			//_loadingStateIcon.scaleY = .3; 
 			
 			// set text field vars
@@ -78,9 +78,9 @@ package fovea.chat.message
 			addChild(_userNameTF);
 			addChild(_messageTF);
 			addChild(_timeTF);
-            if (state == ChatMessage.STATE_IN_PROGRESS)
-                addChild(_loadingStateIcon);
-			
+			if (state == ChatMessage.STATE_IN_PROGRESS)
+				addChild(_loadingStateIcon);
+
 			// add event listeners
 			_avatarImage.addEventListener(ChatUtil.LOAD_SUCCESS, onAvatarImageLoaded);
 		}
@@ -99,20 +99,21 @@ package fovea.chat.message
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{
-            var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
+			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
 			// Define the username location
 			_userNameTF.x = mdu.NAME_TEXT_X;
 			_userNameTF.y = mdu.NAME_TEXT_Y;
 			
 			// Define the message location
-			_messageTF.x = mdu.MESSAGE_TEXT_X;
-			_messageTF.y = mdu.MESSAGE_TEXT_Y;
-			_messageTF.width = consoleWidth - _messageTF.x;
-			
-			// Define the message location
 			_timeTF.x = consoleWidth - _timeTF.width - _loadingStateIcon.width;
 			_timeTF.y = mdu.TIME_TEXT_Y;
+
+			// Define the message location
+			_messageTF.x = mdu.MESSAGE_TEXT_X;
+			_messageTF.y = mdu.MESSAGE_TEXT_Y;
+			_messageTF.width = mdu.MESSAGE_TEXT_WIDTH;
+			//_messageTF.width = _timeTF.x - _messageTF.x;
 			
 			_background.width = this.width;
 			_background.height = _messageTF.bounds.bottom + mdu.BOTTOM_PADDING;
