@@ -3,6 +3,7 @@ package fovea.chat.reply_window
 	import feathers.controls.TextInput;
 	import feathers.events.FeathersEventType;
 	
+	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
 	import fovea.chat.message.MessageDisplayUtil;
 	
@@ -32,7 +33,9 @@ package fovea.chat.reply_window
 		
 		private static const CHARS_LEFT_TEXT:String = "chars_left";
 		private static const DEFAULT_TEXT:String = "write_reply";
-		private static const BACKGROUND_HEIGHT:Number = 75;
+		private static function get BACKGROUND_HEIGHT():Number {
+			return 100 * ChatConsole.theme.scaleFactor;
+		}
 		
 		
 		/**
@@ -47,15 +50,23 @@ package fovea.chat.reply_window
 			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
 			_textBackground = new Quad(1,1,textboxColor);
 			_replyTI = new TextInput();
+			_replyTI.textEditorProperties.fontFamily = "Verdana";
+			_replyTI.textEditorProperties.fontSize = 24 * ChatConsole.theme.scaleFactor;
+			_replyTI.textEditorProperties.color = 0x444444;
 			
 			// Initialize objects
 			_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
 			_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 			_replyTI.textEditorProperties.multiline = true;
-			_replyTI.padding = 5;
+			_replyTI.padding = 5 * ChatConsole.theme.scaleFactor;
 			_replyTI.maxChars = MessageDisplayUtil.getInstance().MAX_CHARACTERS;
 			
-			_charCountTF = new TextField(100, 15, ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1), "Verdana", 8);
+			_charCountTF = new TextField(
+				200 * ChatConsole.theme.scaleFactor,
+				50 * ChatConsole.theme.scaleFactor,
+				ChatUtil.translate(CHARS_LEFT_TEXT)+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1),
+				"Verdana", 20 * ChatConsole.theme.scaleFactor,
+				MessageDisplayUtil.getInstance().TIME_TEXT_COLOR);
 			_charCountTF.hAlign = HAlign.RIGHT;
 			
 			// Add listeners
@@ -82,27 +93,27 @@ package fovea.chat.reply_window
 			_background.height = BACKGROUND_HEIGHT;
 			
 			// Set the textbox background size and position
-			_textBackground.width = consoleWidth - 20;
-			_textBackground.height = BACKGROUND_HEIGHT - 20;
+			_textBackground.width = consoleWidth - 20 * ChatConsole.theme.scaleFactor;
+			_textBackground.height = BACKGROUND_HEIGHT - 20 * ChatConsole.theme.scaleFactor;
 			
 			_textBackground.x = (consoleWidth - _textBackground.width) >> 1;
 			_textBackground.y = (BACKGROUND_HEIGHT - _textBackground.height) >> 1;
 			
 			// Define the textbox border
-			_textBackgroundBorder.x = _textBackground.x - 2;
-			_textBackgroundBorder.y = _textBackground.y - 2;
-			_textBackgroundBorder.width = _textBackground.width + 4;
-			_textBackgroundBorder.height = _textBackground.height + 4;
+			_textBackgroundBorder.x = _textBackground.x - 2 * ChatConsole.theme.scaleFactor;
+			_textBackgroundBorder.y = _textBackground.y - 2 * ChatConsole.theme.scaleFactor;
+			_textBackgroundBorder.width = _textBackground.width + 4 * ChatConsole.theme.scaleFactor;
+			_textBackgroundBorder.height = _textBackground.height + 4 * ChatConsole.theme.scaleFactor;
 			
 			// Set the text input position and size
-			_replyTI.x = _textBackground.x;
-			_replyTI.y = _textBackground.y;
-			_replyTI.width = _textBackground.width;
-			_replyTI.height = _textBackground.height;
+			_replyTI.x = _textBackground.x + 10 * ChatConsole.theme.scaleFactor;
+			_replyTI.y = _textBackground.y + 5 * ChatConsole.theme.scaleFactor;
+			_replyTI.width = _textBackground.width - 10 * ChatConsole.theme.scaleFactor;
+			_replyTI.height = _textBackground.height - 10 * ChatConsole.theme.scaleFactor;
 			
 			// Set the character count display position
-			_charCountTF.x = _replyTI.bounds.right - _charCountTF.width;
-			_charCountTF.y = _replyTI.bounds.bottom - _charCountTF.height;
+			_charCountTF.x = _replyTI.bounds.right - _charCountTF.width - 10 * ChatConsole.theme.scaleFactor;
+			_charCountTF.y = _textBackgroundBorder.bounds.bottom - _charCountTF.height;
 		}
 		
 		/**

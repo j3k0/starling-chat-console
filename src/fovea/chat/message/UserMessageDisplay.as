@@ -150,10 +150,10 @@ package fovea.chat.message
 		override public function dispose():void
 		{
 			_avatarImage.removeEventListeners();
+			_avatarImage.dispose();
 			
 			_userNameTF.dispose();
 			_messageTF.dispose();
-			_avatarImage.dispose();
 			_background.dispose();
 		}
 	}

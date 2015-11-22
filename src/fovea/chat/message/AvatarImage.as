@@ -112,10 +112,13 @@ package fovea.chat.message
 		 */
 		override public function dispose():void
 		{
-			_loader.removeEventListener(Event.COMPLETE, onLoadSuccess);
-			_loader.removeEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
-			_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
-			_image.dispose();
+			if (_loader) {
+				_loader.removeEventListener(Event.COMPLETE, onLoadSuccess);
+				_loader.removeEventListener(IOErrorEvent.IO_ERROR, onLoadFail);
+				_loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onLoadFail);
+			}
+			if (_image)
+				_image.dispose();
 			
 			if(_loadingImage)
 				_loadingImage.dispose();
