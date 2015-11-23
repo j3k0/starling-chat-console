@@ -244,6 +244,27 @@ package fovea.chat
 			// Wheh the app resizes call layout
 			layout();
 		}
+
+		/**
+		 * Returns true iff the given chatMessage has already been added to the console.
+		 * @param chatMessage:ChatMessage the message to search
+		 * @param bestBet:int the index you assume it can be found at (-1 for none)
+		 */
+		private function hasChatMessage(chatMessage:ChatMessage, bestBet:int = -1):Boolean {
+
+			// Most probably, the chat message already is at the same index.
+			// Let's take our chance!
+			if (bestBet >= 0 && _chatMessages.length > bestBet && _chatMessages[bestBet].id == chatMessage.id) {
+				return true;
+			}
+
+			// Now run the expensive tests
+			for(var i:int = 0; i < _chatMessages.length; ++i) {
+				if (_chatMessages[i].id == chatMessage.id)
+					return true;
+			}
+			return false;
+		}
 		
 		/**
 		 * Data retrieval complete function 
@@ -255,19 +276,25 @@ package fovea.chat
 
 			if (chatMessages.length == 0) {
 				clearMessages();
+				layout();
+				return;
 			}
 			
 			// add the message list to the console if doesnt exist
+			var messageToAdd:ChatMessage = null;
 			for(var i:int = 0; i < chatMessages.length; ++i){
 				var chatMessage:ChatMessage = chatMessages[i];
-				var idx:int = _chatMessages.indexOf(chatMessage);
-				
-				if(idx == -1)
-					addMessage(chatMessage); // ChatMessage.STATE_SUCCESS);
+				if (!hasChatMessage(chatMessage, i) && chatMessage != messageToAdd) {
+					if (messageToAdd)
+						addMessage(messageToAdd, false);
+					messageToAdd = chatMessage;
+				}
 			}
-			
-			// reorganize the layout when new chatmessages are received 
-			layout();
+
+			// Relayout on the last added message
+			if (messageToAdd) {
+				addMessage(messageToAdd, true);
+			}
 		}
 		
 		/**
@@ -393,7 +420,7 @@ package fovea.chat
 		 * Adds a new message to the chat message container
 		 * @param data:ChatMessage - Chat message object to be added to the message container
 		 */
-		public function addMessage(chatMessage:ChatMessage):ChatMessage
+		public function addMessage(chatMessage:ChatMessage, relayout:Boolean = true):ChatMessage
 		{	
 			// Set this user sent chat message state to success
 			if(_sentMessages[chatMessage.id] != "undefined" && _sentMessages[chatMessage.id] != null)
@@ -406,23 +433,28 @@ package fovea.chat
 			// set incoming chats to success
 			// chatMessage.state = state;
 			// grab the last message's position in relation to the bottom of the container 
-			var lastMsgPos:Number = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
+			var lastMsgPos:Number;
+			if (relayout)
+				lastMsgPos = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
 			
 			// add text to the console
 			_chatMessages.push(chatMessage);
 			_chatMessageContainer.addItem(chatMessage.view);
 			
-			layout();
-			
-			// Check for auto scroll or new message alert
-			if(_chatMessageContainer.contentHeight > _replyWindow.y)
+			if (relayout)
 			{
-				// if the last message was visible (position before the new message was added > 0),
-				// alert a new message has been added otherwise scroll to bottom.
-				if(lastMsgPos > 0)
-					_chatAlert.show();
-				else
-					_chatMessageContainer.scrollToBottom();
+				layout();
+			
+				// Check for auto scroll or new message alert
+				if(_chatMessageContainer.contentHeight > _replyWindow.y)
+				{
+					// if the last message was visible (position before the new message was added > 0),
+					// alert a new message has been added otherwise scroll to bottom.
+					if(lastMsgPos > 0)
+						_chatAlert.show();
+					else
+						_chatMessageContainer.scrollToBottom();
+				}
 			}
 			
 			return chatMessage
