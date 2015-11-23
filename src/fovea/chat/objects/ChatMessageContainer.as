@@ -8,6 +8,7 @@ package fovea.chat.objects
 	import feathers.controls.Scroller;
 	import feathers.events.FeathersEventType;
 	
+	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
 	
 	import starling.display.DisplayObject;
@@ -42,6 +43,8 @@ package fovea.chat.objects
 		 */
 		public function get contentWidth():Number
 		{
+			return ChatConsole.theme.width;
+			/*
 			var contentRect:Rectangle = new Rectangle();
 			for (var i:int = 0; i < _scrollContainer.numChildren; ++i)
 			{
@@ -52,6 +55,7 @@ package fovea.chat.objects
 					contentRect.right = child.x + child.width;
 			}
 			return contentRect.width;
+			*/
 		}
 		
 		/** 

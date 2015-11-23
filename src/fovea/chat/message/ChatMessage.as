@@ -131,6 +131,7 @@ package fovea.chat.message
 			clearTimer();
 			_view.removeEventListeners();
 			_view.dispose();
+			_view = null; // make sure we're not using the view ever again
 		}
 	}
 }

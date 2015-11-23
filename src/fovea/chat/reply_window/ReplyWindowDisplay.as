@@ -110,8 +110,8 @@ package fovea.chat.reply_window
 			_textBackground.width = consoleWidth - 20 * ChatConsole.theme.scaleFactor;
 			_textBackground.height = BACKGROUND_HEIGHT - 20 * ChatConsole.theme.scaleFactor;
 			
-			_textBackground.x = (consoleWidth - _textBackground.width) >> 1;
-			_textBackground.y = (BACKGROUND_HEIGHT - _textBackground.height) >> 1;
+			_textBackground.x = (consoleWidth - _textBackground.width) * 0.5;
+			_textBackground.y = (BACKGROUND_HEIGHT - _textBackground.height) * 0.5;
 			
 			// Define the textbox border
 			_textBackgroundBorder.x = _textBackground.x - 2 * ChatConsole.theme.scaleFactor;

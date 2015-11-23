@@ -75,6 +75,15 @@ package fovea.chat
 		{
 			return _state;
 		}
+
+		// FIX: Since layout of child elements depend upon the chatconsole width
+		// (which in turn depends on the childs size). We'd better fix one out.
+		override public function get width():Number {
+			return _theme ? _theme.width : 0;
+		}
+		override public function get height():Number {
+			return stage ? stage.stageHeight : 0;
+		}
 		
 		/** the location offset of the close button from tight and top */
 		private static const CLOSE_BUTTON_OFFSET:Number = 10;
@@ -277,6 +286,13 @@ package fovea.chat
 			if (chatMessages.length == 0) {
 				clearMessages();
 				layout();
+				return;
+			}
+
+			// Don't let the console fill up
+			if (_chatMessages.length > 24) {
+				clearMessages();
+				setTimeout(onDataRetrieved, 50);
 				return;
 			}
 			
@@ -578,10 +594,8 @@ package fovea.chat
 		{
 			// remove them from the view
 			_chatMessageContainer.clearMessages();
-			
 			for(var i:int = 0; i < _chatMessages.length; ++i)
 				_chatMessages[i].dispose();
-					
 			_chatMessages.splice(0, _chatMessages.length);
 		}
 

@@ -78,6 +78,10 @@ package fovea.chat.message
 		 */
 		private function onLoadSuccess(event:Event):void
 		{
+			if (!_loader) {
+				// we were disposed.
+				return;
+			}
 			_image = new Image(Texture.fromBitmap(_loader.content as Bitmap));
 			forceImageSize(_image);
 			addChild(_image);
