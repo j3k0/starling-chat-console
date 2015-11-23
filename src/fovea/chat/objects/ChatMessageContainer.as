@@ -1,5 +1,7 @@
 package fovea.chat.objects
 {
+	import com.alanmacdougall.underscore._;
+
 	import flash.geom.Rectangle;
 	
 	import feathers.controls.ScrollContainer;
@@ -21,7 +23,6 @@ package fovea.chat.objects
 	{
 		/** Scroller for the message objects */
 		private var _scrollContainer:ScrollContainer;
-		
 		
 		/** the current scroll position on the y - axis */
 		public function get scrollPosition():Number
@@ -76,6 +77,7 @@ package fovea.chat.objects
 		 */
 		public function ChatMessageContainer()
 		{
+			scrollToBottom = _.debounce(_scrollToBottom, 200);
 			_scrollContainer = new ScrollContainer();
 			_scrollContainer.hasElasticEdges = true;
 			_scrollContainer.horizontalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
@@ -118,11 +120,18 @@ package fovea.chat.objects
 		/** 
 		 * Scroll the container to the bottom most item
 		 */
-		public function scrollToBottom():void
+		private function _scrollToBottom():void
 		{
 			_scrollContainer.validate();
 			_scrollContainer.scrollToPosition(_scrollContainer.horizontalScrollPosition, _scrollContainer.maxVerticalScrollPosition, .5);
 		}
+
+		/**
+		 * Scroll the container to the bottom most item, debounced
+		 *
+		 * Initialized in the constructor
+		 */
+		public var scrollToBottom:Function;
 		
 		/**
 		 * Remove all messages from the view

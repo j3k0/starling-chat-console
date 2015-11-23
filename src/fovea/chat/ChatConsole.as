@@ -272,7 +272,7 @@ package fovea.chat
 
 			//send the text message to the server
 			_server.send(getTimestamp(), event.data.message);
-			_chatMessageContainer.scrollToBottom();
+			// _chatMessageContainer.scrollToBottom();
 			if(_chatMessageContainer.y > 0)
 				slideContent(Math.max(_replyWindow.y - _chatMessageContainer.contentHeight, 0));
 		}
@@ -407,7 +407,8 @@ package fovea.chat
 			// Check for auto scroll or new message alert
 			if(_chatMessageContainer.contentHeight > _replyWindow.y)
 			{
-				// if the position before the new message was added > 0 alert a new message has been added otherwise scroll to bottom.
+				// if the last message was visible (position before the new message was added > 0),
+				// alert a new message has been added otherwise scroll to bottom.
 				if(lastMsgPos > 0)
 					_chatAlert.show();
 				else
