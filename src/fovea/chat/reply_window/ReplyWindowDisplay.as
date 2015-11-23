@@ -39,7 +39,6 @@ package fovea.chat.reply_window
 		/** display the amount of charcters left */
 		private var _charCountTF:TextField;
 		
-		//private static const CHARS_LEFT_TEXT:String = "chat_chars_left";
 		private static const DEFAULT_TEXT:String = "chat_your_message";
 		private static function get BACKGROUND_HEIGHT():Number {
 			return 150 * ChatConsole.theme.scaleFactor;
@@ -74,7 +73,7 @@ package fovea.chat.reply_window
 			_charCountTF = new TextField(
 				200 * ChatConsole.theme.scaleFactor,
 				50 * ChatConsole.theme.scaleFactor,
-				/*ChatUtil.translate(CHARS_LEFT_TEXT)+" "+*/(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1),
+				charCountText(),
 				"Verdana", 20 * ChatConsole.theme.scaleFactor,
 				MessageDisplayUtil.getInstance().TIME_TEXT_COLOR);
 			_charCountTF.hAlign = HAlign.RIGHT;
@@ -169,11 +168,19 @@ package fovea.chat.reply_window
 			forceRefreshViewport();
 		}
 
+		/**
+		 * Trigger f every 100ms for `timeout` milliseconds.
+		 */
 		private function multiTimeout(f:Function, timeout:int):void {
 			for (var i:int = 0; i <= timeout; i += 100)
 				setTimeout(f, i);
 		}
 		
+		/**
+		 * Pull soft keyboard visibility for 1500ms, to update the viewport.
+		 *
+		 * HAX: because softKeyboardRect isn't always updated right after the focus event.
+		 */
 		private function forceRefreshViewport():void {
 			multiTimeout(function():void {
 				viewPortY = -Starling.current.nativeStage.softKeyboardRect.y;
@@ -206,10 +213,27 @@ package fovea.chat.reply_window
 				
 				// Sets the character left
 				if(_replyTI.hasFocus)
-					_charCountTF.text = /*ChatUtil.translate(CHARS_LEFT_TEXT)+" "+*/(_replyTI.maxChars - (_replyTI.text.length + 1));
+					updateCharCount(_replyTI.maxChars - (_replyTI.text.length + 1));
 				else
-					_charCountTF.text = /*ChatUtil.translate(CHARS_LEFT_TEXT)+" "+*/(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1);
+					updateCharCount();
 			}
+		}
+
+		/**
+		 * Return what should be the _charCountTF text
+		 */
+		private function charCountText(value:int = -123456):String {
+			if (value === -123456)
+				value = MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1;
+			return "" + value;
+		}
+
+		/**
+		 * Update _charCountTF text
+		 */
+		private function updateCharCount(value:int = -123456):void {
+			if (_charCountTF)
+				_charCountTF.text = charCountText(value);
 		}
 		
 		/**
