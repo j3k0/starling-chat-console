@@ -1,5 +1,9 @@
 package fovea.chat.interfaces
 {
+	import feathers.controls.Button;
+
+	import fovea.chat.message.MessageDisplayUtil;
+
 	/**
 	 * Interface for the functional and visual porperties of a ChatConsole.</br>
 	 * Properties:
@@ -71,5 +75,22 @@ package fovea.chat.interfaces
 		 * Background color of the reply window text area
 		 */
 		function get replyWindowTextBoxColor():uint;
+
+		/**
+		 * How graphic elements must be scaled up/down
+		 */
+		function get scaleFactor():Number;
+
+		/**
+		 * Customize the look of the close button
+		 */
+		function customizeCloseButton(b:Button):void;
+
+    		/**
+		 * Size of the avatar image
+		 */
+		function avatarSize():Number;
+
+		function customizeMessageDisplay(mdu:MessageDisplayUtil):void;
 	}
 }

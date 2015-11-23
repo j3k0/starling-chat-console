@@ -1,0 +1,3 @@
+[submodule "test/libs/shapes"]
+	path = test/libs/shapes
+	url = https://github.com/Fovea/starling-shapes.git

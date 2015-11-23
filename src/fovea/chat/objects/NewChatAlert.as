@@ -73,6 +73,8 @@ package fovea.chat.objects
 		{
 			if(_state != ChatUtil.CLOSED)
 				return;
+			if (!stage)
+				return;
 			
 			clearTween();
 			

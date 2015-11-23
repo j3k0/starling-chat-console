@@ -2,6 +2,8 @@ package fovea.chat.objects
 {
 	import feathers.controls.Button;
 	
+	import fovea.chat.ChatUtil;
+	
 	import starling.display.Quad;
 
 	/**
@@ -13,6 +15,8 @@ package fovea.chat.objects
 		private var _touchPadding:Number;
 		/** A background object to make the button easier to touch */
 		private var _touchQuad:Quad;
+		/** Close button label text */
+		private static const LABEL_TEXT:String = "close_button";
 		
 		/** padding to enable easier touch capability */
 		public function set touchPadding(value:Number):void
@@ -27,7 +31,7 @@ package fovea.chat.objects
 		 */
 		public function CloseButton(touchPadding:Number = 0)
 		{
-			label = "close";
+			label = ChatUtil.translate(LABEL_TEXT);
 			_touchQuad = new Quad(1,1, 0xFF0000);
 			_touchQuad.alpha = 0;
 			_touchPadding = touchPadding;

@@ -25,8 +25,8 @@ package fovea.chat.message
 		{
 			var message:String = data.message;
 			
-			if (message.length > MessageDisplayUtil.MAX_CHARACTERS-1)
-				message = message.substr(0,MessageDisplayUtil.MAX_CHARACTERS-1)+"...";
+			if (message.length > MessageDisplayUtil.getInstance().MAX_CHARACTERS-1)
+				message = message.substr(0,MessageDisplayUtil.getInstance().MAX_CHARACTERS-1)+"...";
 			
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
@@ -46,7 +46,7 @@ package fovea.chat.message
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{
-			_messageTF.x = MessageDisplayUtil.MESSAGE_TEXT_X;
+			_messageTF.x = MessageDisplayUtil.getInstance().MESSAGE_TEXT_X;
 			
 			_background.width = this.width;
 			_background.height = this.height;

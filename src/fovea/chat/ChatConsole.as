@@ -3,6 +3,7 @@ package fovea.chat
 	import flash.display.Stage;
 	import flash.geom.Point;
 	import flash.system.Capabilities;
+	import flash.utils.setTimeout;
 	
 	import fovea.chat.interfaces.IChatServer;
 	import fovea.chat.interfaces.IChatTheme;
@@ -18,6 +19,7 @@ package fovea.chat
 	import starling.core.Starling;
 	import starling.display.Quad;
 	import starling.display.Sprite;
+	import starling.display.Stage;
 	import starling.events.Event;
 	import starling.events.Touch;
 	import starling.events.TouchEvent;
@@ -55,6 +57,8 @@ package fovea.chat
 		private var _chatAlert:NewChatAlert;
 		/** map of sent messages to chat message objects*/
 		private var _sentMessages:Object;
+		/** translate function */
+		private var _starlingStage:starling.display.Stage;
 		
 		/** Current state of the chat console 
 		    <ul><li>OPEN</li><li>CLOSED</li><li>TRANSITIONING</li>
@@ -69,29 +73,37 @@ package fovea.chat
 			return _state;
 		}
 		
-		/** the location offset of the cloe button from tight and top */
+		/** the location offset of the close button from tight and top */
 		private static const CLOSE_BUTTON_OFFSET:Number = 10;
+
+		public static var theme:IChatTheme = null;
 		
 		/**
 		 * Instantiate ChatConsole
 		 * @param server:IChatServer - Server interface to make and receive server calls
 		 * @param theme:IChatTheme - Theme to define ChatConsole Dispaly Properties
 		 */
-		public function ChatConsole(server:IChatServer, theme:IChatTheme)
+		public function ChatConsole(server:IChatServer, theme:IChatTheme, translate:Function=null)
 		{	
 			// Definitions
 			_server = server;
 			_theme = theme;
+			ChatConsole.theme = theme;
 			_state = ChatUtil.CLOSED;
+			if(translate)
+				ChatUtil.translate = translate;
 
 			// instantiate objects
 			_background = new Quad(_theme.width, 1,_theme.backgroundColor);
 			_chatMessageContainer = new ChatMessageContainer();
 			_chatMessages = new Vector.<ChatMessage>();
 			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor);
-			_closeButton = new CloseButton(5);
+			_closeButton = new CloseButton(5 * _theme.scaleFactor);
 			_chatAlert = new NewChatAlert(this);
 			_sentMessages = new Object();
+
+			// customize objects
+			_theme.customizeCloseButton(_closeButton);
 			
 			// add children
 			addChild(_background);
@@ -109,6 +121,8 @@ package fovea.chat
 			addEventListener(Event.RESIZE, onResize);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(ChatUtil.SEND_REPLY_TEXT, onSendReplyText);
+
+			setTimeout(onDataRetrieved, 50);
 		}
 		
 		/**
@@ -155,11 +169,14 @@ package fovea.chat
 		 */
 		private function resetStageLoc():void
 		{
-			var nativeStage:Stage = Starling.current.nativeStage;
+			// var nativeStage:flash.display.Stage = Starling.current.nativeStage;
 			// get the stage dimensions of the parent
-			_parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
+			// _parentStageDimensions = ChatUtil.stageDimensions(parent, _theme.isMobile);
 			// Define the stage dimensions in this space.
-			_stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
+			// _stageDimensions = ChatUtil.stageDimensions(this, _theme.isMobile);
+
+			_parentStageDimensions = new Point(stage.stageWidth, stage.stageHeight);
+			_stageDimensions =  new Point(stage.stageWidth, stage.stageHeight);
 			
 			// Define console location
 			x = _parentStageDimensions.x;
@@ -190,6 +207,9 @@ package fovea.chat
 		{	
 			// Resets the position of the and sizing of the console
 			resetStageLoc();
+			
+			// store off the stage for disposal
+			_starlingStage = stage;
 			
 			// initialize the close button
 			// add a touch quad for the close button
@@ -222,6 +242,10 @@ package fovea.chat
 		{
 			// retrieve chat messages from the server
 			var chatMessages:Vector.<ChatMessage> = _server.getData();
+
+			if (chatMessages.length == 0) {
+				clearMessages();
+			}
 			
 			// add the message list to the console if doesnt exist
 			for(var i:int = 0; i < chatMessages.length; ++i){
@@ -229,7 +253,7 @@ package fovea.chat
 				var idx:int = _chatMessages.indexOf(chatMessage);
 				
 				if(idx == -1)
-					addMessage(chatMessage, ChatMessage.STATE_SUCCESS);
+					addMessage(chatMessage); // ChatMessage.STATE_SUCCESS);
 			}
 			
 			// reorganize the layout when new chatmessages are received 
@@ -242,12 +266,12 @@ package fovea.chat
 		private function onSendReplyText(event:Event):void
 		{
 			// add the chat message
-			var id:String = getUniqueKey();
-			_sentMessages[id] =
-				addMessageData(new ChatMessageData(id, "Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message,"test"), ChatMessage.STATE_IN_PROGRESS);
-			
+			//var id:String = getUniqueKey();
+			//_sentMessages[id] =
+			//	addMessageData(new ChatMessageData(id, "Jacob", "http://www.thotkraft.com/test/anime_head_02.jpg", event.data.message, "test"), ChatMessage.STATE_IN_PROGRESS);
+
 			//send the text message to the server
-			_server.send(id, event.data.message);
+			_server.send(getTimestamp(), event.data.message);
 			_chatMessageContainer.scrollToBottom();
 			if(_chatMessageContainer.y > 0)
 				slideContent(Math.max(_replyWindow.y - _chatMessageContainer.contentHeight, 0));
@@ -255,12 +279,12 @@ package fovea.chat
 		
 		/**
 		 * When a new message is received
-		 */
 		private function onReceivedChat(event:Event):void
 		{
 			// add the message to the message container 
 			addMessageData(event.data.data, event.data.config);
 		}
+		 */
 		
 		/**
 		 * Close button tapped callback
@@ -359,7 +383,7 @@ package fovea.chat
 		 * Adds a new message to the chat message container
 		 * @param data:ChatMessage - Chat message object to be added to the message container
 		 */
-		public function addMessage(chatMessage:ChatMessage, state:int):ChatMessage
+		public function addMessage(chatMessage:ChatMessage):ChatMessage
 		{	
 			// Set this user sent chat message state to success
 			if(_sentMessages[chatMessage.id] != "undefined" && _sentMessages[chatMessage.id] != null)
@@ -370,7 +394,7 @@ package fovea.chat
 			}
 			
 			// set incoming chats to success
-			chatMessage.state = state;
+			// chatMessage.state = state;
 			// grab the last message's position in relation to the bottom of the container 
 			var lastMsgPos:Number = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
 			
@@ -397,11 +421,11 @@ package fovea.chat
 		 * Adds a new message to the chat message container
 		 * @param data:ChatMessageData - Chat message data to be added to the message container
 		 * @param config:ChatMessageDisplayConfig = null - Display configuration of the chat message display
-		 */
 		public function addMessageData(data:ChatMessageData, state:int, config:ChatMessageDisplayConfig = null):ChatMessage
 		{
 			return addMessage(new ChatMessage(data, config), state);
 		}
+		 */
 		
 		/**
 		 * Display Console
@@ -444,7 +468,7 @@ package fovea.chat
 			_tween.moveTo(_parentStageDimensions.x, y);
 			Starling.juggler.add(_tween);
 			// remove the stage touch listener for tapping outside the console 
-			stage.removeEventListener(TouchEvent.TOUCH, onTouch);
+			_starlingStage.removeEventListener(TouchEvent.TOUCH, onTouch);
 		}
 		
 		/**
@@ -508,13 +532,18 @@ package fovea.chat
 					
 			_chatMessages.splice(0, _chatMessages.length);
 		}
-		
+
+		private function getTimestamp():String {
+			return "" + (new Date()).valueOf();
+		}
+
 		/**
 		 * returns a reasonably unique-key based on this specific console
 		 */
 		private function getUniqueKey():String
 		{
-			return ChatUtil.obfuscateString(Capabilities.cpuArchitecture+Capabilities.version+Capabilities.pixelAspectRatio+_chatMessages.length);
+			return getTimestamp();
+			// return ChatUtil.obfuscateString(Capabilities.cpuArchitecture+Capabilities.version+Capabilities.pixelAspectRatio+_chatMessages.length);
 		}
 		
 		/**
@@ -526,7 +555,7 @@ package fovea.chat
 			clearMessages();
 			
 			// Remove event listeners 
-			stage.removeEventListener(TouchEvent.TOUCH, onTouch);
+			_starlingStage.removeEventListener(TouchEvent.TOUCH, onTouch);
 			_closeButton.removeEventListeners();
 			_chatAlert.removeEventListeners();
 			_chatMessageContainer.removeEventListeners();
