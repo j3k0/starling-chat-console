@@ -1,4 +1,4 @@
-package fovea.chat.reply_window
+package fovea.chat.objects
 {
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Quad;
@@ -9,8 +9,8 @@ package fovea.chat.reply_window
 		private var _quads:Vector.<Quad> = new Vector.<Quad>();
 
 		private function addShadowQuad(w:Number):void {
-			var q:Quad = new Quad(w,1,Color.BLACK);
-			q.alpha = .1;
+			var q:Quad = new Quad(w, 1, Color.BLACK);
+			q.alpha = 0.1;
 			addChild(q);
 			_quads.push(q);
 		}
@@ -27,6 +27,7 @@ package fovea.chat.reply_window
 			for (var i:int = 0; i < _quads.length; ++i) {
 				var q:Quad = _quads[i];
 				q.height = h;
+				q.x = w - q.width;
 			}
 		}
 

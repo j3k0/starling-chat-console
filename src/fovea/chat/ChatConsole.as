@@ -13,6 +13,7 @@ package fovea.chat
 	import fovea.chat.objects.ChatMessageContainer;
 	import fovea.chat.objects.CloseButton;
 	import fovea.chat.objects.NewChatAlert;
+	import fovea.chat.objects.Shadow;
 	import fovea.chat.reply_window.ReplyWindow;
 	
 	import starling.animation.Tween;
@@ -38,6 +39,8 @@ package fovea.chat
 		private var _background:Quad;
 		/** Chat message container */
 		private var _chatMessageContainer:ChatMessageContainer;
+		/** Console shadow */
+		private var _shadow:Shadow;
 		
 		/** Chat Messages */
 		private var _chatMessages:Vector.<ChatMessage>;
@@ -95,6 +98,8 @@ package fovea.chat
 
 			// instantiate objects
 			_background = new Quad(_theme.width, 1,_theme.backgroundColor);
+			_shadow = new Shadow(4);
+			_shadow.alpha = 0;
 			_chatMessageContainer = new ChatMessageContainer();
 			_chatMessages = new Vector.<ChatMessage>();
 			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor);
@@ -106,6 +111,7 @@ package fovea.chat
 			_theme.customizeCloseButton(_closeButton);
 			
 			// add children
+			addChild(_shadow);
 			addChild(_background);
 			addChild(_chatMessageContainer);
 			addChild(_replyWindow.view);
@@ -133,6 +139,10 @@ package fovea.chat
 			// resize the background 
 			_background.width 	= _theme.width;
 			_background.height 	= _stageDimensions.y;
+
+			// layout the shadow
+			_shadow.layout(_stageDimensions.x - _background.width, _stageDimensions.y);
+			_shadow.x = -_shadow.width;
 			
 			// positions chat messages
 			var messageY:Number = 0;
@@ -369,11 +379,11 @@ package fovea.chat
 				return;
 			
 			// get the touch point in the local space
-			var touchPoint:Point = parent.globalToLocal(new Point(touch.globalX, touch.globalY));
+			var touchPoint:Point = globalToLocal(new Point(touch.globalX, touch.globalY));
 			switch(touch.phase)
 			{
 				case TouchPhase.ENDED:
-					if(!bounds.contains(touchPoint.x, touchPoint.y))
+					if(_shadow.bounds.contains(touchPoint.x, touchPoint.y))
 						hide();
 					break;
 			}
@@ -446,9 +456,17 @@ package fovea.chat
 			_tween = new Tween(this, _theme.openCloseTransitionTime, _theme.openCloseTransitionType);
 			_tween.onComplete = onOpenComplete;
 			_tween.moveTo(openLoc, y);
+			_tween.animate("shadowAlpha", 1);
 			Starling.juggler.add(_tween);
 			_chatMessageContainer.scrollToBottom();
 			stage.addEventListener(TouchEvent.TOUCH, onTouch);
+		}
+
+		public function set shadowAlpha(value:Number):void {
+			_shadow.alpha = value;
+		}
+		public function get shadowAlpha():Number {
+			return _shadow.alpha;
 		}
 		
 		/**
@@ -467,6 +485,7 @@ package fovea.chat
 			_tween = new Tween(this, _theme.openCloseTransitionTime, _theme.openCloseTransitionType);
 			_tween.onComplete = onCloseComplete;
 			_tween.moveTo(_parentStageDimensions.x, y);
+			_tween.animate("shadowAlpha", 0);
 			Starling.juggler.add(_tween);
 			// remove the stage touch listener for tapping outside the console 
 			_starlingStage.removeEventListener(TouchEvent.TOUCH, onTouch);
@@ -566,6 +585,7 @@ package fovea.chat
 			clearTween();
 			// Dispose of display objects
 			_background.dispose();
+			_shadow.dispose();
 			_closeButton.dispose();
 			_chatMessageContainer.dispose();
 			_replyWindow.dispose();
