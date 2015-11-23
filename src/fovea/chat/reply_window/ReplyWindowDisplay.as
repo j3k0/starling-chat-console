@@ -39,8 +39,8 @@ package fovea.chat.reply_window
 		/** display the amount of charcters left */
 		private var _charCountTF:TextField;
 		
-		private static const CHARS_LEFT_TEXT:String = "chars_left";
-		private static const DEFAULT_TEXT:String = "write_reply";
+		//private static const CHARS_LEFT_TEXT:String = "chat_chars_left";
+		private static const DEFAULT_TEXT:String = "chat_your_message";
 		private static function get BACKGROUND_HEIGHT():Number {
 			return 150 * ChatConsole.theme.scaleFactor;
 		}
@@ -74,7 +74,7 @@ package fovea.chat.reply_window
 			_charCountTF = new TextField(
 				200 * ChatConsole.theme.scaleFactor,
 				50 * ChatConsole.theme.scaleFactor,
-				ChatUtil.translate(CHARS_LEFT_TEXT)+" "+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1),
+				/*ChatUtil.translate(CHARS_LEFT_TEXT)+" "+*/(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1),
 				"Verdana", 20 * ChatConsole.theme.scaleFactor,
 				MessageDisplayUtil.getInstance().TIME_TEXT_COLOR);
 			_charCountTF.hAlign = HAlign.RIGHT;
@@ -206,9 +206,9 @@ package fovea.chat.reply_window
 				
 				// Sets the character left
 				if(_replyTI.hasFocus)
-					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+" "+(_replyTI.maxChars - (_replyTI.text.length + 1));
+					_charCountTF.text = /*ChatUtil.translate(CHARS_LEFT_TEXT)+" "+*/(_replyTI.maxChars - (_replyTI.text.length + 1));
 				else
-					_charCountTF.text = ChatUtil.translate(CHARS_LEFT_TEXT)+" "+(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1);
+					_charCountTF.text = /*ChatUtil.translate(CHARS_LEFT_TEXT)+" "+*/(MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1);
 			}
 		}
 		
