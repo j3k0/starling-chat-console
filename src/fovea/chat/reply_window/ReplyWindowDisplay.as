@@ -241,10 +241,7 @@ package fovea.chat.reply_window
 		 */
 		private function sendText(txt:String):void
 		{
-			if(_replyTI.text == "")
-				_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
-			else
-				_replyTI.text = "";
+			_replyTI.text = "";
 			if (txt != "")
 				dispatchEventWith(ChatUtil.SEND_REPLY_TEXT, true, { message:txt });
 		}
