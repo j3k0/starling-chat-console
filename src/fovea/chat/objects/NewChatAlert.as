@@ -2,6 +2,8 @@ package fovea.chat.objects
 {
 	import flash.geom.Point;
 	
+	import fovea.chat.ChatUtil;
+	
 	import starling.animation.Tween;
 	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
@@ -12,7 +14,6 @@ package fovea.chat.objects
 	import starling.events.TouchPhase;
 	import starling.text.TextField;
 	import starling.utils.Color;
-	import fovea.chat.ChatUtil;
 
 	/**
 	 * Displays an alert that a new chat has been added to the feed 
@@ -40,13 +41,13 @@ package fovea.chat.objects
 		/** Background of the NewChatAlert */ 
 		private static const BACKGROUND_COLOR:uint = 0xBAC9DE;
 		/** String to dispaly in the NewChatAlert */
-		private static const DISPLAY_TEXT:String = "New Message";
+		private static const DISPLAY_TEXT:String = "new_chat_message";
 		
 		public function NewChatAlert(displayParent:DisplayObjectContainer)
 		{
 			// Instantiate objects
 			_background = new Quad(1,1,BACKGROUND_COLOR);
-			_text = new TextField(100,30,DISPLAY_TEXT,"Verdana", 12, Color.WHITE, true);
+			_text = new TextField(100,30,ChatUtil.translate(DISPLAY_TEXT),"Verdana", 12, Color.WHITE, true);
 			
 			// Initialize Variables
 			_displayParent = displayParent;
