@@ -62,7 +62,7 @@ package fovea.chat.reply_window
 			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
 			
 			// Initialize objects
-			_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
+			setReplyText(null);
 			_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 			var isAndroid:Boolean = Capabilities.manufacturer.indexOf('Android') > -1;
 			if (isAndroid)
@@ -150,7 +150,7 @@ package fovea.chat.reply_window
 		{
 			// If the text box is using the default text clear it.
 			if(_replyTI.text == ChatUtil.translate(DEFAULT_TEXT))
-				_replyTI.text = "";
+				setReplyText("");
 			
 			dispatchEventWith(ChatUtil.SHOW_KEYBOARD, true);
 			forceRefreshViewport();
@@ -163,10 +163,25 @@ package fovea.chat.reply_window
 		{
 			// If the text box is empty return it to the default text
 			if(_replyTI.text == "")
-				_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
+				setReplyText(null);
 			
 			dispatchEventWith(ChatUtil.HIDE_KEYBOARD, true);
 			forceRefreshViewport();
+		}
+
+		private function setReplyText(txt:String):void
+		{
+			if (txt === null) {
+				_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
+				_replyTI.alpha = 0.4;
+			}
+			else {
+				if(txt.length > MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1)
+					_replyTI.text = txt.substring(0, txt.length - 1);
+				else
+					_replyTI.text = txt;
+				_replyTI.alpha = 1.0;
+			}
 		}
 
 		/**
@@ -203,6 +218,7 @@ package fovea.chat.reply_window
 		 */
 		private function onTextChanged(event:Event):void
 		{
+			_replyTI.alpha = 1.0;
 			if(_replyTI.text.indexOf("\n") > -1 || _replyTI.text.indexOf("\r") > -1)
 			{
 				// HAX: because the enter listener doesnt work on certain android devices,
@@ -210,7 +226,7 @@ package fovea.chat.reply_window
 				onTextEnter(event);
 			}else{
 				if(_replyTI.text.length > (MessageDisplayUtil.getInstance().MAX_CHARACTERS - 1))
-					_replyTI.text = _replyTI.text.substring(0, _replyTI.text.length - 1);
+					setReplyText(_replyTI.text);
 				
 				// Sets the character left
 				if(_replyTI.hasFocus)
@@ -242,7 +258,7 @@ package fovea.chat.reply_window
 		 */
 		private function sendText(txt:String):void
 		{
-			_replyTI.text = "";
+			setReplyText("");
 			if (txt != "")
 				dispatchEventWith(ChatUtil.SEND_REPLY_TEXT, true, { message:txt });
 		}
