@@ -34,6 +34,18 @@ package fovea.chat.themes
 		{
 			return Color.WHITE;
 		}
+
+		/**
+		 * Background transparency of the chat console window
+		 */
+		public function get backgroundAlpha():Number
+		{
+			return 0.9;
+		}
+		
+		public function get borderColor():uint { return Color.RED; }
+		public function get borderAlpha():Number { return 0.5; }
+		public function get borderWidth():Number { return 2; }
 		
 		/**
 		 * Width of the chat console, defines where the chat rests when opened.

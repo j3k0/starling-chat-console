@@ -37,6 +37,8 @@ package fovea.chat
 		private var _tween:Tween;
 		/** Console background */
 		private var _background:Quad;
+		/** Console border */
+		private var _border:Quad;
 		/** Chat message container */
 		private var _chatMessageContainer:ChatMessageContainer;
 		/** Console shadow */
@@ -107,6 +109,9 @@ package fovea.chat
 
 			// instantiate objects
 			_background = new Quad(_theme.width, 1,_theme.backgroundColor);
+			_background.alpha = _theme.backgroundAlpha;
+			_border = new Quad(_theme.borderWidth, 1,_theme.borderColor);
+			_border.alpha = _theme.borderAlpha;
 			_shadow = new Shadow(4);
 			_shadow.alpha = 0;
 			_chatMessageContainer = new ChatMessageContainer();
@@ -122,6 +127,7 @@ package fovea.chat
 			// add children
 			addChild(_shadow);
 			addChild(_background);
+			addChild(_border);
 			addChild(_chatMessageContainer);
 			addChild(_replyWindow.view);
 			addChild(_closeButton);
@@ -148,6 +154,10 @@ package fovea.chat
 			// resize the background 
 			_background.width 	= _theme.width;
 			_background.height 	= _stageDimensions.y;
+
+			// resize the border
+			_border.width 	= _theme.borderWidth;
+			_border.height 	= _stageDimensions.y;
 
 			// layout the shadow
 			_shadow.layout(_stageDimensions.x - _background.width, _stageDimensions.y);
@@ -631,6 +641,7 @@ package fovea.chat
 			clearTween();
 			// Dispose of display objects
 			_background.dispose();
+			_border.dispose();
 			_shadow.dispose();
 			_closeButton.dispose();
 			_chatMessageContainer.dispose();

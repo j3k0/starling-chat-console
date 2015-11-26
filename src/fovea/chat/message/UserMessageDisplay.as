@@ -71,6 +71,7 @@ package fovea.chat.message
 			
 			_timeTF.hAlign = HAlign.RIGHT;
 			_timeTF.bold = true;
+			_timeTF.alpha = 0.5;
 			
 			// add the children
 			addChild(_background);

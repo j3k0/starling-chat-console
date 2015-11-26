@@ -57,9 +57,9 @@ package fovea.chat.reply_window
 			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
 			_textBackground = new Quad(1,1,textboxColor);
 			_replyTI = new FoveaTextInput();
-			_replyTI.textEditorProperties.fontFamily = "Verdana";
-			_replyTI.textEditorProperties.fontSize = 28;// * ChatConsole.theme.scaleFactor;
-			_replyTI.textEditorProperties.color = 0x444444;
+			_replyTI.textEditorProperties.fontFamily = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_NAME;
+			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE; // 28 * ChatConsole.theme.scaleFactor;
+			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
 			
 			// Initialize objects
 			_replyTI.text = ChatUtil.translate(DEFAULT_TEXT);
@@ -74,7 +74,8 @@ package fovea.chat.reply_window
 				200 * ChatConsole.theme.scaleFactor,
 				50 * ChatConsole.theme.scaleFactor,
 				charCountText(),
-				"Verdana", 20 * ChatConsole.theme.scaleFactor,
+				MessageDisplayUtil.getInstance().TIME_TEXT_FONT_NAME,
+				MessageDisplayUtil.getInstance().TIME_TEXT_FONT_SIZE,
 				MessageDisplayUtil.getInstance().TIME_TEXT_COLOR);
 			_charCountTF.hAlign = HAlign.RIGHT;
 			
@@ -107,8 +108,8 @@ package fovea.chat.reply_window
 			_background.height = BACKGROUND_HEIGHT;
 			
 			// Set the textbox background size and position
-			_textBackground.width = consoleWidth - 20 * ChatConsole.theme.scaleFactor;
-			_textBackground.height = BACKGROUND_HEIGHT - 20 * ChatConsole.theme.scaleFactor;
+			_textBackground.width = consoleWidth - ChatConsole.theme.borderWidth * 2;
+			_textBackground.height = BACKGROUND_HEIGHT - ChatConsole.theme.borderWidth * 2;
 			
 			_textBackground.x = (consoleWidth - _textBackground.width) * 0.5;
 			_textBackground.y = (BACKGROUND_HEIGHT - _textBackground.height) * 0.5;

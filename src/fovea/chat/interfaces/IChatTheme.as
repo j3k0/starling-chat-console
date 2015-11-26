@@ -28,6 +28,18 @@ package fovea.chat.interfaces
 		 * Background Color of the chat console window
 		 */
 		function get backgroundColor():uint;
+
+		/**
+		 * Background transparency of the chat console window
+		 */
+		function get backgroundAlpha():Number;
+
+		/**
+		 * Border on the side of the console window
+		 */
+		function get borderColor():uint;
+		function get borderAlpha():Number;
+		function get borderWidth():Number;
 		
 		/**
 		 * Width of the chat console, defines where the chat rests when opened.
