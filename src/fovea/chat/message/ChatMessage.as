@@ -5,6 +5,7 @@ package fovea.chat.message
 	
 	import fovea.chat.Controller;
 	import fovea.chat.configs.DefaultChatMessageDisplayConfig;
+	import fovea.chat.message.MessageDisplayUtil;
 
 	/**
 	 * Controller for a specific chat message instance</br>

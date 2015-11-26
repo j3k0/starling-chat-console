@@ -31,9 +31,14 @@ package fovea.chat.message
 		private var _loadingImage:Image;
 		/** load failed image */
 		private var _loadFailedImage:Image;
+
+		/** make the avatar image bigger or smaller than default */
+		private var _scale:Number;
 		
-		public function AvatarImage(loadFailedTexture:Texture, loadingTexture:Texture)
+		public function AvatarImage(loadFailedTexture:Texture, loadingTexture:Texture, scale:Number = 1.0)
 		{	
+			_scale = scale;
+
 			// Instantiate objects
 			_loadingImage = loadingTexture ? new Image(loadingTexture) : null;
 			_loadFailedImage = loadFailedTexture? new Image(loadFailedTexture) : null;;
@@ -65,11 +70,21 @@ package fovea.chat.message
 			_loader.load(new URLRequest(_url), context);
 		}
 
-		public function forceImageSize(img:Image):void {
+		public function forceImageSize(img:Image, scale:Number = 1.0):void {
 			if (img) {
-				img.width = ChatConsole.theme.avatarSize();
-				img.height = ChatConsole.theme.avatarSize();
+				var size:Number = ChatConsole.theme.avatarSize();
+				var ssize:Number = size * scale * _scale;
+				img.x = img.y = (size - ssize) * 0.5;
+				img.width = ssize;
+				img.height = ssize;
 			}
+		}
+
+		override public function get width():Number {
+				return ChatConsole.theme.avatarSize();
+		}
+		override public function get height():Number {
+				return ChatConsole.theme.avatarSize();
 		}
 		
 		/**
@@ -83,12 +98,15 @@ package fovea.chat.message
 				return;
 			}
 			_image = new Image(Texture.fromBitmap(_loader.content as Bitmap));
-			forceImageSize(_image);
+			forceImageSize(_image, 0.8);
 			addChild(_image);
 			
+			// We used to remove the loading icon, but as a quick hack before I need
+			// to deliver tomorrow, I use this as a persistent background for the
+			// avatar.
 			// Remove the loading icon
-			if(_loadingImage)
-				removeChild(_loadingImage);
+			// if(_loadingImage)
+			//   removeChild(_loadingImage);
 			
 			dispatchEventWith(ChatUtil.LOAD_SUCCESS);
 		}
@@ -102,13 +120,13 @@ package fovea.chat.message
 			
 			// Add a load failed image if exists
 			if(_loadFailedImage) {
-				forceImageSize(_loadFailedImage);
+				forceImageSize(_loadFailedImage, 0.8);
 				addChild(_loadFailedImage);
 			}
 			
-			// Remove the loading icon
-			if(_loadingImage)
-				removeChild(_loadingImage);
+			// DO NOT Remove the loading icon: it's used as a background.
+			//if(_loadingImage)
+			//	removeChild(_loadingImage);
 		}
 		
 		/**

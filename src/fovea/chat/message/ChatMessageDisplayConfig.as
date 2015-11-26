@@ -17,6 +17,8 @@ package fovea.chat.message
 		public var backgroundAlpha:Number;
 		public var avatarLoadFailedTexture:Texture;
 		public var avatarLoadingTexture:Texture;
+		public var enableAvatar:Boolean;
+		public var isFromMe:Boolean;
 		
 		/**
 		 * Create a ChatMessageDisplayConfig Object
@@ -26,12 +28,15 @@ package fovea.chat.message
 		 * @param avatarLoadingTexture - texture displayed while avatar image is loading 
 		 */
 		public function ChatMessageDisplayConfig(backgroundColor:uint, backgroundAlpha:Number, 
-												 avatarLoadFailedTexture:Texture = null, avatarLoadingTexture:Texture = null)
+												 avatarLoadFailedTexture:Texture = null, avatarLoadingTexture:Texture = null,
+												 enableAvatar:Boolean = true, isFromMe:Boolean = false)
 		{
 			this.backgroundColor 			= backgroundColor;
 			this.backgroundAlpha 			= backgroundAlpha;
 			this.avatarLoadFailedTexture	= avatarLoadFailedTexture;
 			this.avatarLoadingTexture 		= avatarLoadingTexture;
+			this.enableAvatar = enableAvatar;
+			this.isFromMe = isFromMe;
 		}
 	}
 }

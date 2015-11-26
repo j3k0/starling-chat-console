@@ -1,5 +1,6 @@
 package fovea.chat.message
 {	
+	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
 	import fovea.chat.message.ChatMessage;
 	
@@ -13,18 +14,16 @@ package fovea.chat.message
 	{
 		/** background quad */
 		private var _background:Quad;
-		/** background alpha */
-		private var _backgroundAlpha:Number;
 		/** avatar image */
 		private var _avatarImage:AvatarImage;
-		/** Avatar Name textField */
-		private var _userNameTF:TextField;
 		/** Message textField */
 		private var _messageTF:TextField;
 		/** Time textField */
 		private var _timeTF:TextField;
 		/** state icon container */
 		private var _loadingStateIcon:LoadingStateIcon;
+		/** Display configuration */
+		private var _config:ChatMessageDisplayConfig;
 		
 		/**
 		 * Sets the state of the avatar image
@@ -41,6 +40,7 @@ package fovea.chat.message
 		 */
 		public function UserMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig, state:int)
 		{
+			_config = config;
 			var message:String = data.message;
 			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
@@ -50,10 +50,10 @@ package fovea.chat.message
 			// Instantiates Objects
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
+			_background.visible = false;
 			_loadingStateIcon = new LoadingStateIcon();
 			
-			_avatarImage = new AvatarImage(config.avatarLoadFailedTexture, config.avatarLoadingTexture);
-			_userNameTF = new TextField(mdu.NAME_TEXT_WIDTH, mdu.NAME_TEXT_HEIGHT, data.username, mdu.NAME_TEXT_FONT_NAME, mdu.NAME_TEXT_FONT_SIZE, mdu.NAME_TEXT_COLOR);
+			_avatarImage = new AvatarImage(config.avatarLoadFailedTexture, config.avatarLoadingTexture, config.enableAvatar ? 1.0 : 0.5);
 			_messageTF = new TextField(mdu.MESSAGE_TEXT_WIDTH, mdu.MESSAGE_TEXT_HEIGHT, message, mdu.MESSAGE_TEXT_FONT_NAME, mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
 			_timeTF = new TextField(mdu.TIME_TEXT_WIDTH, mdu.TIME_TEXT_HEIGHT, data.time, mdu.TIME_TEXT_FONT_NAME, mdu.TIME_TEXT_FONT_SIZE, mdu.TIME_TEXT_COLOR);
 			
@@ -63,11 +63,11 @@ package fovea.chat.message
 			//_loadingStateIcon.scaleY = .3; 
 			
 			// set text field vars
-			_userNameTF.hAlign = HAlign.LEFT
-			_userNameTF.bold = true;
 			
 			_messageTF.hAlign = HAlign.LEFT
 			_messageTF.autoSize = TextFieldAutoSize.VERTICAL;
+			if (_config.isFromMe)
+				_messageTF.alpha = 0.7;
 			
 			_timeTF.hAlign = HAlign.RIGHT;
 			_timeTF.bold = true;
@@ -75,15 +75,16 @@ package fovea.chat.message
 			
 			// add the children
 			addChild(_background);
-			addChild(_avatarImage);
-			addChild(_userNameTF);
+			if (_avatarImage)
+				addChild(_avatarImage);
 			addChild(_messageTF);
 			addChild(_timeTF);
 			if (state == ChatMessage.STATE_IN_PROGRESS)
 				addChild(_loadingStateIcon);
 
 			// add event listeners
-			_avatarImage.addEventListener(ChatUtil.LOAD_SUCCESS, onAvatarImageLoaded);
+			if (_avatarImage)
+				_avatarImage.addEventListener(ChatUtil.LOAD_SUCCESS, onAvatarImageLoaded);
 		}
 		
 		/**
@@ -92,7 +93,8 @@ package fovea.chat.message
 		 */
 		public function loadAvatarImage(url:String):void
 		{
-			_avatarImage.load(url);
+			if (_avatarImage)
+				_avatarImage.load(url);
 		}
 		
 		/**
@@ -102,21 +104,18 @@ package fovea.chat.message
 		{
 			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
-			// Define the username location
-			_userNameTF.x = mdu.NAME_TEXT_X;
-			_userNameTF.y = mdu.NAME_TEXT_Y;
-			
 			// Define the message location
 			_timeTF.x = consoleWidth - _timeTF.width - _loadingStateIcon.width;
 			_timeTF.y = mdu.TIME_TEXT_Y;
 
 			// Define the message location
-			_messageTF.x = mdu.MESSAGE_TEXT_X;
+			var offsetX:Number = _config.isFromMe ? mdu.BOTTOM_PADDING : 0;
+			_messageTF.x = mdu.MESSAGE_TEXT_X + offsetX;
 			_messageTF.y = mdu.MESSAGE_TEXT_Y;
-			_messageTF.width = mdu.MESSAGE_TEXT_WIDTH;
-			//_messageTF.width = _timeTF.x - _messageTF.x;
+			_messageTF.width = mdu.MESSAGE_TEXT_WIDTH - offsetX;
 			
-			_background.width = this.width;
+			_background.x = this.width - ChatConsole.theme.borderWidth;
+			_background.width = this.width - ChatConsole.theme.borderWidth;
 			_background.height = _messageTF.bounds.bottom + mdu.BOTTOM_PADDING;
 			
 			// position the loading state icon
@@ -134,15 +133,19 @@ package fovea.chat.message
 		{
 			positionAvatarImage()
 		}
-		
+
 		/**
 		 * Positions the avatar image based upon the image height and text height.
 		 */
 		private function positionAvatarImage():void
 		{
 			// Define the avatar image location
-			_avatarImage.x = MessageDisplayUtil.getInstance().AV_IMAGE_X;
-			_avatarImage.y = (_messageTF.bounds.bottom - _userNameTF.bounds.top) * 0.5/* - _avatarImage.height * 0.5*/;
+			if (_avatarImage) {
+				_avatarImage.x = MessageDisplayUtil.getInstance().AV_IMAGE_X;
+				var top:Number = _messageTF.bounds.top;
+				var bottom:Number = _messageTF.bounds.bottom;
+				_avatarImage.y = (bottom + top) * 0.5 - _avatarImage.height * 0.5;
+			}
 		}
 		
 		/**
@@ -150,10 +153,11 @@ package fovea.chat.message
 		 */
 		override public function dispose():void
 		{
-			_avatarImage.removeEventListeners();
-			_avatarImage.dispose();
+			if (_avatarImage) {
+				_avatarImage.removeEventListeners();
+				_avatarImage.dispose();
+			}
 			
-			_userNameTF.dispose();
 			_messageTF.dispose();
 			_background.dispose();
 		}
