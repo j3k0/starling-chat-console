@@ -1,7 +1,10 @@
 package fovea.chat.objects
 {
+	import fovea.chat.ChatConsole;
+
 	import starling.display.DisplayObjectContainer;
 	import starling.text.TextField;
+	import starling.text.TextFieldAutoSize;
 	import starling.utils.Color;
 	import starling.utils.VAlign;
 
@@ -15,9 +18,10 @@ package fovea.chat.objects
 		
 		public function FailedLoadIcon()
 		{
-			_text = new TextField(40,60,"X","Verdana",40, Color.RED,true);
-			_text.vAlign = VAlign.TOP;
-			
+			_text = new TextField(60 * ChatConsole.theme.scaleFactor,
+														80 * ChatConsole.theme.scaleFactor,
+														"x", "Verdana",
+														50 * ChatConsole.theme.scaleFactor, Color.RED, true);
 			addChild(_text);
 		}
 		

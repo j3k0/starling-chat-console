@@ -1,5 +1,6 @@
 package fovea.chat.message
 {
+	import fovea.chat.ChatConsole;
 	import fovea.chat.objects.FailedLoadIcon;
 	import fovea.chat.objects.LoadingIcon;
 	
@@ -33,22 +34,25 @@ package fovea.chat.message
 			setVisualState();
 		}
 		
-		private static const LOADING_ICON_RADIUS:Number = 20;
+		private static function get LOADING_ICON_RADIUS():Number {
+			return ChatConsole.theme.avatarSize() * 0.5;
+		}
 		
 		public function LoadingStateIcon()
 		{	
 			// Instantiate objects
-			_loadingIcon = new LoadingIcon(Color.BLUE, Color.WHITE, LOADING_ICON_RADIUS);
-			_backgroundQuad = new Quad(LOADING_ICON_RADIUS * 2, LOADING_ICON_RADIUS * 2, Color.BLACK);
+			_loadingIcon = new LoadingIcon(ChatConsole.theme.borderColor, ChatConsole.theme.backgroundColor, LOADING_ICON_RADIUS);
+			_backgroundQuad = new Quad(LOADING_ICON_RADIUS, LOADING_ICON_RADIUS, Color.BLACK);
 			
 			// Initialize objects
 			_state = ChatMessage.STATE_IN_PROGRESS;
 			_imageLoaded = false;
 			_backgroundQuad.alpha = 0;
+			_backgroundQuad.visible = false;
 			
 			// Set position
-			_loadingIcon.x = LOADING_ICON_RADIUS;
-			_loadingIcon.y = LOADING_ICON_RADIUS;
+			//_loadingIcon.x = LOADING_ICON_RADIUS;
+			//_loadingIcon.y = LOADING_ICON_RADIUS;
 			
 			// Add Children
 			addChild(_backgroundQuad);
@@ -69,7 +73,6 @@ package fovea.chat.message
 				case ChatMessage.STATE_FAILED:
 					// Add a load failed icon
 					_loadFailedIcon = new FailedLoadIcon();
-					_loadFailedIcon.y = -10;
 					addChild(_loadFailedIcon);
 					
 					// Remove the loading icon

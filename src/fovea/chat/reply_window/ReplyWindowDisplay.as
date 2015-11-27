@@ -63,10 +63,14 @@ package fovea.chat.reply_window
 			
 			// Initialize objects
 			setReplyText(null);
-			_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 			var isAndroid:Boolean = Capabilities.manufacturer.indexOf('Android') > -1;
-			if (isAndroid)
+			if (isAndroid) {
+				_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
 				_replyTI.textEditorProperties.multiline = true;
+			}
+			else {
+				_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_MIDDLE;
+			}
 			_replyTI.padding = 5 * ChatConsole.theme.scaleFactor;
 			_replyTI.maxChars = MessageDisplayUtil.getInstance().MAX_CHARACTERS;
 			
