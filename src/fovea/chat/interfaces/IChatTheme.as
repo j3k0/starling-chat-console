@@ -29,6 +29,8 @@ package fovea.chat.interfaces
 		 */
 		function get backgroundColor():uint;
 
+		function get replyHeight():Number;
+
 		/**
 		 * Background transparency of the chat console window
 		 */
@@ -97,6 +99,11 @@ package fovea.chat.interfaces
 		 * Customize the look of the close button
 		 */
 		function customizeCloseButton(b:Button):void;
+
+		/**
+		 * Create a "send" button.
+		 */
+		function sendButtonFactory():Button;
 
     		/**
 		 * Size of the avatar image

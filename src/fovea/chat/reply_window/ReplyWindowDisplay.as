@@ -21,6 +21,7 @@ package fovea.chat.reply_window
 	import starling.text.TextField;
 	import starling.utils.Color;
 	import starling.utils.HAlign;
+	import feathers.controls.Button;
 	
 	/**
 	 * View for the Reply Window. </br>
@@ -38,12 +39,10 @@ package fovea.chat.reply_window
 		private var _replyTI:FoveaTextInput;
 		/** display the amount of charcters left */
 		private var _charCountTF:TextField;
+		/** the send button */
+		private var _replyButton:Button;
 		
 		private static const DEFAULT_TEXT:String = "chat_your_message";
-		private static function get BACKGROUND_HEIGHT():Number {
-			return 150 * ChatConsole.theme.scaleFactor;
-		}
-		
 		
 		/**
 		 * Instantiates a ReplyWindow controller
@@ -60,6 +59,7 @@ package fovea.chat.reply_window
 			_replyTI.textEditorProperties.fontFamily = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_NAME;
 			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE; // 28 * ChatConsole.theme.scaleFactor;
 			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
+			_replyButton = ChatConsole.theme.sendButtonFactory();
 			
 			// Initialize objects
 			setReplyText(null);
@@ -82,12 +82,16 @@ package fovea.chat.reply_window
 				MessageDisplayUtil.getInstance().TIME_TEXT_FONT_SIZE,
 				MessageDisplayUtil.getInstance().TIME_TEXT_COLOR);
 			_charCountTF.hAlign = HAlign.RIGHT;
+
+			_replyButton.label = "";
+			_replyButton.validate();
 			
 			// Add listeners
 			_replyTI.addEventListener(FeathersEventType.FOCUS_IN, onTextAreaFocusIn);
 			_replyTI.addEventListener(FeathersEventType.FOCUS_OUT, onTextAreaFocusOut);
 			_replyTI.addEventListener(FeathersEventType.ENTER, onTextEnter);
 			_replyTI.addEventListener(Event.CHANGE, onTextChanged);
+			_replyButton.addEventListener(Event.TRIGGERED, onTextEnter);
 
 			// Add Children
 			addChild(_background);
@@ -95,6 +99,7 @@ package fovea.chat.reply_window
 			addChild(_textBackground)
 			addChild(_replyTI);
 			addChild(_charCountTF);
+			addChild(_replyButton);
 
 			//new InputViewportScroller(new <FoveaTextInput>[
 			//	_replyTI
@@ -109,14 +114,17 @@ package fovea.chat.reply_window
 		{
 			// Set teh background size
 			_background.width = consoleWidth;
-			_background.height = BACKGROUND_HEIGHT;
+			_background.height = ChatConsole.theme.replyHeight;
+
+			_replyButton.x = consoleWidth - _replyButton.width - ChatConsole.theme.borderWidth;
+			_replyButton.y = ChatConsole.theme.borderWidth;
 			
 			// Set the textbox background size and position
-			_textBackground.width = consoleWidth - ChatConsole.theme.borderWidth * 2;
-			_textBackground.height = BACKGROUND_HEIGHT - ChatConsole.theme.borderWidth * 2;
+			_textBackground.width = consoleWidth - ChatConsole.theme.borderWidth * 3 - _replyButton.width;
+			_textBackground.height = ChatConsole.theme.replyHeight - ChatConsole.theme.borderWidth * 2;
 			
-			_textBackground.x = (consoleWidth - _textBackground.width) * 0.5;
-			_textBackground.y = (BACKGROUND_HEIGHT - _textBackground.height) * 0.5;
+			_textBackground.x = ChatConsole.theme.borderWidth; //(consoleWidth - _textBackground.width) * 0.5;
+			_textBackground.y = (ChatConsole.theme.replyHeight - _textBackground.height) * 0.5;
 			
 			// Define the textbox border
 			_textBackgroundBorder.x = _textBackground.x - 2 * ChatConsole.theme.scaleFactor;
@@ -127,11 +135,11 @@ package fovea.chat.reply_window
 			// Set the text input position and size
 			_replyTI.x = _textBackground.x + 10 * ChatConsole.theme.scaleFactor;
 			_replyTI.y = _textBackground.y + 5 * ChatConsole.theme.scaleFactor;
-			_replyTI.width = _textBackground.width - 10 * ChatConsole.theme.scaleFactor;
+			_replyTI.width = _textBackground.width - 100 * ChatConsole.theme.scaleFactor;
 			_replyTI.height = _textBackground.height - 10 * ChatConsole.theme.scaleFactor;
 			
 			// Set the character count display position
-			_charCountTF.x = _replyTI.bounds.right - _charCountTF.width - 10 * ChatConsole.theme.scaleFactor;
+			_charCountTF.x = _textBackground.bounds.right - _charCountTF.width - 20 * ChatConsole.theme.scaleFactor;
 			_charCountTF.y = _textBackgroundBorder.bounds.bottom - _charCountTF.height;
 		}
 
@@ -211,6 +219,8 @@ package fovea.chat.reply_window
 		{
 			// remove the carraige return from the string (if any)
 			var txt:String = _replyTI.text;
+			if(txt === ChatUtil.translate(DEFAULT_TEXT))
+				return;
 			if(txt.indexOf("\n") > -1 || txt.indexOf("\r") > -1)
 				txt = txt.substring(0, txt.length - 1);
 			// if there is text to send, send text
@@ -291,6 +301,7 @@ package fovea.chat.reply_window
 		{
 			_replyTI.removeEventListeners();
 			_replyTI.dispose();
+			_replyButton.dispose();
 		}
 	}
 }

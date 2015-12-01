@@ -123,6 +123,15 @@ package fovea.chat.themes
 
 		public function customizeMessageDisplay(mdu:MessageDisplayUtil):void
 		{}
+
+		public function sendButtonFactory():Button
+		{
+			return new Button();
+		}
+
+		public function get replyHeight():Number {
+			return 150 * scaleFactor;
+		}
 		
 		public function DefaultChatTheme(stageWidth:Number, stageHeight:Number)
 		{
