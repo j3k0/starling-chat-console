@@ -91,7 +91,7 @@ package fovea.chat.reply_window
 			_replyTI.addEventListener(FeathersEventType.FOCUS_OUT, onTextAreaFocusOut);
 			_replyTI.addEventListener(FeathersEventType.ENTER, onTextEnter);
 			_replyTI.addEventListener(Event.CHANGE, onTextChanged);
-			_replyButton.addEventListener(Event.TRIGGERED, onTextEnter);
+			_replyButton.addEventListener(Event.TRIGGERED, onReplyTriggered);
 
 			// Add Children
 			addChild(_background);
@@ -213,6 +213,12 @@ package fovea.chat.reply_window
 			multiTimeout(function():void {
 				viewPortY = -Starling.current.nativeStage.softKeyboardRect.y;
 			}, 1500);
+		}
+
+		private function onReplyTriggered(event:Event):void
+		{
+			onTextEnter(event);
+			_replyTI.clearFocus();//setFocus();//clearFocus();
 		}
 
 		private function onTextEnter(event:Event):void
