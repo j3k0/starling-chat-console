@@ -1,5 +1,6 @@
 package fovea.chat.message
 {
+	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
 	
 	import starling.display.Quad;
@@ -24,16 +25,23 @@ package fovea.chat.message
 		public function SystemMessageDisplay(data:ChatMessageData, config:ChatMessageDisplayConfig)
 		{
 			var message:String = data.message;
+			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
-			if (message.length > MessageDisplayUtil.getInstance().MAX_CHARACTERS-1)
+			if (message.length > mdu.MAX_CHARACTERS-1)
 				message = message.substr(0,MessageDisplayUtil.getInstance().MAX_CHARACTERS-1)+"...";
 			
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
+            _background.visible = false;
 			
-			_messageTF = new TextField(620,70,message);
+			_messageTF = new TextField(
+                mdu.MESSAGE_SYSTEM_TEXT_WIDTH,
+                mdu.MESSAGE_SYSTEM_TEXT_HEIGHT,
+                message,
+                mdu.MESSAGE_SYSTEM_TEXT_FONT_NAME,
+                mdu.MESSAGE_SYSTEM_TEXT_FONT_SIZE,
+                mdu.MESSAGE_SYSTEM_TEXT_COLOR);
 			_messageTF.hAlign = HAlign.LEFT
-			_messageTF.color = ChatUtil.GREY_TEXT_COLOR;
 			_messageTF.bold = true;
 			
 			// add the children
@@ -46,10 +54,20 @@ package fovea.chat.message
 		 */
 		override public function layout(consoleWidth:Number):void	
 		{
-			_messageTF.x = MessageDisplayUtil.getInstance().MESSAGE_TEXT_X;
-			
-			_background.width = this.width;
+			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
+			_messageTF.x = mdu.MESSAGE_SYSTEM_TEXT_X;
+			_messageTF.y = mdu.MESSAGE_SYSTEM_TEXT_Y;
+			_background.width  = this.width - ChatConsole.theme.borderWidth;
 			_background.height = this.height;
 		}
+
+		/**
+		 * Dipose of this object
+		override public function dispose():void
+		{
+			_messageTF.dispose();
+			_background.dispose();
+		}
+		 */
 	}
 }

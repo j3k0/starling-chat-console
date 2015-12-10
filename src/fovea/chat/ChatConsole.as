@@ -151,6 +151,8 @@ package fovea.chat
 		 */
 		private function layout():void
 		{
+            if (!stage) return;
+
 			// resize the background 
 			_background.width 	= _theme.width;
 			_background.height 	= _stageDimensions.y;
@@ -295,7 +297,7 @@ package fovea.chat
 
 			if (chatMessages.length == 0) {
 				clearMessages();
-				layout();
+                layout();
 				return;
 			}
 

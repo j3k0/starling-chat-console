@@ -31,6 +31,14 @@ package fovea.chat.message
 		public var MESSAGE_TEXT_FONT_NAME:String = "Verdana";
 		public var MESSAGE_TEXT_FONT_SIZE:Number = 12;
 		public var MESSAGE_TEXT_COLOR:uint = 0;
+
+		public var MESSAGE_SYSTEM_TEXT_X:Number = 65;
+		public var MESSAGE_SYSTEM_TEXT_Y:Number = 40;
+		public var MESSAGE_SYSTEM_TEXT_WIDTH:Number = 620;
+		public var MESSAGE_SYSTEM_TEXT_HEIGHT:Number = 70;
+		public var MESSAGE_SYSTEM_TEXT_FONT_NAME:String = "Verdana";
+		public var MESSAGE_SYSTEM_TEXT_FONT_SIZE:Number = 12;
+		public var MESSAGE_SYSTEM_TEXT_COLOR:uint = 0x888888;
 		
 		/** Y-Coordinate of time-stamp of the message */
 		public var TIME_TEXT_Y:Number = 14;

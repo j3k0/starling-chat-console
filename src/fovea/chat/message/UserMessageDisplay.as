@@ -155,11 +155,11 @@ package fovea.chat.message
 		{
 			if (_avatarImage) {
 				_avatarImage.removeEventListeners();
-				_avatarImage.dispose();
+				// _avatarImage.dispose();
 			}
-			
-			_messageTF.dispose();
-			_background.dispose();
+			//_messageTF.dispose();
+			//_background.dispose();
+            super.dispose();
 		}
 	}
 }
