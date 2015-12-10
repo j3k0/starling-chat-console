@@ -130,9 +130,11 @@ package fovea.chat.message
 		public function dispose():void
 		{
 			clearTimer();
-			_view.removeEventListeners();
-			_view.dispose();
-			_view = null; // make sure we're not using the view ever again
+            if (_view) {
+                _view.removeEventListeners();
+                _view.dispose();
+                _view = null; // make sure we're not using the view ever again
+            }
 		}
 	}
 }

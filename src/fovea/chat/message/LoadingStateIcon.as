@@ -76,17 +76,19 @@ package fovea.chat.message
 					addChild(_loadFailedIcon);
 					
 					// Remove the loading icon
-					removeChild(_loadingIcon);
+                    _loadingIcon.removeFromParent(true);
 			}
 		}
 		
 		/**
 		 * Disposes of this object
-		 */
 		override public function dispose():void
 		{
-			_loadFailedIcon.dispose();
+            if (_loadingIcon) {
+                _loadFailedIcon.dispose();
+            }
 			_loadingIcon.dispose();
 		}
+		*/
 	}
 }
