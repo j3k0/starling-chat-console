@@ -215,10 +215,18 @@ package fovea.chat.reply_window
 			}, 1500);
 		}
 
+		private var _disableReply:Boolean = false;
 		private function onReplyTriggered(event:Event):void
 		{
-			onTextEnter(event);
-			_replyTI.clearFocus();//setFocus();//clearFocus();
+			if (_disableReply) return;
+			_disableReply = true;
+			_replyTI.clearFocus();
+			_replyTI.alpha = 0;
+			setTimeout(function():void {
+				_replyTI.alpha = 1;
+				_disableReply = false;
+				onTextEnter(event);
+			}, 1000);
 		}
 
 		private function onTextEnter(event:Event):void
