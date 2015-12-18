@@ -20,9 +20,9 @@ package fovea.chat.reply_window
 		 * @param backgroundColor:uint - Background color of the ReplyWindow
 		 * @param textboxColor:uint - Background color of the ReplyWindow TextArea
 		 */
-		public function ReplyWindow(backgroundColor:uint, textboxColor:uint)
+		public function ReplyWindow(backgroundColor:uint, textboxColor:uint, forceFocus:Boolean)
 		{
-			_view = new ReplyWindowDisplay(backgroundColor, textboxColor);
+			_view = new ReplyWindowDisplay(backgroundColor, textboxColor, forceFocus);
 		}
 		
 		/**

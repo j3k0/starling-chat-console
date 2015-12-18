@@ -19,6 +19,14 @@ package fovea.chat.themes
 		{
 			return true;
 		}
+
+		/**
+		 * Define if the platform is mobile
+		 */
+		public function get isAndroid():Boolean
+		{
+			return false;
+		}
 		
 		/**
 		 * How graphic elements must be scaled up/down

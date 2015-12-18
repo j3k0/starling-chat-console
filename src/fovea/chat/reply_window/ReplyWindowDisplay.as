@@ -41,6 +41,8 @@ package fovea.chat.reply_window
 		private var _charCountTF:TextField;
 		/** the send button */
 		private var _replyButton:Button;
+		// force the text input to keep focus (fix issues with android)
+		private var _forceFocus:Boolean = false;
 		
 		private static const DEFAULT_TEXT:String = "chat_your_message";
 		
@@ -49,8 +51,10 @@ package fovea.chat.reply_window
 		 * @param backgroundColor:uint - Background color of the ReplyWindow
 		 * @param textboxColor:uint - Background color of the ReplyWindow TextArea
 		 */
-		public function ReplyWindowDisplay(backgroundColor:uint, textboxColor:uint)
+		public function ReplyWindowDisplay(backgroundColor:uint, textboxColor:uint, forceFocus:Boolean)
 		{
+			trace("ReplyWindowDisplay()");
+			_forceFocus = forceFocus;
 			// Instantiate 
 			_background = new Quad(1,1,backgroundColor);
 			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
@@ -104,6 +108,12 @@ package fovea.chat.reply_window
 			//new InputViewportScroller(new <FoveaTextInput>[
 			//	_replyTI
 			//]).setup();
+			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+		}
+
+		private function onAddedToStage(e:Event):void {
+			if (_forceFocus)
+				_replyTI.setFocus();
 		}
 		
 		/**
@@ -160,6 +170,7 @@ package fovea.chat.reply_window
 		 */
 		private function onTextAreaFocusIn(event:Event):void
 		{
+			trace("onTextAreaFocusIn");
 			// If the text box is using the default text clear it.
 			if(_replyTI.text == ChatUtil.translate(DEFAULT_TEXT))
 				setReplyText("");
@@ -226,6 +237,8 @@ package fovea.chat.reply_window
 				_replyTI.alpha = 1;
 				_disableReply = false;
 				onTextEnter(event);
+				if (_forceFocus)
+					setTimeout(_replyTI.setFocus, 250);
 			}, 1000);
 		}
 

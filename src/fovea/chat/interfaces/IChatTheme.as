@@ -25,6 +25,11 @@ package fovea.chat.interfaces
 		function get isMobile():Boolean;
 		
 		/**
+		 * Define if the platform is android
+		 */
+		function get isAndroid():Boolean;
+		
+		/**
 		 * Background Color of the chat console window
 		 */
 		function get backgroundColor():uint;
