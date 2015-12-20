@@ -12,6 +12,7 @@ package fovea.chat.reply_window
 	import fovea.chat.ChatUtil;
 	import fovea.chat.message.MessageDisplayUtil;
 
+	import fovea.utils.NativeController;
 	import fovea.ui.InputViewportScroller;
 
 	import starling.core.Starling;
@@ -59,9 +60,15 @@ package fovea.chat.reply_window
 			_background = new Quad(1,1,backgroundColor);
 			_textBackgroundBorder = new Quad(1,1,getDarkerColor(backgroundColor));
 			_textBackground = new Quad(1,1,textboxColor);
+
+			var fontSizeFix:Number = 1.0;
+			var nativeController:NativeController = new NativeController({});
+			if (nativeController.isWeb || nativeController.isDesktop)
+				fontSizeFix = 1.0 / Starling.current.contentScaleFactor;
+
 			_replyTI = new FoveaTextInput();
 			_replyTI.textEditorProperties.fontFamily = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_NAME;
-			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE; // 28 * ChatConsole.theme.scaleFactor;
+			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE * fontSizeFix; // 28 * ChatConsole.theme.scaleFactor;
 			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
 			_replyButton = ChatConsole.theme.sendButtonFactory();
 			
