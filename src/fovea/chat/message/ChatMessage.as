@@ -39,7 +39,9 @@ package fovea.chat.message
 		public function set state(value:int):void 
 		{
 			_state = value;
-			view.state = value;
+			if (view) {
+				view.state = value;
+			}
 		}
 		
 		/** user that sent this message */

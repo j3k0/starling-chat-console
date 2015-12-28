@@ -81,7 +81,7 @@ package fovea.chat.objects
 		 */
 		public function ChatMessageContainer()
 		{
-			scrollToBottom = _.debounce(_scrollToBottom, 200);
+			scrollToBottom = _.throttle(_scrollToBottom, millis(SCROLL_BOTTOM_DURATION + 0.1));
 			_scrollContainer = new ScrollContainer();
 			_scrollContainer.hasElasticEdges = true;
 			_scrollContainer.horizontalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
@@ -119,6 +119,13 @@ package fovea.chat.objects
 		{
 			_scrollContainer.width = width;
 			_scrollContainer.height = height;
+			_scrollContainer.validate();
+		}
+
+		private const SCROLL_BOTTOM_DURATION:Number = 0.5;
+		private var _isScrollingBottom:int = 0;
+		public function get isScrollingBottom():Boolean {
+			return _isScrollingBottom > 0;
 		}
 		
 		/** 
@@ -127,7 +134,11 @@ package fovea.chat.objects
 		private function _scrollToBottom():void
 		{
 			_scrollContainer.validate();
-			_scrollContainer.scrollToPosition(_scrollContainer.horizontalScrollPosition, _scrollContainer.maxVerticalScrollPosition, .5);
+			_scrollContainer.scrollToPosition(_scrollContainer.horizontalScrollPosition, _scrollContainer.maxVerticalScrollPosition, SCROLL_BOTTOM_DURATION);
+			_.delay(function():void {
+				_isScrollingBottom --;
+			}, millis(SCROLL_BOTTOM_DURATION));
+			_isScrollingBottom ++;
 		}
 
 		/**
@@ -160,8 +171,10 @@ package fovea.chat.objects
 		override public function dispose():void
 		{
 			_scrollContainer.removeEventListeners();
-			
-			_scrollContainer.dispose();
+			super.dispose();
+			//_scrollContainer.dispose();
 		}
+
+		private function millis(s:Number):Number { return s * 1000; }
 	}
 }

@@ -297,7 +297,7 @@ package fovea.chat
 
 			if (chatMessages.length == 0) {
 				clearMessages();
-                layout();
+				layout();
 				return;
 			}
 
@@ -461,9 +461,11 @@ package fovea.chat
 			// set incoming chats to success
 			// chatMessage.state = state;
 			// grab the last message's position in relation to the bottom of the container 
-			var lastMsgPos:Number;
-			if (relayout)
-				lastMsgPos = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
+			var liveFeed:Boolean = false;
+			if (relayout) {
+				var lastMsgPos:Number = _chatMessageContainer.contentHeight - (_chatMessageContainer.height + _chatMessageContainer.scrollPosition);
+				liveFeed =  _chatMessageContainer.isScrollingBottom || !(lastMsgPos > 0);
+			}
 			
 			// add text to the console
 			_chatMessages.push(chatMessage);
@@ -478,10 +480,10 @@ package fovea.chat
 				{
 					// if the last message was visible (position before the new message was added > 0),
 					// alert a new message has been added otherwise scroll to bottom.
-					if(lastMsgPos > 0)
-						_chatAlert.show();
-					else
+					if(liveFeed)
 						_chatMessageContainer.scrollToBottom();
+					else
+						_chatAlert.show();
 				}
 			}
 			
