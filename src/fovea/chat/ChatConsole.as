@@ -116,7 +116,7 @@ package fovea.chat
 			_shadow.alpha = 0;
 			_chatMessageContainer = new ChatMessageContainer();
 			_chatMessages = new Vector.<ChatMessage>();
-			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor, theme.isAndroid);
+			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor, false /*theme.isAndroid*/);
 			_closeButton = new CloseButton(5 * _theme.scaleFactor);
 			_chatAlert = new NewChatAlert(this);
 			_sentMessages = new Object();

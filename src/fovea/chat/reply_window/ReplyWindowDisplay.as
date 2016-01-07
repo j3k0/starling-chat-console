@@ -66,7 +66,7 @@ package fovea.chat.reply_window
 			if (nativeController.isWeb || nativeController.isDesktop)
 				fontSizeFix = 1.0 / Starling.current.contentScaleFactor;
 
-			_replyTI = new FoveaTextInput();
+			_replyTI = new FoveaTextInput(FoveaTextInput.DISABLED);
 			_replyTI.textEditorProperties.fontFamily = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_NAME;
 			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE * fontSizeFix; // 28 * ChatConsole.theme.scaleFactor;
 			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
@@ -163,7 +163,7 @@ package fovea.chat.reply_window
 		/**
 		 * Change the viewport
 		 */
-		public function set viewPortY(value:Number):void
+		private function set viewPortY(value:Number):void
 		{
 			var vp:Rectangle = Starling.current.viewPort;
 			if (value !== vp.y) {
@@ -228,6 +228,8 @@ package fovea.chat.reply_window
 		 * HAX: because softKeyboardRect isn't always updated right after the focus event.
 		 */
 		private function forceRefreshViewport():void {
+			if (ChatConsole.theme.isAndroid)
+				return;
 			multiTimeout(function():void {
 				viewPortY = -Starling.current.nativeStage.softKeyboardRect.y;
 			}, 1500);
@@ -255,8 +257,11 @@ package fovea.chat.reply_window
 			var txt:String = _replyTI.text;
 			if(txt === ChatUtil.translate(DEFAULT_TEXT))
 				return;
-			if(txt.indexOf("\n") > -1 || txt.indexOf("\r") > -1)
+			if(txt.indexOf("\n") > -1 || txt.indexOf("\r") > -1) {
+				if (ChatConsole.theme.isAndroid)
+					_replyTI.clearFocus();
 				txt = txt.substring(0, txt.length - 1);
+			}
 			// if there is text to send, send text
 			sendText(txt);
 		}
