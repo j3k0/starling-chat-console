@@ -120,6 +120,7 @@ package fovea.chat.objects
 			_scrollContainer.width = width;
 			_scrollContainer.height = height;
 			_scrollContainer.validate();
+			_scrollContainer.readjustLayout();
 		}
 
 		private const SCROLL_BOTTOM_DURATION:Number = 0.5;
