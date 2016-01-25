@@ -7,6 +7,7 @@ package fovea.chat.reply_window
 	import flash.geom.Rectangle;
 	import flash.system.Capabilities;
 	import flash.utils.setTimeout;
+	import flash.text.ReturnKeyLabel;
 	
 	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
@@ -70,6 +71,7 @@ package fovea.chat.reply_window
 			_replyTI.textEditorProperties.fontFamily = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_NAME;
 			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE * fontSizeFix; // 28 * ChatConsole.theme.scaleFactor;
 			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
+			_replyTI.textEditorProperties.returnKeyLabel = ReturnKeyLabel.DONE;
 			_replyButton = ChatConsole.theme.sendButtonFactory();
 			
 			// Initialize objects
