@@ -11,6 +11,8 @@ package fovea.chat.themes
 	{	
 		private var _stageWidth:Number = 0;
 		private var _stageHeight:Number = 0;
+        public function get stageWidth():Number { return _stageWidth; }
+        public function get stageHeight():Number { return _stageHeight; }
 
 		/**
 		 * Define if the platform is mobile
