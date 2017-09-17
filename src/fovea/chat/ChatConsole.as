@@ -11,7 +11,7 @@ package fovea.chat
 	import fovea.chat.message.ChatMessageData;
 	import fovea.chat.message.ChatMessageDisplayConfig;
 	import fovea.chat.objects.ChatMessageContainer;
-	import fovea.chat.objects.CloseButton;
+	import feathers.controls.Button;
 	import fovea.chat.objects.NewChatAlert;
 	import fovea.chat.objects.Shadow;
 	import fovea.chat.reply_window.ReplyWindow;
@@ -57,7 +57,7 @@ package fovea.chat
 		/** the width of the stage in this space's parent */
 		private var _parentStageDimensions:Point;
 		/** Close button */
-		private var _closeButton:CloseButton;
+		private var _closeButton:Button;
 		/** New Chat Alert */
 		private var _chatAlert:NewChatAlert;
 		/** map of sent messages to chat message objects*/
@@ -117,7 +117,9 @@ package fovea.chat
 			_chatMessageContainer = new ChatMessageContainer();
 			_chatMessages = new Vector.<ChatMessage>();
 			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor, false /*theme.isAndroid*/);
-			_closeButton = new CloseButton(10 * _theme.scaleFactor);
+			_closeButton = theme.closeButtonFactory(); // new Button();
+            // _closeButton.padding = 100 * _theme.scaleFactor;
+            _closeButton.label = ChatUtil.translate("close_button");
 			_chatAlert = new NewChatAlert(this);
 			_sentMessages = new Object();
 
@@ -183,7 +185,7 @@ package fovea.chat
 			_replyWindow.y = _stageDimensions.y - _replyWindow.height;
 
 			// position the close button
-			_closeButton.layout();
+			// _closeButton.layout();
 			_closeButton.x = width - _closeButton.width - CLOSE_BUTTON_OFFSET;
 			_closeButton.y = CLOSE_BUTTON_OFFSET;
 
@@ -244,10 +246,10 @@ package fovea.chat
 
 			// initialize the close button
 			// add a touch quad for the close button
-			_closeButton.validate();
-			var touchQuad:Quad = new Quad(_closeButton.width, _closeButton.height, 0xFF0000);
-			_closeButton.addChild(touchQuad);
-			touchQuad.alpha = 0;
+			// _closeButton.validate();
+			// var touchQuad:Quad = new Quad(_closeButton.width, _closeButton.height, 0xFF0000);
+			// _closeButton.addChild(touchQuad);
+			// touchQuad.alpha = 0;
 
 
 			// call the layout function

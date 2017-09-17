@@ -12,17 +12,18 @@ package fovea.chat.objects
 	public class CloseButton extends Button
 	{
 		/** padding added to all sides, to enable easier touch capability */
-		private var _touchPadding:Number;
+		// private var _touchPadding:Number;
 		/** A background object to make the button easier to touch */
-		private var _touchQuad:Quad;
+		// private var _touchQuad:Quad;
 		/** Close button label text */
 		private static const LABEL_TEXT:String = "close_button";
 		
 		/** padding to enable easier touch capability */
 		public function set touchPadding(value:Number):void
 		{
-			_touchPadding = value;
-			layout();
+			// _touchPadding = value;
+            padding = value;
+			// layout();
 		}
 		
 		/**
@@ -32,11 +33,11 @@ package fovea.chat.objects
 		public function CloseButton(touchPadding:Number = 0)
 		{
 			label = ChatUtil.translate(LABEL_TEXT);
-			_touchQuad = new Quad(1,1, 0xFF0000);
-			_touchQuad.alpha = 0;
-			_touchPadding = touchPadding;
+			// _touchQuad = new Quad(1,1, 0xFF0000);
+			// _touchQuad.alpha = 0;
+			padding = touchPadding;
 			
-			addChild(_touchQuad);
+			// addChild(_touchQuad);
 		}
 		
 		/**
@@ -44,10 +45,10 @@ package fovea.chat.objects
 		 */
 		public function layout():void
 		{
-			_touchQuad.x = -_touchPadding;
-			_touchQuad.y = -_touchPadding;
-			_touchQuad.width = width +  (_touchPadding * 2);
-			_touchQuad.height = height + (_touchPadding * 2);
+			// _touchQuad.x = 0; // -_touchPadding;
+			// _touchQuad.y = 0; // -_touchPadding;
+			// _touchQuad.width = width + _touchPadding * 2;
+			// _touchQuad.height = height + _touchPadding * 2;
 		}
 	}
 }

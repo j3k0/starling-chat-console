@@ -106,9 +106,14 @@ package fovea.chat.interfaces
 		function customizeCloseButton(b:Button):void;
 
 		/**
-		 * Create a "send" button.
+		 * Create the button to send a message.
 		 */
 		function sendButtonFactory():Button;
+
+		/**
+		 * Create the button to close the chat console.
+		 */
+        function closeButtonFactory():Button;
 
     		/**
 		 * Size of the avatar image

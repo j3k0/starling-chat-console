@@ -139,10 +139,14 @@ package fovea.chat.themes
 			return new Button();
 		}
 
+        public function closeButtonFactory():Button {
+            return new Button();
+        }
+		
 		public function get replyHeight():Number {
 			return 150 * scaleFactor;
 		}
-		
+
 		public function DefaultChatTheme(stageWidth:Number, stageHeight:Number)
 		{
 			_stageWidth = stageWidth;
