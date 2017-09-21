@@ -173,6 +173,7 @@ package fovea.chat.reply_window
 		{
 			var vp:Rectangle = Starling.current.viewPort;
 			if (value !== vp.y) {
+                vp = vp.clone();
 				vp.y = value;
 				Starling.current.viewPort = vp;
 			}
@@ -184,6 +185,7 @@ package fovea.chat.reply_window
 		private function onTextAreaFocusIn(event:Event):void
 		{
 			trace("onTextAreaFocusIn");
+            ChatConsole.boostFPS(1);
 			// If the text box is using the default text clear it.
 			if(_replyTI.text == ChatUtil.translate(DEFAULT_TEXT))
 				setReplyText("");
@@ -197,6 +199,7 @@ package fovea.chat.reply_window
 		 */
 		private function onTextAreaFocusOut(event:Event):void
 		{
+            ChatConsole.boostFPS(1);
 			// If the text box is empty return it to the default text
 			if(_replyTI.text == "")
 				setReplyText(null);
@@ -223,8 +226,8 @@ package fovea.chat.reply_window
 		/**
 		 * Trigger f every 100ms for `timeout` milliseconds.
 		 */
-		private function multiTimeout(f:Function, timeout:int):void {
-			for (var i:int = 0; i <= timeout; i += 100)
+		private function multiTimeout(f:Function, from:int, to:int):void {
+			for (var i:int = from; i <= to; i += 100)
 				setTimeout(f, i);
 		}
 		
@@ -237,8 +240,13 @@ package fovea.chat.reply_window
 			if (ChatConsole.theme.isAndroid)
 				return;
 			multiTimeout(function():void {
-				viewPortY = -Starling.current.nativeStage.softKeyboardRect.y;
-			}, 1500);
+                trace("[ReplyWindowDisplay] softKeyboardRect x=" + Starling.current.nativeStage.softKeyboardRect.x + " width=" + Starling.current.nativeStage.softKeyboardRect.width);
+                trace("[ReplyWindowDisplay] softKeyboardRect y=" + Starling.current.nativeStage.softKeyboardRect.y + " height=" + Starling.current.nativeStage.softKeyboardRect.height);
+                if (_replyTI.hasFocus)
+                    viewPortY = -Starling.current.nativeStage.softKeyboardRect.height;
+                else
+                    viewPortY = 0;
+			}, 50, 1500);
 		}
 
 		private var _disableReply:Boolean = false;
