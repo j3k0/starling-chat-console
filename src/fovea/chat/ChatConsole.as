@@ -87,6 +87,10 @@ package fovea.chat
 			return stage ? stage.stageHeight : 0;
 		}
 
+        public static var boostFPS:Function = function(duration:Number):void {
+            // client app can set it's own (if app uses variable frame rate)
+        };
+
 		/** the location offset of the close button from tight and top */
 		private static const CLOSE_BUTTON_OFFSET:Number = 10;
 

@@ -90,6 +90,9 @@ package fovea.chat.objects
 			addChild(_scrollContainer);
 			
 			_scrollContainer.addEventListener(FeathersEventType.SCROLL_COMPLETE, onScrollComplete);
+			_scrollContainer.addEventListener(FeathersEventType.SCROLL_START, function(event:Event):void {
+                ChatConsole.boostFPS(3);
+            });
 		}
 		
 		/** 
