@@ -272,9 +272,9 @@ package fovea.chat.reply_window
 			if(txt === ChatUtil.translate(DEFAULT_TEXT))
 				return;
 			if(txt.indexOf("\n") > -1 || txt.indexOf("\r") > -1) {
-				if (ChatConsole.theme.isAndroid)
-					_replyTI.clearFocus();
-				txt = txt.substring(0, txt.length - 1);
+				/* if (ChatConsole.theme.isAndroid)
+					_replyTI.clearFocus(); */
+				txt = txt.replace("\n", "").replace("\r","");
 			}
 			// if there is text to send, send text
 			sendText(txt);
