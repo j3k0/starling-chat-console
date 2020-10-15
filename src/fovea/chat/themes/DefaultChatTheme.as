@@ -4,11 +4,11 @@ package fovea.chat.themes
 
 	import fovea.chat.interfaces.IChatTheme;
 	import fovea.chat.message.MessageDisplayUtil;
-	
+
 	import starling.utils.Color;
-	
+
 	public class DefaultChatTheme implements IChatTheme
-	{	
+	{
 		private var _stageWidth:Number = 0;
 		private var _stageHeight:Number = 0;
 
@@ -27,7 +27,7 @@ package fovea.chat.themes
 		{
 			return false;
 		}
-		
+
 		/**
 		 * How graphic elements must be scaled up/down
 		 */
@@ -35,8 +35,8 @@ package fovea.chat.themes
 			return 1.0;
 		}
 
-		/** 
-		 *  Background Color of the chat console window 
+		/**
+		 *  Background Color of the chat console window
 		 */
 		public function get backgroundColor():uint
 		{
@@ -50,11 +50,11 @@ package fovea.chat.themes
 		{
 			return 0.9;
 		}
-		
+
 		public function get borderColor():uint { return Color.RED; }
 		public function get borderAlpha():Number { return 0.5; }
 		public function get borderWidth():Number { return 2; }
-		
+
 		/**
 		 * Width of the chat console, defines where the chat rests when opened.
 		 */
@@ -62,16 +62,16 @@ package fovea.chat.themes
 		{
 			return _stageWidth * 0.9; // 800;
 		}
-		
-		/** 
-		 * Length of time for the open and close transition animations, (in Seconds) 
+
+		/**
+		 * Length of time for the open and close transition animations, (in Seconds)
 		 */
 		public function get openCloseTransitionTime():Number
 		{
 			return .2;
 		}
-		
-		
+
+
 		/**
 		 * Type of Ease used in the open and close animations
 		 * <ul>
@@ -98,7 +98,7 @@ package fovea.chat.themes
 		{
 			return "easeOut";
 		}
-		
+
 		/**
 		 * Background color of the reply window
 		 */
@@ -106,7 +106,7 @@ package fovea.chat.themes
 		{
 			return 0xF2F2F4;
 		}
-		
+
 		/**
 		 * Background color of the reply window text area
 		 */
@@ -121,7 +121,19 @@ package fovea.chat.themes
 		public function customizeCloseButton(b:Button):void
 		{}
 
-    		/**
+		/**
+		 * Customize the look of the menu button
+		 */
+		public function customizeMenuButton(b:Button):void
+		{}
+
+		public function customizeBlockButton(b:Button):void
+		{}
+
+		public function customizeReportButton(b:Button):void
+		{}
+
+    	/**
 		 * Size of the avatar image
 		 */
 		public function avatarSize():Number
@@ -140,7 +152,11 @@ package fovea.chat.themes
 		public function get replyHeight():Number {
 			return 150 * scaleFactor;
 		}
-		
+
+		public function get settingsHeight():Number {
+			return 160 * scaleFactor;
+		}
+
 		public function DefaultChatTheme(stageWidth:Number, stageHeight:Number)
 		{
 			_stageWidth = stageWidth;

@@ -15,26 +15,28 @@ package fovea.chat.interfaces
 	 * 	<li>openCloseTransitionType</li>
 	 * 	<li>replyWindowBackgroundColor</li>
 	 * 	<li>replyWindowTextBoxColor</li>
-	 * </ul> 
+	 * </ul>
 	 */
 	public interface IChatTheme
-	{	
+	{
 		/**
 		 * Define if the platform is mobile
 		 */
 		function get isMobile():Boolean;
-		
+
 		/**
 		 * Define if the platform is android
 		 */
 		function get isAndroid():Boolean;
-		
+
 		/**
 		 * Background Color of the chat console window
 		 */
 		function get backgroundColor():uint;
 
 		function get replyHeight():Number;
+
+		function get settingsHeight():Number;
 
 		/**
 		 * Background transparency of the chat console window
@@ -47,20 +49,20 @@ package fovea.chat.interfaces
 		function get borderColor():uint;
 		function get borderAlpha():Number;
 		function get borderWidth():Number;
-		
+
 		/**
 		 * Width of the chat console, defines where the chat rests when opened.
 		 */
 		function get width():Number;
-		
-		
+
+
 		/**
 		 * Length of time for the open and close transition animations</br>
 		 *  (in Seconds)
 		 */
 		function get openCloseTransitionTime():Number;
-		
-		
+
+
 		/**
 		 * Type of Ease used in the open and close animations
 		 * <ul>
@@ -84,12 +86,12 @@ package fovea.chat.interfaces
 		 * </ul>
 		 */
 		function get openCloseTransitionType():String;
-		
+
 		/**
 		 * Background color of the reply window
 		 */
 		function get replyWindowBackgroundColor():uint;
-		
+
 		/**
 		 * Background color of the reply window text area
 		 */
@@ -106,11 +108,18 @@ package fovea.chat.interfaces
 		function customizeCloseButton(b:Button):void;
 
 		/**
+		 * Customize the look of the close button
+		 */
+		function customizeMenuButton(b:Button):void;
+		function customizeBlockButton(b:Button):void;
+		function customizeReportButton(b:Button):void;
+
+		/**
 		 * Create a "send" button.
 		 */
 		function sendButtonFactory():Button;
 
-    		/**
+    	/**
 		 * Size of the avatar image
 		 */
 		function avatarSize():Number;

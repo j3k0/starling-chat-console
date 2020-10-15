@@ -12,11 +12,14 @@ package fovea.chat
 	import fovea.chat.message.ChatMessageDisplayConfig;
 	import fovea.chat.objects.ChatMessageContainer;
 	import fovea.chat.objects.CloseButton;
+	import fovea.chat.objects.MenuButton;
 	import fovea.chat.objects.NewChatAlert;
 	import fovea.chat.objects.Shadow;
 	import fovea.chat.reply_window.ReplyWindow;
+	import fovea.chat.menu_bar.MenuBar;
 
 	import starling.animation.Tween;
+	import starling.animation.Transitions;
 	import starling.core.Starling;
 	import starling.display.Quad;
 	import starling.display.Sprite;
@@ -33,6 +36,10 @@ package fovea.chat
 	 */
 	public class ChatConsole extends Sprite
 	{
+    	public static var BLOCK_USER_EVENT:String = "BLOCK_USER_EVENT";
+    	public static var REPORT_USER_EVENT:String = "REPORT_USER_EVENT";
+    	public static var MENU_BUTTON_EVENT:String = "MENU_BUTTON_EVENT";
+
 		/** slide open transition tween **/
 		private var _tween:Tween;
 		/** Console background */
@@ -52,12 +59,16 @@ package fovea.chat
 		private var _theme:IChatTheme;
 		/** the reply window */
 		private var _replyWindow:ReplyWindow;
+		/** the menu window */
+		private var _menuBar:MenuBar;
 		/** the width of the stage in this space */
 		private var _stageDimensions:Point;
 		/** the width of the stage in this space's parent */
 		private var _parentStageDimensions:Point;
 		/** Close button */
 		private var _closeButton:CloseButton;
+		/** Menu button */
+		private var _menuButton:MenuButton;
 		/** New Chat Alert */
 		private var _chatAlert:NewChatAlert;
 		/** map of sent messages to chat message objects*/
@@ -88,7 +99,10 @@ package fovea.chat
 		}
 
 		/** the location offset of the close button from tight and top */
-		private static const CLOSE_BUTTON_OFFSET:Number = 10;
+		private static const CLOSE_BUTTON_OFFSET:Number = 100;
+
+		/** the location offset of the menu button from tight and top */
+		private static const MENU_BUTTON_OFFSET:Number = 20;
 
 		public static var theme:IChatTheme = null;
 
@@ -97,7 +111,7 @@ package fovea.chat
 		 * @param server:IChatServer - Server interface to make and receive server calls
 		 * @param theme:IChatTheme - Theme to define ChatConsole Dispaly Properties
 		 */
-		public function ChatConsole(server:IChatServer, theme:IChatTheme, translate:Function=null)
+		public function ChatConsole(server:IChatServer, theme:IChatTheme, translate:Function=null, translateN:Function=null)
 		{
 			// Definitions
 			_server = server;
@@ -106,6 +120,8 @@ package fovea.chat
 			_state = ChatUtil.CLOSED;
 			if(translate)
 				ChatUtil.translate = translate;
+			if (translateN)
+				ChatUtil.translateN = translateN;
 
 			// instantiate objects
 			_background = new Quad(_theme.width, 1,_theme.backgroundColor);
@@ -117,12 +133,17 @@ package fovea.chat
 			_chatMessageContainer = new ChatMessageContainer();
 			_chatMessages = new Vector.<ChatMessage>();
 			_replyWindow = new ReplyWindow(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor, false /*theme.isAndroid*/);
+			_menuBar = new MenuBar(theme.replyWindowBackgroundColor, theme.replyWindowTextBoxColor, false /*theme.isAndroid*/);
 			_closeButton = new CloseButton(5 * _theme.scaleFactor);
+			_menuButton = new MenuButton();
 			_chatAlert = new NewChatAlert(this);
 			_sentMessages = new Object();
 
 			// customize objects
 			_theme.customizeCloseButton(_closeButton);
+			_theme.customizeMenuButton(_menuButton);
+			_theme.customizeBlockButton(_menuBar.getBlockButton());
+			_theme.customizeReportButton(_menuBar.getReportButton());
 
 			// add children
 			addChild(_shadow);
@@ -130,11 +151,18 @@ package fovea.chat
 			addChild(_border);
 			addChild(_chatMessageContainer);
 			addChild(_replyWindow.view);
+			addChild(_menuBar.view);
 			addChild(_closeButton);
+			addChild(_menuButton);
+
+			//_menuBar.hide();
 
 			// add listeners
 			_server.addListener(onDataRetrieved);
 			_closeButton.addEventListener(Event.TRIGGERED, onClosebuttonTriggered);
+			_menuButton.addEventListener(Event.TRIGGERED, onMenubuttonTriggered);
+			_menuBar.getBlockButton().addEventListener(Event.TRIGGERED, onBlockbuttonTriggered);
+			_menuBar.getReportButton().addEventListener(Event.TRIGGERED, onReportbuttonTriggered);
 			_chatAlert.addEventListener(Event.TRIGGERED, onChatAlertTriggered);
 			_chatMessageContainer.addEventListener(ChatUtil.SCROLLER_BOTTOM_REACHED, onScrollBottomReached);
 			addEventListener(ChatUtil.SHOW_KEYBOARD, onShowKeyboard);
@@ -143,7 +171,18 @@ package fovea.chat
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(ChatUtil.SEND_REPLY_TEXT, onSendReplyText);
 
+			addEventListener
+
 			setTimeout(onDataRetrieved, 50);
+		}
+
+		private var _usernames:Array = [];
+		public function set usernames(value:Array):void {
+			_usernames = value;
+			_menuBar.getBlockButton().label = ChatUtil.translateN("chat_block_button", _usernames);
+			_menuBar.getBlockButton().validate();
+			_menuBar.getReportButton().label = ChatUtil.translateN("chat_report_button", _usernames);
+			_menuBar.getReportButton().validate();
 		}
 
 		/**
@@ -182,10 +221,20 @@ package fovea.chat
 			_replyWindow.x = 0;
 			_replyWindow.y = _stageDimensions.y - _replyWindow.height;
 
+			// position menu bar
+			_menuBar.layout(this.width);
+			_menuBar.x = menuBarX();
+			_menuBar.y = 0;//_stageDimensions.y - _menuBar.height;
+
 			// position the close button
 			_closeButton.layout();
 			_closeButton.x = width - _closeButton.width - CLOSE_BUTTON_OFFSET;
 			_closeButton.y = CLOSE_BUTTON_OFFSET;
+
+			// position the menu button
+			_menuButton.layout();
+			_menuButton.x = width - _menuButton.width - MENU_BUTTON_OFFSET;
+			_menuButton.y = ChatConsole.theme.borderWidth;;
 
 			// position the chat message container
 			_chatMessageContainer.layout(width, _replyWindow.y);
@@ -248,6 +297,13 @@ package fovea.chat
 			var touchQuad:Quad = new Quad(_closeButton.width, _closeButton.height, 0xFF0000);
 			_closeButton.addChild(touchQuad);
 			touchQuad.alpha = 0;
+
+			// initialize the menu button
+			// add a touch quad for the close button
+			_menuButton.validate();
+			var touchQuad1:Quad = new Quad(_menuButton.width, _menuButton.height, 0xFF0000);
+			_menuButton.addChild(touchQuad1);
+			touchQuad1.alpha = 0;
 
 
 			// call the layout function
@@ -358,6 +414,55 @@ package fovea.chat
 		{
 			// close the chat console
 			hide();
+		}
+
+		private var _menuBarVisible:Boolean = false;
+		private function menuBarX():Number {
+			if (_menuBarVisible)
+				return 0;
+			else
+				return this.width;
+		}
+
+		/**
+		 * Settings button tapped callback
+		 */
+		private function onMenubuttonTriggered(event:Event):void
+		{
+			// close the menu bar
+			_menuBarVisible = !_menuBarVisible;
+
+			// Remove tween if tween exists
+			clearTween();
+
+			// _state = ChatUtil.TRANSITIONING;
+			_tween = new Tween(this._menuBar, 0.3, Transitions.EASE_OUT);
+			_tween.onComplete = clearTween;
+			_tween.moveTo(menuBarX(), _menuBar.y);
+			// _tween.animate("shadowAlpha", 0);
+			Starling.juggler.add(_tween);
+
+			dispatchEventWith(MENU_BUTTON_EVENT);
+		}
+
+		public function onBlockbuttonTriggered(username:String):void {
+			this.dispatchEventWith(
+				BLOCK_USER_EVENT,
+				false,
+				{
+					username: _usernames[0]
+				}
+			);
+		}
+
+		public function onReportbuttonTriggered(username:String):void {
+			this.dispatchEventWith(
+				REPORT_USER_EVENT,
+				false,
+				{
+					username: _usernames[0]
+				}
+			);
 		}
 
 		/**
@@ -637,6 +742,7 @@ package fovea.chat
 			// Remove event listeners
 			_starlingStage.removeEventListener(TouchEvent.TOUCH, onTouch);
 			_closeButton.removeEventListeners();
+			_menuButton.removeEventListeners();
 			_chatAlert.removeEventListeners();
 			_chatMessageContainer.removeEventListeners();
 
@@ -648,8 +754,10 @@ package fovea.chat
 			_border.dispose();
 			_shadow.dispose();
 			_closeButton.dispose();
+			_menuButton.dispose();
 			_chatMessageContainer.dispose();
 			_replyWindow.dispose();
+			_menuBar.dispose();
 		}
 	}
 }
