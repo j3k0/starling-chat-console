@@ -174,9 +174,6 @@ package fovea.chat
 			addEventListener(Event.RESIZE, onResize);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			addEventListener(ChatUtil.SEND_REPLY_TEXT, onSendReplyText);
-
-			addEventListener
-
 			setTimeout(onDataRetrieved, 50);
 		}
 
