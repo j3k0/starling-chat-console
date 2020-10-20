@@ -1,15 +1,11 @@
 package fovea.chat
 {
-	import flash.display.Stage;
 	import flash.geom.Point;
-	import flash.system.Capabilities;
 	import flash.utils.setTimeout;
 
 	import fovea.chat.interfaces.IChatServer;
 	import fovea.chat.interfaces.IChatTheme;
 	import fovea.chat.message.ChatMessage;
-	import fovea.chat.message.ChatMessageData;
-	import fovea.chat.message.ChatMessageDisplayConfig;
 	import fovea.chat.objects.ChatMessageContainer;
 	import fovea.chat.objects.CloseButton;
 	import fovea.chat.objects.MenuButton;

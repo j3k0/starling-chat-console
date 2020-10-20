@@ -1,31 +1,17 @@
 package fovea.chat.menu_bar
 {
-    import feathers.controls.FoveaTextInput;
-    import feathers.controls.TextInput;
-    import feathers.events.FeathersEventType;
-
-    import flash.geom.Rectangle;
-    import flash.system.Capabilities;
-    import flash.utils.setTimeout;
+    
     CONFIG::MOBILE {
         import flash.text.ReturnKeyLabel;
     }
 
     import fovea.chat.ChatConsole;
-    import fovea.chat.ChatUtil;
-    import fovea.chat.message.MessageDisplayUtil;
     import fovea.chat.objects.MenuButton;
 
-    import fovea.utils.NativeController;
-    import fovea.ui.InputViewportScroller;
-
-    import starling.core.Starling;
     import starling.display.DisplayObjectContainer;
     import starling.display.Quad;
     import starling.events.Event;
-    import starling.text.TextField;
     import starling.utils.Color;
-    import starling.utils.HAlign;
     import feathers.controls.Button;
 
     /**
