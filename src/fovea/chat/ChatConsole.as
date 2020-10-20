@@ -176,7 +176,16 @@ package fovea.chat
 		private var _usernames:Array = [];
 		public function set usernames(value:Array):void {
 			_usernames = value;
-			_menuBar.getBlockButton().label = ChatUtil.translateN("chat_block_button", _usernames);
+			refreshMenuBar();
+		}
+
+		private function refreshMenuBar() {
+            if (_server.isBlocked(_usernames[0])) {
+				_menuBar.getBlockButton().label = ChatUtil.translateN("chat_unblock_button", _usernames);
+			}
+			else {
+				_menuBar.getBlockButton().label = ChatUtil.translateN("chat_block_button", _usernames);
+			}
 			_menuBar.getBlockButton().validate();
 			_menuBar.getReportButton().label = ChatUtil.translateN("chat_report_button", _usernames);
 			_menuBar.getReportButton().validate();
@@ -383,6 +392,8 @@ package fovea.chat
 		 */
 		private function onSendReplyText(event:Event):void
 		{
+			if (_menuBarVisible)
+				this.hideShowMenuBar();
 			// add the chat message
 			//var id:String = getUniqueKey();
 			//_sentMessages[id] =
@@ -426,8 +437,14 @@ package fovea.chat
 		 */
 		private function onMenubuttonTriggered(event:Event):void
 		{
+			this.hideShowMenuBar();
+			dispatchEventWith(MENU_BUTTON_EVENT);
+		}
+
+		public function hideShowMenuBar(): void {
 			// close the menu bar
 			_menuBarVisible = !_menuBarVisible;
+			if (_menuBarVisible) refreshMenuBar();
 
 			// Remove tween if tween exists
 			clearTween();
@@ -438,11 +455,11 @@ package fovea.chat
 			_tween.moveTo(menuBarX(), _menuBar.y);
 			// _tween.animate("shadowAlpha", 0);
 			Starling.juggler.add(_tween);
-
-			dispatchEventWith(MENU_BUTTON_EVENT);
 		}
 
 		public function onBlockbuttonTriggered(username:String):void {
+			if (_menuBarVisible)
+				this.hideShowMenuBar();
 			this.dispatchEventWith(
 				BLOCK_USER_EVENT,
 				false,
@@ -453,6 +470,8 @@ package fovea.chat
 		}
 
 		public function onReportbuttonTriggered(username:String):void {
+			if (_menuBarVisible)
+				this.hideShowMenuBar();
 			this.dispatchEventWith(
 				REPORT_USER_EVENT,
 				false,
@@ -467,6 +486,9 @@ package fovea.chat
 		 */
 		private function onShowKeyboard(event:Event):void
 		{
+			if (_menuBarVisible)
+				this.hideShowMenuBar();
+
 			// Only open the keyboard when the console is open
 			if(_state != ChatUtil.OPEN)
 				return;
@@ -515,6 +537,8 @@ package fovea.chat
 		 */
 		private function onChatAlertTriggered(event:Event):void
 		{
+			if (_menuBarVisible)
+				this.hideShowMenuBar();
 			_chatMessageContainer.scrollToBottom();
 		}
 
@@ -540,8 +564,11 @@ package fovea.chat
 			switch(touch.phase)
 			{
 				case TouchPhase.ENDED:
-					if(_shadow.bounds.contains(touchPoint.x, touchPoint.y))
+					if(_shadow.bounds.contains(touchPoint.x, touchPoint.y)){
+						if (_menuBarVisible)
+							this.hideShowMenuBar();
 						hide();
+					}
 					break;
 			}
 		}

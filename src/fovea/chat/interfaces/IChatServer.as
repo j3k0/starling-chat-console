@@ -14,5 +14,7 @@ package fovea.chat.interfaces
 		// when data is updated.
 		function addListener(f:Function):void;
 		function removeListener(f:Function):void;
+
+		function isBlocked(username:String):Boolean;
 	}
 }
