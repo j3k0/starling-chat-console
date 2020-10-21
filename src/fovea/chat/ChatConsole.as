@@ -179,7 +179,7 @@ package fovea.chat
 			refreshMenuBar();
 		}
 
-		private function refreshMenuBar() {
+		private function refreshMenuBar(): void {
             if (_server.isBlocked(_usernames[0])) {
 				_menuBar.getBlockButton().label = ChatUtil.translateN("chat_unblock_button", _usernames);
 			}
