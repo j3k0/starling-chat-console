@@ -113,6 +113,7 @@ package fovea.chat.interfaces
 		function customizeMenuButton(b:Button):void;
 		function customizeBlockButton(b:Button):void;
 		function customizeReportButton(b:Button):void;
+		function customizeDisableChatButton(b:Button):void;
 
 		/**
 		 * Create a "send" button.

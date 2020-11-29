@@ -46,10 +46,15 @@ package fovea.chat.menu_bar
             return view.getReportButton();
         }
 
-        public function hide():void
+        public function getDisableChatButton():Button
         {
-            return view.hide();
+            return view.getDisableChatButton();
         }
+
+        // public function hide():void
+        // {
+        //     view.hide();
+        // }
 
         /**
          * Disposes of this object

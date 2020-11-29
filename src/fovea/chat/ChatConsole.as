@@ -34,6 +34,7 @@ package fovea.chat
 	{
     	public static var BLOCK_USER_EVENT:String = "BLOCK_USER_EVENT";
     	public static var REPORT_USER_EVENT:String = "REPORT_USER_EVENT";
+    	public static var DISABLE_CHAT_EVENT:String = "DISABLE_CHAT_EVENT";
     	public static var MENU_BUTTON_EVENT:String = "MENU_BUTTON_EVENT";
 
 		/** slide open transition tween **/
@@ -144,6 +145,7 @@ package fovea.chat
 			_theme.customizeMenuButton(_menuButton);
 			_theme.customizeBlockButton(_menuBar.getBlockButton());
 			_theme.customizeReportButton(_menuBar.getReportButton());
+			_theme.customizeDisableChatButton(_menuBar.getDisableChatButton());
 
 			// add children
 			addChild(_shadow);
@@ -163,6 +165,7 @@ package fovea.chat
 			_menuButton.addEventListener(Event.TRIGGERED, onMenubuttonTriggered);
 			_menuBar.getBlockButton().addEventListener(Event.TRIGGERED, onBlockbuttonTriggered);
 			_menuBar.getReportButton().addEventListener(Event.TRIGGERED, onReportbuttonTriggered);
+			_menuBar.getDisableChatButton().addEventListener(Event.TRIGGERED, onDisableChatButtonTriggered);
 			_chatAlert.addEventListener(Event.TRIGGERED, onChatAlertTriggered);
 			_chatMessageContainer.addEventListener(ChatUtil.SCROLLER_BOTTOM_REACHED, onScrollBottomReached);
 			addEventListener(ChatUtil.SHOW_KEYBOARD, onShowKeyboard);
@@ -189,6 +192,8 @@ package fovea.chat
 			_menuBar.getBlockButton().validate();
 			_menuBar.getReportButton().label = ChatUtil.translateN("chat_report_button", _usernames);
 			_menuBar.getReportButton().validate();
+			_menuBar.getDisableChatButton().label = ChatUtil.translateN("disable_chat_button", _usernames);
+			_menuBar.getDisableChatButton().validate();
 		}
 
 		/**
@@ -477,6 +482,17 @@ package fovea.chat
 				false,
 				{
 					username: _usernames[0]
+				}
+			);
+		}
+
+		public function onDisableChatButtonTriggered():void {
+			if (_menuBarVisible)
+				this.hideShowMenuBar();
+			this.dispatchEventWith(
+				DISABLE_CHAT_EVENT,
+				false,
+				{
 				}
 			);
 		}

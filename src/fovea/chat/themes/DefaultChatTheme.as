@@ -133,6 +133,9 @@ package fovea.chat.themes
 		public function customizeReportButton(b:Button):void
 		{}
 
+		public function customizeDisableChatButton(b:Button):void
+		{}
+
     	/**
 		 * Size of the avatar image
 		 */

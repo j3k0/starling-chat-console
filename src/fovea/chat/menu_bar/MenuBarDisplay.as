@@ -25,6 +25,7 @@ package fovea.chat.menu_bar
         /** the mute button */
         private var _reportButton:Button;
         private var _blockButton:Button;
+        private var _disableChatButton:Button;
         // force the text input to keep focus (fix issues with android)
 
 
@@ -51,10 +52,16 @@ package fovea.chat.menu_bar
             _reportButton.validate();
             _reportButton.addEventListener(Event.TRIGGERED, onReportTriggered);
 
+            _disableChatButton = new MenuButton();
+            _disableChatButton.label = "";
+            _disableChatButton.validate();
+            _disableChatButton.addEventListener(Event.TRIGGERED, onDisableChatTriggered);
+
             // Add Children
             addChild(_background);
             addChild(_blockButton);
             addChild(_reportButton);
+            addChild(_disableChatButton);
 
             //new InputViewportScroller(new <FoveaTextInput>[
             //  _replyTI
@@ -81,23 +88,32 @@ package fovea.chat.menu_bar
 
         }
 
+        private function onDisableChatTriggered(event:Event):void
+        {
+
+        }
+
         /**
          * Defines the positioning and size of the Menu Bar
          * @param consoleWidth:Number - The width of the chat console used for children sizig and positioning
          */
         public function layout(consoleWidth:Number):void
         {
-            var cursor:Number = 100;
+            var cursor:Number = 50;
             // Set the background size
             _background.width = consoleWidth;
             _background.height = ChatConsole.theme.settingsHeight;
 
             _blockButton.x = cursor;
             _blockButton.y = ChatConsole.theme.borderWidth;
-            cursor += (consoleWidth - 100) / 2;
+            cursor += (consoleWidth - 100) / 3;
 
             _reportButton.x = cursor;
             _reportButton.y = ChatConsole.theme.borderWidth;
+            cursor += (consoleWidth - 100) / 3;
+
+            _disableChatButton.x = cursor;
+            _disableChatButton.y = ChatConsole.theme.borderWidth;
         }
 
         public function getBlockButton():Button {
@@ -108,9 +124,13 @@ package fovea.chat.menu_bar
             return _reportButton
         }
 
-        public function hide():void {
-            super.hide();
+        public function getDisableChatButton():Button {
+            return _disableChatButton;
         }
+
+        // public function hide():void {
+        //     super.hide();
+        // }
 
 
         /**
@@ -137,6 +157,7 @@ package fovea.chat.menu_bar
         {
             _blockButton.dispose();
             _reportButton.dispose();
+            _disableChatButton.dispose();
         }
     }
 }
