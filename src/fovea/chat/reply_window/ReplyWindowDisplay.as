@@ -1,22 +1,22 @@
 package fovea.chat.reply_window
 {
-	import feathers.controls.FoveaTextInput;
+	CONFIG::MOBILE {
+		import flash.text.ReturnKeyLabel;
+	}
+
 	import feathers.controls.TextInput;
 	import feathers.events.FeathersEventType;
 
 	import flash.geom.Rectangle;
 	import flash.system.Capabilities;
 	import flash.utils.setTimeout;
-    CONFIG::MOBILE {
-        import flash.text.ReturnKeyLabel;
-    }
 	
 	import fovea.chat.ChatConsole;
 	import fovea.chat.ChatUtil;
 	import fovea.chat.message.MessageDisplayUtil;
 
 	import fovea.utils.NativeController;
-	import fovea.ui.InputViewportScroller;
+	// import fovea.ui.InputViewportScroller;
 
 	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
@@ -40,7 +40,7 @@ package fovea.chat.reply_window
 		/** the background of the object */
 		private var _textBackgroundBorder:Quad;
 		/** the replytext box */
-		private var _replyTI:FoveaTextInput;
+		private var _replyTI:TextInput;
 		/** display the amount of charcters left */
 		private var _charCountTF:TextField;
 		/** the send button */
@@ -69,7 +69,7 @@ package fovea.chat.reply_window
 			if (nativeController.isWeb || nativeController.isDesktop)
 				fontSizeFix = 1.0 / Starling.current.contentScaleFactor;
 
-			_replyTI = new FoveaTextInput(FoveaTextInput.DISABLED);
+			_replyTI = new TextInput();
 			_replyTI.textEditorProperties.fontFamily = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_NAME;
 			_replyTI.textEditorProperties.fontSize = MessageDisplayUtil.getInstance().MESSAGE_TEXT_FONT_SIZE * fontSizeFix; // 28 * ChatConsole.theme.scaleFactor;
 			_replyTI.textEditorProperties.color = MessageDisplayUtil.getInstance().MESSAGE_TEXT_COLOR; // 0x444444;
