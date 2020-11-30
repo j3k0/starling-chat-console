@@ -47,7 +47,10 @@ package fovea.chat.objects
 		{
 			// Instantiate objects
 			_background = new Quad(1,1,BACKGROUND_COLOR);
-			_text = new TextField(100,30,ChatUtil.translate(DISPLAY_TEXT),"Verdana", 12, Color.WHITE, true);
+			_text = new TextField(100,30);
+			_text.text = ChatUtil.translate(DISPLAY_TEXT);
+			_text.format.setTo("Verdana", 12, Color.WHITE);
+			_text.format.bold = true;
 			
 			// Initialize Variables
 			_displayParent = displayParent;

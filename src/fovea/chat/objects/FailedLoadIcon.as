@@ -4,9 +4,7 @@ package fovea.chat.objects
 
 	import starling.display.DisplayObjectContainer;
 	import starling.text.TextField;
-	import starling.text.TextFieldAutoSize;
 	import starling.utils.Color;
-	import starling.utils.VAlign;
 
 	/**
 	 * Icon for a failed avatar image load 
@@ -18,10 +16,10 @@ package fovea.chat.objects
 		
 		public function FailedLoadIcon()
 		{
-			_text = new TextField(60 * ChatConsole.theme.scaleFactor,
-														80 * ChatConsole.theme.scaleFactor,
-														"x", "Verdana",
-														50 * ChatConsole.theme.scaleFactor, Color.RED, true);
+			_text = new TextField(60 * ChatConsole.theme.scaleFactor, 80 * ChatConsole.theme.scaleFactor);
+			_text.text = "x";
+			_text.format.setTo("Verdana", 50 * ChatConsole.theme.scaleFactor, Color.RED);
+			_text.format.bold = true;
 			addChild(_text);
 		}
 		

@@ -5,7 +5,6 @@ package fovea.chat.objects
 	import flash.geom.Rectangle;
 	
 	import feathers.controls.ScrollContainer;
-	import feathers.controls.Scroller;
 	import feathers.events.FeathersEventType;
 	
 	import fovea.chat.ChatConsole;
@@ -14,6 +13,7 @@ package fovea.chat.objects
 	import starling.display.DisplayObject;
 	import starling.display.DisplayObjectContainer;
 	import starling.events.Event;
+	import feathers.controls.ScrollPolicy;
 
 	/**
 	 * A scroll container wrapper class</br>
@@ -84,7 +84,7 @@ package fovea.chat.objects
 			scrollToBottom = _.throttle(_scrollToBottom, millis(SCROLL_BOTTOM_DURATION + 0.1));
 			_scrollContainer = new ScrollContainer();
 			_scrollContainer.hasElasticEdges = true;
-			_scrollContainer.horizontalScrollPolicy = Scroller.SCROLL_POLICY_OFF;
+			_scrollContainer.horizontalScrollPolicy = ScrollPolicy.OFF;
 			
 			// Add the scroll window
 			addChild(_scrollContainer);

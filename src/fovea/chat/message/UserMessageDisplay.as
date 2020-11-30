@@ -8,7 +8,7 @@ package fovea.chat.message
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
-	import starling.utils.HAlign;
+	import starling.utils.Align;
 
 	public class UserMessageDisplay extends ChatMessageDisplay
 	{
@@ -54,8 +54,12 @@ package fovea.chat.message
 			_loadingStateIcon = new LoadingStateIcon();
 			
 			_avatarImage = new AvatarImage(config.avatarLoadFailedTexture, config.avatarLoadingTexture, config.enableAvatar ? 1.0 : 0.5);
-			_messageTF = new TextField(mdu.MESSAGE_TEXT_WIDTH, mdu.MESSAGE_TEXT_HEIGHT, message, mdu.MESSAGE_TEXT_FONT_NAME, mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
-			_timeTF = new TextField(mdu.TIME_TEXT_WIDTH, mdu.TIME_TEXT_HEIGHT, data.time, mdu.TIME_TEXT_FONT_NAME, mdu.TIME_TEXT_FONT_SIZE, mdu.TIME_TEXT_COLOR);
+			_messageTF = new TextField(mdu.MESSAGE_TEXT_WIDTH, mdu.MESSAGE_TEXT_HEIGHT);
+			_messageTF.text = message;
+			_messageTF.format.setTo(mdu.MESSAGE_TEXT_FONT_NAME, mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
+			_timeTF = new TextField(mdu.TIME_TEXT_WIDTH, mdu.TIME_TEXT_HEIGHT);
+			_timeTF.text = data.time;
+			_timeTF.format.setTo(mdu.TIME_TEXT_FONT_NAME, mdu.TIME_TEXT_FONT_SIZE, mdu.TIME_TEXT_COLOR);
 			
 			// initialize objects
 			_loadingStateIcon.width = _loadingStateIcon.height = mdu.LOADING_STATE_ICON_SIZE;
@@ -64,13 +68,13 @@ package fovea.chat.message
 			
 			// set text field vars
 			
-			_messageTF.hAlign = HAlign.LEFT
+			_messageTF.format.horizontalAlign = Align.LEFT
 			_messageTF.autoSize = TextFieldAutoSize.VERTICAL;
 			if (_config.isFromMe)
 				_messageTF.alpha = 0.7;
 			
-			_timeTF.hAlign = HAlign.RIGHT;
-			_timeTF.bold = true;
+			_timeTF.format.horizontalAlign = Align.RIGHT;
+			_timeTF.format.bold = true;
 			_timeTF.alpha = 0.5;
 			
 			// add the children

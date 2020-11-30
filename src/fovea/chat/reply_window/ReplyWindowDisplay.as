@@ -24,8 +24,9 @@ package fovea.chat.reply_window
 	import starling.events.Event;
 	import starling.text.TextField;
 	import starling.utils.Color;
-	import starling.utils.HAlign;
 	import feathers.controls.Button;
+	import starling.utils.Align;
+	import feathers.layout.VerticalAlign;
 	
 	/**
 	 * View for the Reply Window. </br>
@@ -82,23 +83,23 @@ package fovea.chat.reply_window
 			setReplyText(null);
 			var isAndroid:Boolean = Capabilities.manufacturer.indexOf('Android') > -1;
 			if (isAndroid) {
-				_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_TOP;
+				_replyTI.verticalAlign = VerticalAlign.TOP;
 				_replyTI.textEditorProperties.multiline = true;
 			}
 			else {
-				_replyTI.verticalAlign = TextInput.VERTICAL_ALIGN_MIDDLE;
+				_replyTI.verticalAlign = VerticalAlign.MIDDLE;
 			}
 			_replyTI.padding = 5 * ChatConsole.theme.scaleFactor;
 			_replyTI.maxChars = MessageDisplayUtil.getInstance().MAX_CHARACTERS;
 			
 			_charCountTF = new TextField(
 				200 * ChatConsole.theme.scaleFactor,
-				50 * ChatConsole.theme.scaleFactor,
-				charCountText(),
-				MessageDisplayUtil.getInstance().TIME_TEXT_FONT_NAME,
+				50 * ChatConsole.theme.scaleFactor);
+			_charCountTF.text = charCountText();
+			_charCountTF.format.setTo(MessageDisplayUtil.getInstance().TIME_TEXT_FONT_NAME,
 				MessageDisplayUtil.getInstance().TIME_TEXT_FONT_SIZE,
 				MessageDisplayUtil.getInstance().TIME_TEXT_COLOR);
-			_charCountTF.hAlign = HAlign.RIGHT;
+			_charCountTF.format.horizontalAlign = Align.RIGHT;
 
 			_replyButton.label = "";
 			_replyButton.validate();

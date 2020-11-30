@@ -1,11 +1,9 @@
 package fovea.chat.message
 {
 	import fovea.chat.ChatConsole;
-	import fovea.chat.ChatUtil;
-	
 	import starling.display.Quad;
 	import starling.text.TextField;
-	import starling.utils.HAlign;
+	import starling.utils.Align;
 
 	/**
 	 * View for a system chat message
@@ -36,13 +34,14 @@ package fovea.chat.message
 			
 			_messageTF = new TextField(
                 mdu.MESSAGE_SYSTEM_TEXT_WIDTH,
-                mdu.MESSAGE_SYSTEM_TEXT_HEIGHT,
-                message,
-                mdu.MESSAGE_SYSTEM_TEXT_FONT_NAME,
+                mdu.MESSAGE_SYSTEM_TEXT_HEIGHT);
+			_messageTF.text = message;
+			_messageTF.format.setTo(
+				mdu.MESSAGE_SYSTEM_TEXT_FONT_NAME,
                 mdu.MESSAGE_SYSTEM_TEXT_FONT_SIZE,
                 mdu.MESSAGE_SYSTEM_TEXT_COLOR);
-			_messageTF.hAlign = HAlign.LEFT
-			_messageTF.bold = true;
+			_messageTF.format.horizontalAlign = Align.LEFT
+			_messageTF.format.bold = true;
 			
 			// add the children
 			addChild(_background);
