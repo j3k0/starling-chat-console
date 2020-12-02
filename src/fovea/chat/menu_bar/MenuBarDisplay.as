@@ -63,9 +63,6 @@ package fovea.chat.menu_bar
             addChild(_reportButton);
             addChild(_disableChatButton);
 
-            //new InputViewportScroller(new <FoveaTextInput>[
-            //  _replyTI
-            //]).setup();
             addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
         }
 

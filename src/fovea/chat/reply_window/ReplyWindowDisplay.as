@@ -16,7 +16,7 @@ package fovea.chat.reply_window
 	import fovea.chat.message.MessageDisplayUtil;
 
 	import fovea.utils.NativeController;
-	// import fovea.ui.InputViewportScroller;
+	import fovea.ui.InputViewportScroller;
 
 	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
@@ -119,9 +119,7 @@ package fovea.chat.reply_window
 			addChild(_charCountTF);
 			addChild(_replyButton);
 
-			//new InputViewportScroller(new <FoveaTextInput>[
-			//	_replyTI
-			//]).setup();
+			new InputViewportScroller(new <TextInput>[ _replyTI ]).setup();
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
