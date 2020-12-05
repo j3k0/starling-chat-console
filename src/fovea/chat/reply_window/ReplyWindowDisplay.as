@@ -16,7 +16,7 @@ package fovea.chat.reply_window
 	import fovea.chat.message.MessageDisplayUtil;
 
 	import fovea.utils.NativeController;
-	import fovea.ui.InputViewportScroller;
+	// import fovea.ui.InputViewportScroller;
 
 	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
@@ -119,7 +119,7 @@ package fovea.chat.reply_window
 			addChild(_charCountTF);
 			addChild(_replyButton);
 
-			new InputViewportScroller(new <TextInput>[ _replyTI ]).setup();
+			// new InputViewportScroller(new <TextInput>[ _replyTI ]).setup();
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 		}
 
@@ -236,13 +236,15 @@ package fovea.chat.reply_window
 		 * HAX: because softKeyboardRect isn't always updated right after the focus event.
 		 */
 		private function forceRefreshViewport():void {
-			if (ChatConsole.theme.isAndroid)
-				return;
+			if (ChatConsole.theme.isAndroid) {
+				// return;
+			}
 			multiTimeout(function():void {
                 trace("[ReplyWindowDisplay] softKeyboardRect x=" + Starling.current.nativeStage.softKeyboardRect.x + " width=" + Starling.current.nativeStage.softKeyboardRect.width);
                 trace("[ReplyWindowDisplay] softKeyboardRect y=" + Starling.current.nativeStage.softKeyboardRect.y + " height=" + Starling.current.nativeStage.softKeyboardRect.height);
+				var extra:Number = (ChatConsole.theme.isAndroid) ? -150 : 0;
                 if (_replyTI.hasFocus)
-                    viewPortY = -Starling.current.nativeStage.softKeyboardRect.height;
+                    viewPortY = -Starling.current.nativeStage.softKeyboardRect.height + extra;
                 else
                     viewPortY = 0;
 			}, 50, 1500);
