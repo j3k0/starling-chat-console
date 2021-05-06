@@ -49,7 +49,7 @@ package fovea.chat.objects
 			_background = new Quad(1,1,BACKGROUND_COLOR);
 			_text = new TextField(100,30);
 			_text.text = ChatUtil.translate(DISPLAY_TEXT);
-			_text.format.setTo("Verdana", 12, Color.WHITE);
+			_text.format.setTo("_sans", 12, Color.WHITE);
 			_text.format.bold = true;
 			
 			// Initialize Variables

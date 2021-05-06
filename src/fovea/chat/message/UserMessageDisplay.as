@@ -9,6 +9,7 @@ package fovea.chat.message
 	import starling.text.TextField;
 	import starling.text.TextFieldAutoSize;
 	import starling.utils.Align;
+	import feathers.controls.text.StageTextTextEditor;
 
 	public class UserMessageDisplay extends ChatMessageDisplay
 	{
@@ -17,7 +18,7 @@ package fovea.chat.message
 		/** avatar image */
 		private var _avatarImage:AvatarImage;
 		/** Message textField */
-		private var _messageTF:TextField;
+		private var _messageTF:StageTextTextEditor;
 		/** Time textField */
 		private var _timeTF:TextField;
 		/** state icon container */
@@ -54,9 +55,27 @@ package fovea.chat.message
 			_loadingStateIcon = new LoadingStateIcon();
 			
 			_avatarImage = new AvatarImage(config.avatarLoadFailedTexture, config.avatarLoadingTexture, config.enableAvatar ? 1.0 : 0.5);
+			/*
 			_messageTF = new TextField(mdu.MESSAGE_TEXT_WIDTH, mdu.MESSAGE_TEXT_HEIGHT);
-			_messageTF.text = message;
-			_messageTF.format.setTo(mdu.MESSAGE_TEXT_FONT_NAME, mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
+			_messageTF.isHtmlText = true;
+			_messageTF.text = formatMessage(message);
+			if (TextFieldEmoji.isEmoji(message)) {
+				_messageTF.format.setTo('Emoji', mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
+			}
+			else {
+				_messageTF.format.setTo(mdu.MESSAGE_TEXT_FONT_NAME, mdu.MESSAGE_TEXT_FONT_SIZE, mdu.MESSAGE_TEXT_COLOR);
+			}
+			*/
+			const stte:StageTextTextEditor = new StageTextTextEditor();
+			_messageTF = stte;
+			stte.text = message; // formatMessage(message);
+			stte.fontFamily = 'Helvetica';
+			stte.fontSize = mdu.MESSAGE_TEXT_FONT_SIZE;
+			stte.color = mdu.MESSAGE_TEXT_COLOR;
+			stte.multiline = true;
+			stte.isEditable = false;
+			stte.validate();
+
 			_timeTF = new TextField(mdu.TIME_TEXT_WIDTH, mdu.TIME_TEXT_HEIGHT);
 			_timeTF.text = data.time;
 			_timeTF.format.setTo(mdu.TIME_TEXT_FONT_NAME, mdu.TIME_TEXT_FONT_SIZE, mdu.TIME_TEXT_COLOR);
@@ -68,8 +87,8 @@ package fovea.chat.message
 			
 			// set text field vars
 			
-			_messageTF.format.horizontalAlign = Align.LEFT
-			_messageTF.autoSize = TextFieldAutoSize.VERTICAL;
+			// _messageTF.format.horizontalAlign = Align.LEFT
+			// _messageTF.autoSize = TextFieldAutoSize.VERTICAL;
 			if (_config.isFromMe)
 				_messageTF.alpha = 0.7;
 			
@@ -117,6 +136,9 @@ package fovea.chat.message
 			_messageTF.x = mdu.MESSAGE_TEXT_X + offsetX;
 			_messageTF.y = mdu.MESSAGE_TEXT_Y;
 			_messageTF.width = mdu.MESSAGE_TEXT_WIDTH - offsetX;
+			_messageTF.height = undefined;
+			_messageTF.validate();
+			_messageTF.height += mdu.MESSAGE_TEXT_FONT_SIZE;
 			
 			_background.x = this.width - ChatConsole.theme.borderWidth;
 			_background.width = this.width - ChatConsole.theme.borderWidth;

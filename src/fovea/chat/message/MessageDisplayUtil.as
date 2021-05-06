@@ -18,7 +18,7 @@ package fovea.chat.message
 		public var NAME_TEXT_Y:Number = 14;
 		public var NAME_TEXT_WIDTH:Number = 620;
 		public var NAME_TEXT_HEIGHT:Number = 30;
-		public var NAME_TEXT_FONT_NAME:String = "Verdana";
+		public var NAME_TEXT_FONT_NAME:String = "_sans";
 		public var NAME_TEXT_FONT_SIZE:Number = 12;
 		public var NAME_TEXT_COLOR:uint = 0;
 		
@@ -28,7 +28,7 @@ package fovea.chat.message
 		public var MESSAGE_TEXT_Y:Number = 40;
 		public var MESSAGE_TEXT_WIDTH:Number = 620;
 		public var MESSAGE_TEXT_HEIGHT:Number = 70;
-		public var MESSAGE_TEXT_FONT_NAME:String = "Verdana";
+		public var MESSAGE_TEXT_FONT_NAME:String = "_sans";
 		public var MESSAGE_TEXT_FONT_SIZE:Number = 12;
 		public var MESSAGE_TEXT_COLOR:uint = 0;
 
@@ -36,7 +36,7 @@ package fovea.chat.message
 		public var MESSAGE_SYSTEM_TEXT_Y:Number = 40;
 		public var MESSAGE_SYSTEM_TEXT_WIDTH:Number = 620;
 		public var MESSAGE_SYSTEM_TEXT_HEIGHT:Number = 70;
-		public var MESSAGE_SYSTEM_TEXT_FONT_NAME:String = "Verdana";
+		public var MESSAGE_SYSTEM_TEXT_FONT_NAME:String = "_sans";
 		public var MESSAGE_SYSTEM_TEXT_FONT_SIZE:Number = 12;
 		public var MESSAGE_SYSTEM_TEXT_COLOR:uint = 0x888888;
 		
@@ -44,7 +44,7 @@ package fovea.chat.message
 		public var TIME_TEXT_Y:Number = 14;
 		public var TIME_TEXT_WIDTH:Number = 66;
 		public var TIME_TEXT_HEIGHT:Number = 30;
-		public var TIME_TEXT_FONT_NAME:String = "Verdana";
+		public var TIME_TEXT_FONT_NAME:String = "_sans";
 		public var TIME_TEXT_FONT_SIZE:Number = 12;
 		public var TIME_TEXT_COLOR:uint = 0;
 		

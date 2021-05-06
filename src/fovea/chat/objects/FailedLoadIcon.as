@@ -18,7 +18,7 @@ package fovea.chat.objects
 		{
 			_text = new TextField(60 * ChatConsole.theme.scaleFactor, 80 * ChatConsole.theme.scaleFactor);
 			_text.text = "x";
-			_text.format.setTo("Verdana", 50 * ChatConsole.theme.scaleFactor, Color.RED);
+			_text.format.setTo("_sans", 50 * ChatConsole.theme.scaleFactor, Color.RED);
 			_text.format.bold = true;
 			addChild(_text);
 		}
