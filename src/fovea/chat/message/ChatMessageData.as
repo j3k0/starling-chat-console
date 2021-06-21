@@ -14,6 +14,8 @@ package fovea.chat.message
 	{
 		/** user that sent this message */
 		public var username:String;
+		/** display name of the user that sent this message */
+		public var userDisplaName:String;
 		/** URL of the avatar image (always a square)  */
 		public var avatarURL:String;
 		/** message text */
@@ -26,10 +28,11 @@ package fovea.chat.message
 		public var id:String;
 		
 		
-		public function ChatMessageData(id:String, username:String, avatarURL:String, message:String, time:String)
+		public function ChatMessageData(id:String, username:String, userDisplaName:String, avatarURL:String, message:String, time:String)
 		{
 			this.id = id;
 			this.username = username;
+			this.userDisplaName = userDisplaName;
 			this.avatarURL = avatarURL;
 			this.message = message;
 			this.time = time;

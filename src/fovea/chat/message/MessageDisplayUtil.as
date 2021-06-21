@@ -8,7 +8,10 @@ package fovea.chat.message
 	public class MessageDisplayUtil
 	{
 		/** X-Coordinate of the avatar image */
-		public var AV_IMAGE_X:Number = 15;
+		public var AV_PADDING_WIDTH:Number = 15;
+		public var AV_IMAGE_WIDTH:Number = 15;
+		public var AV_IMAGE_LEFT_X:Number = 15;
+		public var AV_IMAGE_RIGHT_X:Number = 620;
 		/** Y-Coordinate of the avatar image */
 		//public var AV_IMAGE_Y:Number = 14;
 		
@@ -31,6 +34,7 @@ package fovea.chat.message
 		public var MESSAGE_TEXT_FONT_NAME:String = "_sans";
 		public var MESSAGE_TEXT_FONT_SIZE:Number = 12;
 		public var MESSAGE_TEXT_COLOR:uint = 0;
+		public var REPLY_TEXT_COLOR:uint = 0;
 
 		public var MESSAGE_SYSTEM_TEXT_X:Number = 65;
 		public var MESSAGE_SYSTEM_TEXT_Y:Number = 40;
@@ -41,11 +45,11 @@ package fovea.chat.message
 		public var MESSAGE_SYSTEM_TEXT_COLOR:uint = 0x888888;
 		
 		/** Y-Coordinate of time-stamp of the message */
-		public var TIME_TEXT_Y:Number = 14;
+		// public var TIME_TEXT_Y:Number = 9;
 		public var TIME_TEXT_WIDTH:Number = 66;
 		public var TIME_TEXT_HEIGHT:Number = 30;
 		public var TIME_TEXT_FONT_NAME:String = "_sans";
-		public var TIME_TEXT_FONT_SIZE:Number = 12;
+		public var TIME_TEXT_FONT_SIZE:Number = 10;
 		public var TIME_TEXT_COLOR:uint = 0;
 		
 		/** MESSAGE PADDING */

@@ -26,7 +26,7 @@ package fovea.chat.message
 			var mdu:MessageDisplayUtil = MessageDisplayUtil.getInstance();
 			
 			if (message.length > mdu.MAX_CHARACTERS-1)
-				message = message.substr(0,MessageDisplayUtil.getInstance().MAX_CHARACTERS-1)+"...";
+				message = message.substr(0, MessageDisplayUtil.getInstance().MAX_CHARACTERS-1) + "...";
 			
 			_background = new Quad(1,1,config.backgroundColor);
 			_background.alpha = config.backgroundAlpha;
